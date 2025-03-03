@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">CitationMobileApp</string>
+
+
+    <!--
+        BUTTONS
+    -->
+    <string name="play">Jouer</string>
+
+    <!--
+        HOME
+    -->
+    <string name="home_bottom_bar">Accueil</string>
+
+    <!--
+        PROFILE
+    -->
+    <string name="profile_bottom_bar">Profil</string>
+
+    <!--
+        Settings
+    -->
+    <string name="settings_title">Paramètres</string>
+
+    <!--
+        DESIGN SYSTEM
+    -->
+    <string name="design_system_title">Design System</string>
+</resources>
