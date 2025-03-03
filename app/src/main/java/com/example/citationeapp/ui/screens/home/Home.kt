@@ -26,7 +26,6 @@ fun Home(
     LaunchedEffect(Unit) {}
 
     TextBottomBar(textId = R.string.home_bottom_bar, color = primary)
-
 }
 
 data class HomeUIState(

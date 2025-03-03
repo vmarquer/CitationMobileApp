@@ -15,6 +15,8 @@ import com.example.citationeapp.R
 import com.example.citationeapp.ui.CitationAppUIState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.citationeapp.ui.screens.home.Home
+import com.example.citationeapp.ui.screens.profile.Profile
 
 
 //region Liste des routes
@@ -100,11 +102,6 @@ sealed class Route(
 }
 //endregion
 
-
-//region Nav host
-private const val challengesRoutePattern = "challenges_graph"
-private const val profileRoutePattern = "profile_graph"
-
 @Composable
 fun NavigationHost(
     appUIState: CitationAppUIState,
@@ -117,11 +114,11 @@ fun NavigationHost(
         navController = navController, startDestination = startDestination, modifier = modifier
     ) {
         composable(route = Route.TopLevelRoute.Home.name) {
-            Route.TopLevelRoute.Home
+            Home()
         }
 
         composable(route = Route.TopLevelRoute.Profile.name) {
-            Route.TopLevelRoute.Profile
+            Profile()
         }
     }
 }
