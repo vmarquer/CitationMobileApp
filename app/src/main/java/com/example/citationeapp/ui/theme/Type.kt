@@ -1,34 +1,47 @@
 package com.example.citationeapp.ui.theme
 
-import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.citationeapp.R
 
-// Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+//-----------  Familles de police -----------//
+val barlowFontFamily = FontFamily(
+    Font(R.font.barlowregular)
+)
+
+//-----------  Styles de texte -----------//
+val h1 = TextStyle(
+    fontFamily = barlowFontFamily,
+    fontSize = 32.sp,
+)
+
+val h2 = TextStyle(
+    fontFamily = barlowFontFamily,
+    fontSize = 24.sp,
+)
+
+val h3 = TextStyle(
+    fontFamily = barlowFontFamily,
+    fontSize = 18.sp,
+)
+
+val h1Bold = TextStyle(
+    fontFamily = barlowFontFamily,
+    fontSize = 32.sp,
+    fontWeight = FontWeight.Bold
+)
+
+val h2Bold = TextStyle(
+    fontFamily = barlowFontFamily,
+    fontSize = 24.sp,
+    fontWeight = FontWeight.Bold
+)
+
+val h3Bold = TextStyle(
+    fontFamily = barlowFontFamily,
+    fontSize = 18.sp,
+    fontWeight = FontWeight.Bold
 )

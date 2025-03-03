@@ -15,8 +15,11 @@ import com.example.citationeapp.R
 import com.example.citationeapp.ui.CitationAppUIState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import com.example.citationeapp.ui.screens.home.Home
 import com.example.citationeapp.ui.screens.profile.Profile
+import com.example.citationeapp.ui.screens.profile.Settings
+import com.example.citationeapp.designsystem.DesignSystem
 
 
 //region Liste des routes
@@ -102,6 +105,8 @@ sealed class Route(
 }
 //endregion
 
+private const val profileRoutePattern = "profile_graph"
+
 @Composable
 fun NavigationHost(
     appUIState: CitationAppUIState,
@@ -117,8 +122,28 @@ fun NavigationHost(
             Home()
         }
 
-        composable(route = Route.TopLevelRoute.Profile.name) {
-            Profile()
+        navigation(
+            route = profileRoutePattern,
+            startDestination = Route.TopLevelRoute.Profile.name
+        ) {
+            composable(route = Route.TopLevelRoute.Profile.name) {
+                Profile(
+                    showProfileSettings = { navController.navigate(Route.NestedLevelRoute.Settings.name) },
+                    showDesignSystem = { navController.navigate(Route.NestedLevelRoute.DesignSystem.name) }
+                )
+            }
+
+            composable(route = Route.NestedLevelRoute.Settings.name) {
+                Settings(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(route = Route.NestedLevelRoute.DesignSystem.name) {
+                DesignSystem(
+                    onBack = { navController.popBackStack() }
+                )
+            }
         }
     }
 }
