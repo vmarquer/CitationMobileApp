@@ -26,50 +26,22 @@ val spacing24 = 24.dp
 val spacing32 = 32.dp
 val spacing34 = 34.dp
 
-val spacingMinus12 = (-12).dp
-val spacingMinus24 = (-24).dp
-
 // --- Tailles des icones
 val iconVerySmallSize = 10.dp
 val iconSmallSize = 16.dp
-val iconTimelineSize = 16.dp
-val iconToggleSize = 24.dp
-val iconNotificationSize = 24.dp
-val iconButtonSize = 32.dp
-val iconArrowSize = 48.dp
-val spacingIcon = 8.dp      // espace dans les lignes entre textes et icones
+val iconMediumSize = 24.dp
+val iconLargeSize = 32.dp
+val iconVeryLargeSize = 64.dp
 
 // --- Lignes
 val lineHeightSmall = 1.dp
 val lineHeightMedium = 2.dp
 val lineHeightLarge = 8.dp
 
-// --- Dimensions des Layouts
-val paddingScreen = 16.dp       // padding des écrans
-val timerSize = 150.dp                  // taille du composant timer
-val rankHeight = 98.dp
-
-// --- Boutons
-val heightButton = 48.dp
-val cornerButtonSize = 16.dp
-val paddingButtonGhostHorizontal = 4.dp
-val paddingButtonGhostVertical = 8.dp
-val paddingButtonPrimaryHorizontal = 16.dp
-val paddingButtonPrimaryVertical = 8.dp
-val paddingButtonContent = 8.dp
 
 // --- Autres composants
-val paddingHorizontalToggleList = 32.dp
-val minHeightToggle = 64.dp
-val progressBarSize = 8.dp
-val titleSquareSize = 8.dp
-val radioSpacerSize = 16.dp
-val stepperSize = 16.dp
-val timelineStrokeWidth = 2.dp
-val timelineOnGoingSize = 36.dp
-val heightNotificationCard = 64.dp
-val inputButtonSize = 70.dp
-val inputTextFieldWidth = 110.dp
-val cardBlackLineWidth = 2.dp
-val cardWhiteSize = 8.dp
-val cardBlackSize = 7.dp
+val heightTextField = 64.dp
+val customBoxHeightQuestion = 400.dp
+val customBoxHeightAnswer = 250.dp
+val customBoxHeightAnswerFirstHalf = 150.dp
+val customBoxHeightAnswerSecondHalf = 90.dp

@@ -10,12 +10,18 @@
     <!--
         HOME
     -->
-    <string name="home_bottom_bar">Accueil</string>
+    <string name="home_title">Accueil</string>
+
+    <!--
+        HOME
+    -->
+    <string name="play_title">Jouer</string>
+    <string name="play_question_place_holder">Entrez votre réponse...</string>
 
     <!--
         PROFILE
     -->
-    <string name="profile_bottom_bar">Profil</string>
+    <string name="profile_title">Profil</string>
 
     <!--
         Settings

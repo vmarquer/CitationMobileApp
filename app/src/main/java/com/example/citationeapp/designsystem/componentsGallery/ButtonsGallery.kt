@@ -1,6 +1,10 @@
 package com.example.citationeapp.designsystem.componentsGallery
 
+import ButtonPrimary
+import IconButton
+import IconTextButton
 import RoundedIconButton
+import TextIconButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +29,12 @@ fun DesignSystemButtons(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(spacing10),
     ) {
         TextH1(text = "Buttons")
+
+        ButtonPrimary(
+            modifier = Modifier,
+            text = "ButtonPrimary",
+            onClick = {}
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -59,5 +69,51 @@ fun DesignSystemButtons(modifier: Modifier = Modifier) {
                 onClick = {},
             )
         }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(
+                iconId = R.drawable.ic_back,
+                color = white,
+                backgroundColor = primary,
+                onClick = {},
+            )
+
+            IconButton(
+                iconId = R.drawable.ic_next,
+                color = white,
+                backgroundColor = primary,
+                onClick = {},
+            )
+
+            IconButton(
+                iconId = R.drawable.ic_trophy,
+                color = white,
+                backgroundColor = primary,
+                onClick = {},
+            )
+
+            IconButton(
+                iconId = R.drawable.ic_settings,
+                color = white,
+                backgroundColor = primary,
+                onClick = {},
+            )
+        }
+
+        TextIconButton(
+            onClick = {},
+            text = "TextIconButton",
+            iconId = R.drawable.ic_next
+        )
+
+        IconTextButton(
+            onClick = {},
+            text = "IconTextButton",
+            iconId = R.drawable.ic_next
+        )
     }
 }

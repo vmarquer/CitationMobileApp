@@ -5,14 +5,19 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Stable
@@ -21,18 +26,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.citationeapp.R
 import com.example.citationeapp.navigation.NavigationHost
 import com.example.citationeapp.navigation.Route
 import com.example.citationeapp.navigation.navigateToTopLevelDestination
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBottomBar
-import com.example.citationeapp.ui.theme.grey
-import com.example.citationeapp.ui.theme.iconButtonSize
+import com.example.citationeapp.ui.theme.components.TextScreenTitle
+import com.example.citationeapp.ui.theme.iconLargeSize
+import com.example.citationeapp.ui.theme.iconMediumSize
+import com.example.citationeapp.ui.theme.padding6
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.white
 
@@ -46,9 +55,15 @@ fun CitationApp(
         Scaffold(
             contentColor = Color.Transparent,
             containerColor = Color.Transparent,
+            topBar = {
+                CitationTopBar(
+                    currentDestination = appUIState.currentDestination,
+                    onBack = { appUIState.navController.popBackStack() }
+                )
+            },
             bottomBar = {
                 if (appUIState.shouldShowBottomBar) {
-                    SEngagerBottomBar(
+                    CitationBottomBar(
                         destinations = appUIState.topLevelDestinations,
                         currentDestination = appUIState.currentDestination,
                         onNavigateToDestination = appUIState.navController::navigateToTopLevelDestination
@@ -63,9 +78,56 @@ fun CitationApp(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CitationTopBar(
+    currentDestination: NavDestination?,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val currentRoute = Route.getRoute(currentDestination?.route)
+
+    currentRoute?.let { route ->
+        if (route.showTopBar) {
+            val parentRouteName: Int? = (route as? Route.NestedLevelRoute)?.parent?.displayName
+            TopAppBar(
+                title = {
+                    route.displayName?.let {
+                        TextScreenTitle(
+                            textId = it,
+                            color = white,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+                },
+                navigationIcon = {
+                    if (parentRouteName != null) {
+                        IconButton(
+                            onClick = onBack,
+                            modifier = Modifier.padding(horizontal = padding6)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_back),
+                                contentDescription = null,
+                                tint = white,
+                                modifier = Modifier.size(iconMediumSize)
+                            )
+                        }
+                    }
+                },
+                modifier = modifier.fillMaxWidth(),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = primary,
+                    titleContentColor = white
+                )
+            )
+        }
+    }
+}
+
 
 @Composable
-fun SEngagerBottomBar(
+fun CitationBottomBar(
     destinations: List<Route.TopLevelRoute>,
     currentDestination: NavDestination?,
     onNavigateToDestination: (Route.TopLevelRoute) -> Unit,
@@ -74,12 +136,12 @@ fun SEngagerBottomBar(
     val currentRoute = Route.getRoute(currentDestination?.route)
     currentRoute?.let { route ->
         if (route.showBottomBar) {
-            val selectionDestination = currentDestination
             NavigationBar(containerColor = white) {
                 destinations.forEach { destination ->
                     val interactionSource = remember { MutableInteractionSource() }
                     val pressed by interactionSource.collectIsPressedAsState()
-                    val selected = selectionDestination.isTopLevelDestinationInHierarchy(destination)
+                    val selected =
+                        currentDestination.isTopLevelDestinationInHierarchy(destination)
 
                     val selectedContentColor = if (pressed) black else primary
                     val unselectedContentColor = if (pressed) black else black
@@ -92,10 +154,15 @@ fun SEngagerBottomBar(
                                 Icon(
                                     painter = painterResource(id = destination.iconId),
                                     contentDescription = null,
-                                    modifier = modifier.size(iconButtonSize)
+                                    modifier = modifier.size(iconLargeSize)
                                 )
                             },
-                            label = { TextBottomBar(textId = destination.titleTextId, color = Color.Unspecified) },
+                            label = {
+                                TextBottomBar(
+                                    textId = destination.titleTextId,
+                                    color = Color.Unspecified
+                                )
+                            },
                             colors = NavigationBarItemDefaults.colors().copy(
                                 selectedIconColor = selectedContentColor,
                                 selectedTextColor = selectedContentColor,
@@ -116,6 +183,7 @@ fun SEngagerBottomBar(
         }
     }
 }
+
 
 // Vérification si on a une route de premier niveau
 private fun NavDestination?.isTopLevelDestinationInHierarchy(topLevelRoute: Route.TopLevelRoute) =

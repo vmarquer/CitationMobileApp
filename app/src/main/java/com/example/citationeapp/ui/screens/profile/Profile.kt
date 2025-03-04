@@ -1,5 +1,6 @@
 package com.example.citationeapp.ui.screens.profile
 
+import ButtonPrimary
 import IconTextButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,12 +13,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.example.citationeapp.R
-import com.example.citationeapp.ui.theme.black
-import com.example.citationeapp.ui.theme.components.TextScreenTitle
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.spacing16
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,19 +44,14 @@ fun Profile(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(spacing16)
     ) {
-        TextScreenTitle(
-            textId = R.string.profile_bottom_bar,
-            color = black,
-            textAlign = TextAlign.Center
-        )
-        IconTextButton(
+        ButtonPrimary(
+            modifier = Modifier.fillMaxWidth(),
             textId = R.string.settings_title,
-            iconId = R.drawable.ic_settings,
             onClick = showProfileSettings
         )
-        IconTextButton(
+        ButtonPrimary(
+            modifier = Modifier.fillMaxWidth(),
             textId = R.string.design_system_title,
-            iconId = R.drawable.ic_settings,
             onClick = showDesignSystem
         )
     }

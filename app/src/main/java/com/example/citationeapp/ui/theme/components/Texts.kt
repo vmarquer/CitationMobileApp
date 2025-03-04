@@ -56,13 +56,15 @@ fun TextH1(
     modifier: Modifier = Modifier,
     text: String = "",
     @StringRes textId: Int = -1,
-    color: Color = black
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = if (textId == -1) text else stringResource(id = textId),
         modifier = modifier,
         color = color,
-        style = h1
+        style = h1,
+        textAlign = textAlign
     )
 }
 
@@ -71,13 +73,15 @@ fun TextH2(
     modifier: Modifier = Modifier,
     text: String = "",
     @StringRes textId: Int = -1,
-    color: Color = black
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = if (textId == -1) text else stringResource(id = textId),
         modifier = modifier,
         color = color,
-        style = h2
+        style = h2,
+        textAlign = textAlign
     )
 }
 
@@ -86,13 +90,15 @@ fun TextH3(
     modifier: Modifier = Modifier,
     text: String = "",
     @StringRes textId: Int = -1,
-    color: Color = black
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = if (textId == -1) text else stringResource(id = textId),
         modifier = modifier,
         color = color,
-        style = h3
+        style = h3,
+        textAlign = textAlign
     )
 }
 
@@ -101,13 +107,15 @@ fun TextH1Bold(
     modifier: Modifier = Modifier,
     text: String = "",
     @StringRes textId: Int = -1,
-    color: Color = black
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = if (textId == -1) text else stringResource(id = textId),
         modifier = modifier,
         color = color,
-        style = h1Bold
+        style = h1Bold,
+        textAlign = textAlign
     )
 }
 
@@ -116,13 +124,15 @@ fun TextH2Bold(
     modifier: Modifier = Modifier,
     text: String = "",
     @StringRes textId: Int = -1,
-    color: Color = black
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = if (textId == -1) text else stringResource(id = textId),
         modifier = modifier,
         color = color,
-        style = h2Bold
+        style = h2Bold,
+        textAlign = textAlign
     )
 }
 
@@ -131,12 +141,14 @@ fun TextH3Bold(
     modifier: Modifier = Modifier,
     text: String = "",
     @StringRes textId: Int = -1,
-    color: Color = black
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = if (textId == -1) text else stringResource(id = textId),
         modifier = modifier,
         color = color,
-        style = h3Bold
+        style = h3Bold,
+        textAlign = textAlign
     )
 }

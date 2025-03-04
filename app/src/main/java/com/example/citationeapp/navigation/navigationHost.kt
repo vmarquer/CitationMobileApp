@@ -20,68 +20,99 @@ import com.example.citationeapp.ui.screens.home.Home
 import com.example.citationeapp.ui.screens.profile.Profile
 import com.example.citationeapp.ui.screens.profile.Settings
 import com.example.citationeapp.designsystem.DesignSystem
+import com.example.citationeapp.ui.screens.play.Answer
+import com.example.citationeapp.ui.screens.play.Play
+import com.example.citationeapp.ui.screens.play.Question
 
 
 //region Liste des routes
 sealed class Route(
-    val name: String,
-    val showBottomBar: Boolean
+    val name : String,
+    val showTopBar : Boolean,
+    val showBottomBar: Boolean,
+    // Nom de la route à afficher dans la barre de navigation.
+    @StringRes val displayName: Int? = null
 ) {
 
     // Routes utilisées dans la barre de navigation
     sealed class TopLevelRoute(
         name: String,
+        showTopBar: Boolean,
         showBottomBar: Boolean,
+        displayName: Int,
         @DrawableRes val iconId: Int,
         @StringRes val titleTextId: Int
-    ) : Route(name, showBottomBar) {
+    ) : Route(name, showTopBar, showBottomBar, displayName) {
         data object Home : TopLevelRoute(
             name = "home",
+            showTopBar = true,
             showBottomBar = true,
             iconId = R.drawable.ic_home,
-            titleTextId = R.string.home_bottom_bar,
+            titleTextId = R.string.home_title,
+            displayName = R.string.home_title,
+        )
+
+        data object Play : TopLevelRoute(
+            name = "play",
+            showTopBar = true,
+            showBottomBar = true,
+            iconId = R.drawable.ic_play,
+            titleTextId = R.string.play_title,
+            displayName = R.string.play_title,
         )
 
         data object Profile : TopLevelRoute(
             name = "profile",
+            showTopBar = true,
             showBottomBar = true,
             iconId = R.drawable.ic_profile,
-            titleTextId = R.string.profile_bottom_bar,
+            titleTextId = R.string.profile_title,
+            displayName = R.string.profile_title,
         )
 
         companion object {
-            val entries: List<TopLevelRoute> = listOf(Home, Profile)
+            val entries: List<TopLevelRoute> = listOf(Home, Play, Profile)
         }
     }
 
     sealed class NestedLevelRoute(
         name: String,
+        showTopBar : Boolean,
         showBottomBar: Boolean,
+        displayName: Int? = null,
         val parent: TopLevelRoute
-    ) : Route(name, showBottomBar) {
+    ) : Route(name, showTopBar, showBottomBar, displayName) {
         data object Question : NestedLevelRoute(
             name = "question",
+            showTopBar = false,
             showBottomBar = true,
-            parent = TopLevelRoute.Home,
+            parent = TopLevelRoute.Play,
+            displayName = R.string.play_title,
         )
 
         data object Answer : NestedLevelRoute(
             name = "answer",
+            showTopBar = false,
             showBottomBar = true,
-            parent = TopLevelRoute.Home,
+            parent = TopLevelRoute.Play,
+            displayName = R.string.play_title,
         )
 
         // Profil
         data object Settings : NestedLevelRoute(
             name = "settings",
+            showTopBar = true,
             showBottomBar = true,
-            parent = TopLevelRoute.Profile
+            parent = TopLevelRoute.Profile,
+            displayName = R.string.settings_title,
         )
 
         data object DesignSystem : NestedLevelRoute(
             name = "designsystem",
+            showTopBar = true,
             showBottomBar = false,
-            parent = TopLevelRoute.Profile
+            parent = TopLevelRoute.Profile,
+            displayName = R.string.design_system_title,
         )
     }
 
@@ -90,6 +121,7 @@ sealed class Route(
             return when (route) {
 
                 TopLevelRoute.Home.name -> TopLevelRoute.Home
+                TopLevelRoute.Play.name -> TopLevelRoute.Play
                 TopLevelRoute.Profile.name -> TopLevelRoute.Profile
 
                 NestedLevelRoute.Question.name -> NestedLevelRoute.Question
@@ -105,6 +137,7 @@ sealed class Route(
 }
 //endregion
 
+private const val playRoutePattern = "play_graph"
 private const val profileRoutePattern = "profile_graph"
 
 @Composable
@@ -120,6 +153,29 @@ fun NavigationHost(
     ) {
         composable(route = Route.TopLevelRoute.Home.name) {
             Home()
+        }
+        navigation(
+            route = playRoutePattern,
+            startDestination = Route.TopLevelRoute.Play.name
+        ) {
+            composable(route = Route.TopLevelRoute.Play.name) {
+                Play (
+                    launchGame = { navController.navigate(Route.NestedLevelRoute.Question.name) }
+                )
+            }
+
+            composable(route = Route.NestedLevelRoute.Question.name) {
+                Question(
+                    goToAnswer = { navController.navigate(Route.NestedLevelRoute.Answer.name) }
+                )
+            }
+
+            composable(route = Route.NestedLevelRoute.Answer.name) {
+                Answer(
+                    newQuote = { navController.navigate(Route.NestedLevelRoute.Question.name) },
+                    goHome = { navController.navigate(Route.TopLevelRoute.Home.name) }
+                )
+            }
         }
 
         navigation(
@@ -161,12 +217,17 @@ fun NavController.navigateToTopLevelDestination(topLevelDestination: Route.TopLe
 
     when (topLevelDestination) {
         Route.TopLevelRoute.Home -> this.navigateToHome(topLevelNavOptions)
+        Route.TopLevelRoute.Play -> this.navigateToPlay(topLevelNavOptions)
         Route.TopLevelRoute.Profile -> this.navigateToProfile(topLevelNavOptions)
     }
 }
 
 fun NavController.navigateToHome(navOptions: NavOptions? = null) {
     this.navigate(Route.TopLevelRoute.Home.name, navOptions)
+}
+
+fun NavController.navigateToPlay(navOptions: NavOptions? = null) {
+    this.navigate(Route.TopLevelRoute.Play.name, navOptions)
 }
 
 fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
