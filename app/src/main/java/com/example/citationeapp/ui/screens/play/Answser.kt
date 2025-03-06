@@ -16,17 +16,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.CustomBox
+import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.customBoxHeightAnswer
 import com.example.citationeapp.ui.theme.customBoxHeightAnswerFirstHalf
@@ -35,24 +34,26 @@ import com.example.citationeapp.ui.theme.padding32
 import com.example.citationeapp.ui.theme.spacing16
 import com.example.citationeapp.ui.theme.spacing6
 import com.example.citationeapp.ui.theme.spacing8
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
+import com.example.citationeapp.viewmodel.CitationVersion
+import com.example.citationeapp.viewmodel.CitationViewModel
+import com.example.citationeapp.viewmodel.VersionViewModel
 
 @Composable
 fun Answer(
     modifier: Modifier = Modifier,
-    viewModel: AnswerViewModel = hiltViewModel(),
-    newQuote: () -> Unit,
+    citationViewModel: CitationViewModel,
+    versionViewModel: VersionViewModel,
+    goToNewCitation: () -> Unit,
     goHome: () -> Unit,
 ) {
-    val uiState = viewModel.uiState.collectAsState()
-    val context = LocalContext.current
+    val uiState = citationViewModel.uiState.collectAsState()
+    val version by versionViewModel.version.collectAsState()
 
-
-    // équivalent de NgOnInit
-    LaunchedEffect(Unit) {}
+    LaunchedEffect(uiState.value.isError) {
+        if (uiState.value.isError) {
+            goHome()
+        }
+    }
 
     Column(
         modifier = modifier
@@ -64,60 +65,74 @@ fun Answer(
             space = spacing16, alignment = Alignment.CenterVertically
         )
     ) {
-        CustomBox(
-            verticalAlignment = Alignment.Center,
-            height = customBoxHeightAnswer
-        ) {
-            TextH3(
-                text = "Test citation",
-                textAlign = TextAlign.Center
-            )
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(
-                spacing16, alignment = Alignment.CenterHorizontally
-            )
-        ) {
+        uiState.value.currentCitation?.let { currentCitation ->
             CustomBox(
-                modifier = Modifier.weight(1f),
                 verticalAlignment = Alignment.Center,
                 height = customBoxHeightAnswer
             ) {
                 TextH3(
-                    text = "Affiche du film",
+                    text = if (version == CitationVersion.VF) currentCitation.quoteVF else currentCitation.quoteVO,
+                    color = black,
                     textAlign = TextAlign.Center
                 )
             }
 
-            Column(
-                modifier = Modifier.weight(1f)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(
+                    spacing16, alignment = Alignment.CenterHorizontally
+                )
             ) {
                 CustomBox(
+                    modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.Center,
-                    height = customBoxHeightAnswerFirstHalf
+                    height = customBoxHeightAnswer
                 ) {
                     TextH3(
-                        text = "Réponse",
+                        text = "Affiche du film",
                         textAlign = TextAlign.Center
                     )
                 }
 
-                Box(
-                    modifier = Modifier.height(customBoxHeightAnswerSecondHalf).fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                Column(
+                    modifier = Modifier.weight(1f)
                 ) {
-                    Image(
-                        modifier = Modifier.height(80.dp).padding(top = spacing6),
-                        painter = painterResource(id = R.drawable.ic_success),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit
-                    )
+                    CustomBox(
+                        verticalAlignment = Alignment.Center,
+                        height = customBoxHeightAnswerFirstHalf
+                    ) {
+                        Column {
+                            TextH3(
+                                text = if (version == CitationVersion.VF)
+                                    currentCitation.movieVF?: ""
+                                else currentCitation.movieVO?: "",
+                                textAlign = TextAlign.Center
+                            )
+                            TextH3(
+                                text = if (version == CitationVersion.VF)
+                                    currentCitation.userGuessMovieVF?: ""
+                                else currentCitation.userGuessMovieVO?: "",
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+
+                    Box(
+                        modifier = Modifier.height(customBoxHeightAnswerSecondHalf).fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            modifier = Modifier.height(80.dp).padding(top = spacing6),
+                            painter = painterResource(
+                                id = if (currentCitation.result == true) R.drawable.ic_success else R.drawable.ic_fail
+                            ),
+                            contentDescription = null,
+                            contentScale = ContentScale.Fit
+                        )
+                    }
                 }
             }
         }
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(
@@ -130,22 +145,13 @@ fun Answer(
                 iconId = R.drawable.ic_home
             )
             TextIconButton(
-                onClick = newQuote,
+                onClick = {
+                    goToNewCitation()
+                    citationViewModel.getRandomCitation()
+                          },
                 textId = R.string.play,
                 iconId = R.drawable.ic_next
             )
         }
     }
-}
-
-data class AnswerUIState(
-    val name: String = "",
-)
-
-@HiltViewModel
-class AnswerViewModel @Inject constructor(
-    // call repositories
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(AnswerUIState())
-    val uiState: StateFlow<AnswerUIState> = _uiState
 }

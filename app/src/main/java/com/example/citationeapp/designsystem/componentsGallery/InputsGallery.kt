@@ -19,8 +19,8 @@ fun DesignSystemInputs(modifier: Modifier = Modifier) {
     ) {
         TextH1(text = "Inputs")
 
-        TextInputWithButton{ inputText ->
-            println("Texte saisi : $inputText")
-        }
+        TextInputWithButton(
+            onClick = {}
+        )
     }
 }

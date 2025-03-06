@@ -10,37 +10,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.spacing24
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
+import com.example.citationeapp.viewmodel.CitationViewModel
+import com.example.citationeapp.viewmodel.VersionViewModel
 
 @Composable
 fun Play(
     modifier: Modifier = Modifier,
-    viewModel: PlayViewModel = hiltViewModel(),
+    citationViewModel: CitationViewModel,
+    versionViewModel: VersionViewModel,
     launchGame: () -> Unit,
 ) {
-    val uiState = viewModel.uiState.collectAsState()
-    val context = LocalContext.current
-
-
-    // équivalent de NgOnInit
-    LaunchedEffect(Unit) {}
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -59,21 +47,12 @@ fun Play(
         )
 
         TextIconButton(
-            onClick = launchGame,
+            onClick = {
+                launchGame()
+                citationViewModel.getRandomCitation()
+                      },
             textId = R.string.play,
             iconId = R.drawable.ic_next
         )
     }
-}
-
-data class PlayUIState(
-    val name: String = "",
-)
-
-@HiltViewModel
-class PlayViewModel @Inject constructor(
-    // call repositories
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(PlayUIState())
-    val uiState: StateFlow<PlayUIState> = _uiState
 }

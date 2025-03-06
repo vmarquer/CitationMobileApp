@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -32,7 +31,7 @@ import com.example.citationeapp.ui.theme.white
 @Composable
 fun TextInputWithButton(
     modifier: Modifier = Modifier,
-    onSendClick: (String) -> Unit
+    onClick: (String) -> Unit
 ) {
     var text by rememberSaveable { mutableStateOf("") }
 
@@ -45,7 +44,9 @@ fun TextInputWithButton(
     ) {
         TextField(
             value = text,
-            onValueChange = { text = it },
+            onValueChange = {
+                text = it
+                            },
             modifier = Modifier
                 .weight(1f)
                 .height(heightTextField),
@@ -70,7 +71,7 @@ fun TextInputWithButton(
             iconId = R.drawable.ic_next,
             color = white,
             backgroundColor = primary,
-            onClick = { onSendClick(text) },
+            onClick = { onClick(text) },
         )
     }
 }

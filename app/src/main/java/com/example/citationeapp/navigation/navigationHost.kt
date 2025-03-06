@@ -21,8 +21,10 @@ import com.example.citationeapp.ui.screens.profile.Profile
 import com.example.citationeapp.ui.screens.profile.Settings
 import com.example.citationeapp.designsystem.DesignSystem
 import com.example.citationeapp.ui.screens.play.Answer
+import com.example.citationeapp.viewmodel.CitationViewModel
 import com.example.citationeapp.ui.screens.play.Play
 import com.example.citationeapp.ui.screens.play.Question
+import com.example.citationeapp.viewmodel.VersionViewModel
 
 
 //region Liste des routes
@@ -143,6 +145,8 @@ private const val profileRoutePattern = "profile_graph"
 @Composable
 fun NavigationHost(
     appUIState: CitationAppUIState,
+    citationViewModel: CitationViewModel = hiltViewModel(),
+    versionViewModel: VersionViewModel  = hiltViewModel(),
     modifier: Modifier = Modifier,
     startDestination: String = Route.TopLevelRoute.Home.name
 ) {
@@ -160,19 +164,26 @@ fun NavigationHost(
         ) {
             composable(route = Route.TopLevelRoute.Play.name) {
                 Play (
+                    citationViewModel = citationViewModel,
+                    versionViewModel = versionViewModel,
                     launchGame = { navController.navigate(Route.NestedLevelRoute.Question.name) }
                 )
             }
 
             composable(route = Route.NestedLevelRoute.Question.name) {
                 Question(
-                    goToAnswer = { navController.navigate(Route.NestedLevelRoute.Answer.name) }
+                    citationViewModel = citationViewModel,
+                    versionViewModel = versionViewModel,
+                    goToAnswer = { navController.navigate(Route.NestedLevelRoute.Answer.name) },
+                    goHome = { navController.navigate(Route.TopLevelRoute.Home.name) }
                 )
             }
 
             composable(route = Route.NestedLevelRoute.Answer.name) {
                 Answer(
-                    newQuote = { navController.navigate(Route.NestedLevelRoute.Question.name) },
+                    citationViewModel = citationViewModel,
+                    versionViewModel = versionViewModel,
+                    goToNewCitation = { navController.navigate(Route.NestedLevelRoute.Question.name) },
                     goHome = { navController.navigate(Route.TopLevelRoute.Home.name) }
                 )
             }
@@ -191,14 +202,12 @@ fun NavigationHost(
 
             composable(route = Route.NestedLevelRoute.Settings.name) {
                 Settings(
-                    onBack = { navController.popBackStack() }
+                    versionViewModel = versionViewModel,
                 )
             }
 
             composable(route = Route.NestedLevelRoute.DesignSystem.name) {
-                DesignSystem(
-                    onBack = { navController.popBackStack() }
-                )
+                DesignSystem()
             }
         }
     }
