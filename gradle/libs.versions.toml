@@ -1,7 +1,10 @@
 [versions]
 agp = "8.7.0"
+converterGson = "2.9.0"
+gson = "2.8.8"
 hiltAndroid = "2.51.1"
 hiltCompiler = "2.44"
+hiltCompilerVersion = "2.51.1"
 hiltNavigationCompose = "1.2.0"
 hiltTesting = "2.55"
 kotlin = "2.1.0"
@@ -14,13 +17,20 @@ activityCompose = "1.9.3"
 composeBom = "2024.04.01"
 navigationRuntimeAndroid = "2.9.0-alpha07"
 navigationCompose = "2.8.8"
+retrofit = "2.11.0"
+retrofitVersion = "2.9.0"
+roomKtx = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroid" }
 hilt-android-v2511 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltTesting" }
+hilt-compiler-v2511 = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompilerVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -36,6 +46,11 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
+retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+retrofit-v290 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

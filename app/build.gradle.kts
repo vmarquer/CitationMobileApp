@@ -56,10 +56,12 @@ dependencies {
     // Dépendances Hilt
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android.v2511)
-    kapt(libs.hilt.compiler)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.hilt.compiler.v2511)
 
     // Pour les tests d'instrumentation
     androidTestImplementation(libs.hilt.android.testing)
+
     kaptAndroidTest(libs.hilt.compiler)
 
     // Pour les tests locaux
@@ -73,6 +75,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.scalars)
+    implementation(libs.retrofit.converter.moshi)
+    implementation(libs.converter.gson)
+
+    implementation(libs.hilt.android.gradle.plugin)
 }
 
 hilt {
