@@ -13,10 +13,13 @@
     <string name="home_title">Accueil</string>
 
     <!--
-        HOME
+        PLAY
     -->
     <string name="play_title">Jouer</string>
     <string name="play_question_place_holder">Entrez votre réponse...</string>
+    <string name="play_answer_good_answer">Bravo, bonne réponse !</string>
+    <string name="play_answer_bad_answer">Aïe, mauvaise réponse…</string>
+    <string name="play_answer_go_next_quote">Passer à la citation suivante</string>
 
     <!--
         PROFILE

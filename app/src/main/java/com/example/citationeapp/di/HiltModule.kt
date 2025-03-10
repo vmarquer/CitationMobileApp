@@ -3,6 +3,8 @@ package com.example.citationeapp.di
 import com.example.citationeapp.data.domain.mapper.toCitationAnswerResponseDto
 import com.example.citationeapp.data.domain.mapper.toCitationLightDto
 import com.example.citationeapp.data.models.Citation
+import com.example.citationeapp.data.models.Film
+import com.example.citationeapp.data.models.getAnswer
 import com.example.citationeapp.data.remote.dto.CitationAnswerRequestDTO
 import com.example.citationeapp.data.remote.dto.CitationAnswerResponseDTO
 import com.example.citationeapp.data.remote.dto.CitationLightDto
@@ -26,21 +28,33 @@ interface HiltModule {
 }
 
 val citationsMock: MutableList<Citation> = citations
+val moviesMock: List<Film> = movies
 
 class FakeCitationRepository @Inject constructor() : CitationRepositoryInterface {
 
     override suspend fun getRandomCitation(): Response<CitationLightDto> {
-        return Response.success(citationsMock.random().toCitationLightDto());
+        val citation = citationsMock.random()
+        val choices = moviesMock
+            .filter { it.kind == citation.kind && it.id != citation.answerId }
+            .shuffled()
+            .take(3)
+            .toMutableList()
+        moviesMock.find { it.id == citation.answerId }?.let { choices.add(it) }
+        val citationWithChoices = citation.copy(choices = choices)
+        return Response.success(citationWithChoices.toCitationLightDto())
     }
 
     override suspend fun postAnswer(id: Int, answer: CitationAnswerRequestDTO): Response<CitationAnswerResponseDTO> {
-        val citation = citationsMock[id].copy(
-            userGuessMovieVF = answer.movieVF,
-            userGuessMovieVO = answer.movieVO,
-            result = answer.movieVO == citationsMock[id].movieVO || answer.movieVF == citationsMock[id].movieVF
+        val citation = citationsMock.find { it.id == id } ?: citationsMock.first()
+        val movieAnswer = citation.getAnswer()
+        val result = answer.userAnswerId == citation.answerId
+        val updatedCitation = citation.copy(
+            userGuessMovieVF = movieAnswer?.titleVF,
+            userGuessMovieVO = movieAnswer?.titleVO,
+            result = result
         )
-        citationsMock[id] = citation
-        return Response.success(citation.toCitationAnswerResponseDto())
+        citationsMock[citationsMock.indexOf(citation)] = updatedCitation
+        return Response.success(updatedCitation.toCitationAnswerResponseDto())
     }
 }
 

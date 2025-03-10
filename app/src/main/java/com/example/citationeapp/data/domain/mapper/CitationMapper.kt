@@ -10,30 +10,25 @@ fun CitationLightDto.toCitation(): Citation {
         id = id,
         quoteVO = quoteVO,
         quoteVF = quoteVF,
-        movieVO = null,
-        movieVF = null,
-        caracter = null,
-        actor = null,
         difficulty = difficulty,
         kind = kind,
-        result = null
+        choices = choices
     )
 }
 
 fun Citation.updateWithResponse(response: CitationAnswerResponseDTO): Citation {
     return this.copy(
-        movieVO = response.movieVO,
-        movieVF = response.movieVF,
         caracter = response.caracter,
         actor = response.actor,
+        answerId = response.answerId,
         result = response.result
     )
 }
 
-fun Citation.updateWithUserGuess(response: CitationAnswerRequestDTO): Citation {
+fun Citation.updateWithUserGuess(userGuessMovieVO: String, userGuessMovieVF: String): Citation {
     return this.copy(
-        userGuessMovieVO = response.movieVO,
-        userGuessMovieVF = response.movieVF,
+        userGuessMovieVO = userGuessMovieVO,
+        userGuessMovieVF = userGuessMovieVF,
     )
 }
 
@@ -44,16 +39,16 @@ fun Citation.toCitationLightDto(): CitationLightDto {
         quoteVF = quoteVF,
         difficulty = difficulty,
         kind = kind,
+        choices = choices
     )
 }
 
 fun Citation.toCitationAnswerResponseDto(): CitationAnswerResponseDTO {
     return CitationAnswerResponseDTO(
         id = id,
-        movieVO = this.movieVO?: "",
-        movieVF = this.movieVF?: "",
         caracter = this.caracter?: "",
-        actor = this.caracter?: "",
+        actor = this.actor?: "",
+        answerId = this.answerId?: -1,
         result = this.result?: false,
     )
 }

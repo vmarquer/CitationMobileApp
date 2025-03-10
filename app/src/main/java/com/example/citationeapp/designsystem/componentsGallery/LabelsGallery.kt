@@ -8,6 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.citationeapp.ui.theme.black
+import com.example.citationeapp.ui.theme.components.TextBody1Bold
+import com.example.citationeapp.ui.theme.components.TextBody1Regular
+import com.example.citationeapp.ui.theme.components.TextBody2Bold
+import com.example.citationeapp.ui.theme.components.TextBody2Regular
 import com.example.citationeapp.ui.theme.components.TextBottomBar
 import com.example.citationeapp.ui.theme.components.TextH1
 import com.example.citationeapp.ui.theme.components.TextH1Bold
@@ -27,7 +31,7 @@ fun DesignSystemLabels(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(spacing10),
     ) {
-        TextH1(text = "Labels")
+        TextH2(text = "Labels")
 
         Column(
             modifier = modifier.fillMaxWidth(),
@@ -45,6 +49,10 @@ fun DesignSystemLabels(modifier: Modifier = Modifier) {
             TextH1Bold(text = "TextH1Bold")
             TextH2Bold(text = "TextH2Bold")
             TextH3Bold(text = "TextH3Bold")
+            TextBody1Regular(text = "TextBody1Regular")
+            TextBody2Regular(text = "TextBody2Regular")
+            TextBody1Bold(text = "TextBody1Bold")
+            TextBody2Bold(text = "TextBody1Bold")
         }
     }
 }

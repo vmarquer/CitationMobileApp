@@ -15,6 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.components.TextH1
+import com.example.citationeapp.ui.theme.components.TextH2
+import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing10
@@ -28,7 +30,7 @@ fun DesignSystemButtons(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(spacing10),
     ) {
-        TextH1(text = "Buttons")
+        TextH2(text = "Buttons")
 
         ButtonPrimary(
             modifier = Modifier,

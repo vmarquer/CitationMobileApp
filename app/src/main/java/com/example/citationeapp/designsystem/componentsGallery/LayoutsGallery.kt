@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.citationeapp.ui.theme.CustomBox
 import com.example.citationeapp.ui.theme.components.TextH1
+import com.example.citationeapp.ui.theme.components.TextH2
 import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.padding64
 import com.example.citationeapp.ui.theme.spacing10
@@ -19,7 +20,7 @@ fun DesignSystemLayouts(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(spacing10),
     ) {
-        TextH1(text = "Layouts")
+        TextH2(text = "Layouts")
 
         CustomBox(
             height = padding64

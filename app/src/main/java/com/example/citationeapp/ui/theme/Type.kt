@@ -45,3 +45,25 @@ val h3Bold = TextStyle(
     fontSize = 18.sp,
     fontWeight = FontWeight.Bold
 )
+
+val body1Regular = TextStyle(
+    fontFamily = barlowFontFamily,
+    fontSize = 16.sp
+)
+
+val body1Bold = TextStyle(
+    fontFamily = barlowFontFamily,
+    fontSize = 16.sp,
+    fontWeight = FontWeight.Bold
+)
+
+val body2Regular = TextStyle(
+    fontFamily = barlowFontFamily,
+    fontSize = 14.sp
+)
+
+val body2Bold = TextStyle(
+    fontFamily = barlowFontFamily,
+    fontSize = 14.sp,
+    fontWeight = FontWeight.Bold
+)

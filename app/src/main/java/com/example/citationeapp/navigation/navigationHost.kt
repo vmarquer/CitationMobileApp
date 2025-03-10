@@ -144,10 +144,10 @@ private const val profileRoutePattern = "profile_graph"
 
 @Composable
 fun NavigationHost(
+    modifier: Modifier = Modifier,
     appUIState: CitationAppUIState,
     citationViewModel: CitationViewModel = hiltViewModel(),
     versionViewModel: VersionViewModel  = hiltViewModel(),
-    modifier: Modifier = Modifier,
     startDestination: String = Route.TopLevelRoute.Home.name
 ) {
     val navController = appUIState.navController
@@ -258,34 +258,6 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
 fun NavController.navigateToDesignSystem(navOptions: NavOptions? = null) {
     this.navigate(Route.NestedLevelRoute.DesignSystem.name, navOptions)
 }
-
-
-
-
-
-
-
-
-
-//fun NavController.navigateToStep(step: Step?) {
-//    val navOptions = navOptions {
-//        popUpTo(route = Route.TopLevelRoute.Challenges.name)
-//    }
-//
-//    when (step) {
-//        is Input -> navigateToInput(navOptions)
-//        is InputQuestion -> navigateToInputQuestion(navOptions)
-//        is InputProgressive -> navigateToInputProgressive(navOptions)
-//        is Quiz -> navigateToQuiz(navOptions)
-//        is Ready -> navigateToReady(navOptions)
-//        is Tutorial -> navigateToTutorial(navOptions)
-//        is Exercise -> navigateToExercise(navOptions)
-//        is Score -> navigateToScore(navOptions)
-//
-//        // si plus d'étape, on affiche l'écran score
-//        else -> navigateToScore(navOptions)
-//    }
-//}
 
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(navController: NavController): T {

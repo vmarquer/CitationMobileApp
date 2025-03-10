@@ -9,6 +9,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.citationeapp.ui.theme.black
+import com.example.citationeapp.ui.theme.body1Bold
+import com.example.citationeapp.ui.theme.body1Regular
+import com.example.citationeapp.ui.theme.body2Bold
+import com.example.citationeapp.ui.theme.body2Regular
 import com.example.citationeapp.ui.theme.h1
 import com.example.citationeapp.ui.theme.h1Bold
 import com.example.citationeapp.ui.theme.h2
@@ -150,5 +154,65 @@ fun TextH3Bold(
         color = color,
         style = h3Bold,
         textAlign = textAlign
+    )
+}
+
+@Composable
+fun TextBody1Regular(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    @StringRes textId: Int = -1,
+    color: Color = black
+) {
+    Text(
+        text = if (textId == -1) text else stringResource(id = textId),
+        modifier = modifier,
+        color = color,
+        style = body1Regular
+    )
+}
+
+@Composable
+fun TextBody1Bold(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    @StringRes textId: Int = -1,
+    color: Color = black
+) {
+    Text(
+        text = if (textId == -1) text else stringResource(id = textId),
+        modifier = modifier,
+        color = color,
+        style = body1Bold
+    )
+}
+
+@Composable
+fun TextBody2Regular(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    @StringRes textId: Int = -1,
+    color: Color = black
+) {
+    Text(
+        text = if (textId == -1) text else stringResource(id = textId),
+        modifier = modifier,
+        color = color,
+        style = body2Regular
+    )
+}
+
+@Composable
+fun TextBody2Bold(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    @StringRes textId: Int = -1,
+    color: Color = black
+) {
+    Text(
+        text = if (textId == -1) text else stringResource(id = textId),
+        modifier = modifier,
+        color = color,
+        style = body2Bold
     )
 }

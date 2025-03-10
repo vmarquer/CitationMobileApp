@@ -1,5 +1,6 @@
 package com.example.citationeapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.citationeapp.data.domain.mapper.toCitation
@@ -57,25 +58,29 @@ class CitationViewModel @Inject constructor(
     fun sendAnwser(id: Int, answer: CitationAnswerRequestDTO) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
-
-            val currentCitation = _uiState.value.currentCitation
-            if (currentCitation != null) {
-                val updatedCitation = currentCitation.updateWithUserGuess(answer)
-                _uiState.value = _uiState.value.copy(currentCitation = updatedCitation)
+            val currentCitation = _uiState.value.currentCitation ?: return@launch
+            val selectedMovie = currentCitation.choices.find { it.id == answer.userAnswerId }
+            if (selectedMovie == null) {
+                _uiState.value = _uiState.value.copy(isError = true, isLoading = false)
+                return@launch
             }
-
             try {
                 val response = repository.postAnswer(id, answer)
                 if (response.isSuccessful) {
                     response.body()?.let { citationAnswerResponse ->
-                        val finalUpdatedCitation = currentCitation?.updateWithResponse(citationAnswerResponse)
                         _uiState.value = _uiState.value.copy(
-                            currentCitation = finalUpdatedCitation,
+                            currentCitation = currentCitation.copy(
+                                userGuessMovieVO = selectedMovie.titleVO,
+                                userGuessMovieVF = selectedMovie.titleVF,
+                                caracter = citationAnswerResponse.caracter,
+                                actor = citationAnswerResponse.actor,
+                                answerId = citationAnswerResponse.answerId,
+                                result = citationAnswerResponse.result
+                            )
                         )
                     }
                 } else {
                     _uiState.value = _uiState.value.copy(
-                        currentCitation = null,
                         isError = true,
                     )
                 }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.citationeapp.ui.theme.components.TextH1
+import com.example.citationeapp.ui.theme.components.TextH2
 import com.example.citationeapp.ui.theme.components.TextInputWithButton
 import com.example.citationeapp.ui.theme.spacing10
 
@@ -17,7 +18,7 @@ fun DesignSystemInputs(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(spacing10),
     ) {
-        TextH1(text = "Inputs")
+        TextH2(text = "Inputs")
 
         TextInputWithButton(
             onClick = {}
