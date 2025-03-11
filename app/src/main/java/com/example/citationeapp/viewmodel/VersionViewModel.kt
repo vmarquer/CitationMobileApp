@@ -20,8 +20,6 @@ class VersionViewModel @Inject constructor(
     }
 }
 
-
-
 enum class CitationVersion(val displayName: String) {
     VO("Version Originale"),
     VF("Version Française");

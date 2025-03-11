@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextBody2Regular
-import com.example.citationeapp.ui.theme.components.TextH2
 import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.dark_blue
 import com.example.citationeapp.ui.theme.fail

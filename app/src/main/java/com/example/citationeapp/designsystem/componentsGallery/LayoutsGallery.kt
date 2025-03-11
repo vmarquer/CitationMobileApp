@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.citationeapp.ui.theme.CustomBox
-import com.example.citationeapp.ui.theme.components.TextH2
 import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.padding64

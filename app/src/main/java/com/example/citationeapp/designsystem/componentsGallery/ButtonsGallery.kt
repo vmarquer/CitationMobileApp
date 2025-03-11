@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.black
-import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.grey
 import com.example.citationeapp.ui.theme.primary

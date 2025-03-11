@@ -10,13 +10,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.components.CheckableRow
-import com.example.citationeapp.ui.theme.components.TextH2
 import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.components.TextInputWithButton
 import com.example.citationeapp.ui.theme.spacing10
-import com.example.citationeapp.viewmodel.CitationVersion
 
 @Composable
 fun DesignSystemInputs(modifier: Modifier = Modifier) {
