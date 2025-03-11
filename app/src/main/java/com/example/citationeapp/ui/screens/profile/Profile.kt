@@ -1,7 +1,5 @@
 package com.example.citationeapp.ui.screens.profile
 
-import ButtonPrimary
-import IconTextButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.spacing16
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,8 +24,6 @@ import javax.inject.Inject
 fun Profile(
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel(),
-    showProfileSettings: () -> Unit,
-    showDesignSystem: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -44,16 +39,7 @@ fun Profile(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(spacing16)
     ) {
-        ButtonPrimary(
-            modifier = Modifier.fillMaxWidth(),
-            textId = R.string.settings_title,
-            onClick = showProfileSettings
-        )
-        ButtonPrimary(
-            modifier = Modifier.fillMaxWidth(),
-            textId = R.string.design_system_title,
-            onClick = showDesignSystem
-        )
+
     }
 }
 

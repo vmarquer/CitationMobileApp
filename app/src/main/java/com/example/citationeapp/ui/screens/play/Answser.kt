@@ -2,8 +2,6 @@ package com.example.citationeapp.ui.screens.play
 
 import AnswerButton
 import ButtonPrimary
-import RoundedIconButton
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,19 +27,18 @@ import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.CustomBox
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
-import com.example.citationeapp.ui.theme.components.TextH2
 import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.customBoxHeightAnswer
 import com.example.citationeapp.ui.theme.customBoxHeightAnswerSecondHalf
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.failSuccessLogoHeight
 import com.example.citationeapp.ui.theme.padding32
+import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.primary
-import com.example.citationeapp.ui.theme.spacing16
+import com.example.citationeapp.ui.theme.spacing12
 import com.example.citationeapp.ui.theme.spacing2
 import com.example.citationeapp.ui.theme.spacing8
 import com.example.citationeapp.ui.theme.success
-import com.example.citationeapp.ui.theme.white
 import com.example.citationeapp.viewmodel.CitationVersion
 import com.example.citationeapp.viewmodel.CitationViewModel
 import com.example.citationeapp.viewmodel.VersionViewModel
@@ -66,11 +63,11 @@ fun Answer(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(padding32)
+            .padding(horizontal = padding32, vertical = padding8)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(
-            space = spacing16, alignment = Alignment.CenterVertically
+            space = spacing12, alignment = Alignment.CenterVertically
         )
     ) {
         if (uiState.value.isLoading) {
@@ -100,7 +97,11 @@ fun Answer(
                             enabled = false,
                             backgroundColor = if (movie.id == currentCitation.answerId) success
                             else if (movie.titleVO == currentCitation.userGuessMovieVO ||
-                                movie.titleVF == currentCitation.userGuessMovieVF) fail else primary
+                                movie.titleVF == currentCitation.userGuessMovieVF) fail.copy(0.5f)
+                            else primary.copy(0.5f),
+                            borderColor = if (movie.id == currentCitation.answerId) success
+                            else if (movie.titleVO == currentCitation.userGuessMovieVO ||
+                                movie.titleVF == currentCitation.userGuessMovieVF) fail else primary,
                         )
                     }
                 }

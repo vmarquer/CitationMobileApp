@@ -40,7 +40,7 @@ val lineHeightLarge = 8.dp
 
 
 // --- Autres composants
-val heightTextField = 64.dp
+val heightTextField = 50.dp
 val customBoxHeightQuestion = 300.dp
 val customBoxHeightAnswer = 180.dp
 val customBoxHeightAnswerSecondHalf = 90.dp

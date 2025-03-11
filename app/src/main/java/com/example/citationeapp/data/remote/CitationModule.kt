@@ -1,12 +1,12 @@
 package com.example.citationeapp.data.remote
 
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import com.example.citationeapp.data.remote.api.CitationApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module

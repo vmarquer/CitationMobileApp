@@ -31,7 +31,7 @@ fun DesignSystemLabels(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(spacing10),
     ) {
-        TextH2(text = "Labels")
+        TextH3Bold(text = "Labels")
 
         Column(
             modifier = modifier.fillMaxWidth(),

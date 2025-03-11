@@ -1,11 +1,8 @@
 package com.example.citationeapp.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.citationeapp.data.domain.mapper.toCitation
-import com.example.citationeapp.data.domain.mapper.updateWithResponse
-import com.example.citationeapp.data.domain.mapper.updateWithUserGuess
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.remote.dto.CitationAnswerRequestDTO
 import com.example.citationeapp.data.remote.repositories.CitationRepositoryInterface

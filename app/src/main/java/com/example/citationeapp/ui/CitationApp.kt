@@ -38,8 +38,7 @@ import com.example.citationeapp.navigation.Route
 import com.example.citationeapp.navigation.navigateToTopLevelDestination
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBottomBar
-import com.example.citationeapp.ui.theme.components.TextScreenTitle
-import com.example.citationeapp.ui.theme.iconLargeSize
+import com.example.citationeapp.ui.theme.components.TextH2Bold
 import com.example.citationeapp.ui.theme.iconMediumSize
 import com.example.citationeapp.ui.theme.padding6
 import com.example.citationeapp.ui.theme.primary
@@ -93,7 +92,7 @@ fun CitationTopBar(
             TopAppBar(
                 title = {
                     route.displayName?.let {
-                        TextScreenTitle(
+                        TextH2Bold(
                             textId = it,
                             color = white,
                             textAlign = TextAlign.Start
@@ -154,7 +153,7 @@ fun CitationBottomBar(
                                 Icon(
                                     painter = painterResource(id = destination.iconId),
                                     contentDescription = null,
-                                    modifier = modifier.size(iconLargeSize)
+                                    modifier = modifier.size(iconMediumSize)
                                 )
                             },
                             label = {

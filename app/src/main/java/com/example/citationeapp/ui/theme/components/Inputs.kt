@@ -1,14 +1,20 @@
 package com.example.citationeapp.ui.theme.components
 
 import IconButton
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -19,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.grey
@@ -50,7 +57,7 @@ fun TextInputWithButton(
             modifier = Modifier
                 .weight(1f)
                 .height(heightTextField),
-            placeholder = { TextH3(textId = R.string.play_question_place_holder, color = grey) },
+            placeholder = { TextBody1Regular(textId = R.string.play_question_place_holder, color = grey) },
             singleLine = true,
             colors = TextFieldDefaults.colors().copy(
                 focusedTextColor = black,
@@ -75,3 +82,32 @@ fun TextInputWithButton(
         )
     }
 }
+
+@Composable
+fun CheckableRow(
+    text: String = "",
+    @StringRes textId: Int = -1,
+    isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onCheckedChange(!isChecked) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        TextBody2Regular(
+            text = (if (textId == -1) text else stringResource(id = textId)),
+            modifier = Modifier.weight(3f).padding(start = padding8)
+        )
+        Checkbox(
+            checked = isChecked,
+            onCheckedChange = { onCheckedChange(it) },
+            colors = CheckboxDefaults.colors(
+                checkedColor = primary,
+            )
+        )
+    }
+}
+

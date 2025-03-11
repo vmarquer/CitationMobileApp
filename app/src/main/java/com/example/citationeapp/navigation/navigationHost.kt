@@ -10,20 +10,20 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import androidx.navigation.navOptions
-import com.example.citationeapp.R
-import com.example.citationeapp.ui.CitationAppUIState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.example.citationeapp.ui.screens.home.Home
-import com.example.citationeapp.ui.screens.profile.Profile
-import com.example.citationeapp.ui.screens.profile.Settings
+import androidx.navigation.navOptions
+import com.example.citationeapp.R
 import com.example.citationeapp.designsystem.DesignSystem
+import com.example.citationeapp.ui.CitationAppUIState
+import com.example.citationeapp.ui.screens.home.Home
 import com.example.citationeapp.ui.screens.play.Answer
-import com.example.citationeapp.viewmodel.CitationViewModel
 import com.example.citationeapp.ui.screens.play.Play
 import com.example.citationeapp.ui.screens.play.Question
+import com.example.citationeapp.ui.screens.profile.Profile
+import com.example.citationeapp.ui.screens.profile.Settings
+import com.example.citationeapp.viewmodel.CitationViewModel
 import com.example.citationeapp.viewmodel.VersionViewModel
 
 
@@ -63,17 +63,17 @@ sealed class Route(
             displayName = R.string.play_title,
         )
 
-        data object Profile : TopLevelRoute(
-            name = "profile",
+        data object Settings : TopLevelRoute(
+            name = "settings",
             showTopBar = true,
             showBottomBar = true,
-            iconId = R.drawable.ic_profile,
-            titleTextId = R.string.profile_title,
-            displayName = R.string.profile_title,
+            iconId = R.drawable.ic_settings,
+            titleTextId = R.string.settings_title,
+            displayName = R.string.settings_title,
         )
 
         companion object {
-            val entries: List<TopLevelRoute> = listOf(Home, Play, Profile)
+            val entries: List<TopLevelRoute> = listOf(Home, Play, Settings)
         }
     }
 
@@ -100,21 +100,21 @@ sealed class Route(
             displayName = R.string.play_title,
         )
 
-        // Profil
-        data object Settings : NestedLevelRoute(
-            name = "settings",
+        // Settings
+        data object Profile : NestedLevelRoute(
+            name = "profile",
             showTopBar = true,
             showBottomBar = true,
-            parent = TopLevelRoute.Profile,
-            displayName = R.string.settings_title,
+            parent = TopLevelRoute.Settings,
+            displayName = R.string.settings_profile_title,
         )
 
         data object DesignSystem : NestedLevelRoute(
             name = "designsystem",
             showTopBar = true,
             showBottomBar = false,
-            parent = TopLevelRoute.Profile,
-            displayName = R.string.design_system_title,
+            parent = TopLevelRoute.Settings,
+            displayName = R.string.settings_design_system_title,
         )
     }
 
@@ -124,12 +124,12 @@ sealed class Route(
 
                 TopLevelRoute.Home.name -> TopLevelRoute.Home
                 TopLevelRoute.Play.name -> TopLevelRoute.Play
-                TopLevelRoute.Profile.name -> TopLevelRoute.Profile
+                TopLevelRoute.Settings.name -> TopLevelRoute.Settings
 
                 NestedLevelRoute.Question.name -> NestedLevelRoute.Question
                 NestedLevelRoute.Answer.name -> NestedLevelRoute.Answer
 
-                NestedLevelRoute.Settings.name -> NestedLevelRoute.Settings
+                NestedLevelRoute.Profile.name -> NestedLevelRoute.Profile
                 NestedLevelRoute.DesignSystem.name -> NestedLevelRoute.DesignSystem
 
                 else -> null
@@ -191,19 +191,18 @@ fun NavigationHost(
 
         navigation(
             route = profileRoutePattern,
-            startDestination = Route.TopLevelRoute.Profile.name
+            startDestination = Route.TopLevelRoute.Settings.name
         ) {
-            composable(route = Route.TopLevelRoute.Profile.name) {
-                Profile(
-                    showProfileSettings = { navController.navigate(Route.NestedLevelRoute.Settings.name) },
-                    showDesignSystem = { navController.navigate(Route.NestedLevelRoute.DesignSystem.name) }
+            composable(route = Route.TopLevelRoute.Settings.name) {
+                Settings(
+                    showProfile = { navController.navigate(Route.NestedLevelRoute.Profile.name) },
+                    showDesignSystem = { navController.navigate(Route.NestedLevelRoute.DesignSystem.name) },
+                    versionViewModel = versionViewModel,
                 )
             }
 
-            composable(route = Route.NestedLevelRoute.Settings.name) {
-                Settings(
-                    versionViewModel = versionViewModel,
-                )
+            composable(route = Route.NestedLevelRoute.Profile.name) {
+                Profile()
             }
 
             composable(route = Route.NestedLevelRoute.DesignSystem.name) {
@@ -227,7 +226,7 @@ fun NavController.navigateToTopLevelDestination(topLevelDestination: Route.TopLe
     when (topLevelDestination) {
         Route.TopLevelRoute.Home -> this.navigateToHome(topLevelNavOptions)
         Route.TopLevelRoute.Play -> this.navigateToPlay(topLevelNavOptions)
-        Route.TopLevelRoute.Profile -> this.navigateToProfile(topLevelNavOptions)
+        Route.TopLevelRoute.Settings -> this.navigateToSettings(topLevelNavOptions)
     }
 }
 
@@ -239,8 +238,8 @@ fun NavController.navigateToPlay(navOptions: NavOptions? = null) {
     this.navigate(Route.TopLevelRoute.Play.name, navOptions)
 }
 
-fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
-    this.navigate(Route.TopLevelRoute.Profile.name, navOptions)
+fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
+    this.navigate(Route.TopLevelRoute.Settings.name, navOptions)
 }
 
 fun NavController.navigateToQuestion(navOptions: NavOptions? = null) {
@@ -251,8 +250,8 @@ fun NavController.navigateToAnswer(navOptions: NavOptions? = null) {
     this.navigate(Route.NestedLevelRoute.Answer.name, navOptions)
 }
 
-fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
-    this.navigate(Route.NestedLevelRoute.Settings.name, navOptions)
+fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
+    this.navigate(Route.NestedLevelRoute.Profile.name, navOptions)
 }
 
 fun NavController.navigateToDesignSystem(navOptions: NavOptions? = null) {

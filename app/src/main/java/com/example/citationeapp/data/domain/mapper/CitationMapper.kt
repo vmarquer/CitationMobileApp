@@ -1,7 +1,6 @@
 package com.example.citationeapp.data.domain.mapper
 
 import com.example.citationeapp.data.models.Citation
-import com.example.citationeapp.data.remote.dto.CitationAnswerRequestDTO
 import com.example.citationeapp.data.remote.dto.CitationAnswerResponseDTO
 import com.example.citationeapp.data.remote.dto.CitationLightDto
 

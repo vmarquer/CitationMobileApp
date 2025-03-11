@@ -36,11 +36,10 @@ class FakeCitationRepository @Inject constructor() : CitationRepositoryInterface
         val citation = citationsMock.random()
         val choices = moviesMock
             .filter { it.kind == citation.kind && it.id != citation.answerId }
-            .shuffled()
             .take(3)
             .toMutableList()
         moviesMock.find { it.id == citation.answerId }?.let { choices.add(it) }
-        val citationWithChoices = citation.copy(choices = choices)
+        val citationWithChoices = citation.copy(choices = choices.shuffled())
         return Response.success(citationWithChoices.toCitationLightDto())
     }
 

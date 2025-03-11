@@ -1,23 +1,23 @@
 package com.example.citationeapp.designsystem.componentsGallery
 
+import AnswerButton
 import ButtonPrimary
 import IconButton
-import IconTextButton
+import ProfileButton
 import RoundedIconButton
 import TextIconButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.citationeapp.R
-import com.example.citationeapp.ui.theme.components.TextH1
-import com.example.citationeapp.ui.theme.components.TextH2
-import com.example.citationeapp.ui.theme.components.TextH3
-import com.example.citationeapp.ui.theme.padding16
+import com.example.citationeapp.ui.theme.black
+import com.example.citationeapp.ui.theme.components.TextBody1Bold
+import com.example.citationeapp.ui.theme.components.TextH3Bold
+import com.example.citationeapp.ui.theme.grey
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing10
 import com.example.citationeapp.ui.theme.white
@@ -30,7 +30,7 @@ fun DesignSystemButtons(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(spacing10),
     ) {
-        TextH2(text = "Buttons")
+        TextH3Bold(text = "Buttons")
 
         ButtonPrimary(
             modifier = Modifier,
@@ -112,10 +112,20 @@ fun DesignSystemButtons(modifier: Modifier = Modifier) {
             iconId = R.drawable.ic_next
         )
 
-        IconTextButton(
+        ProfileButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "ProfileButton",
             onClick = {},
-            text = "IconTextButton",
-            iconId = R.drawable.ic_next
+            iconId = R.drawable.ic_profile,
+            colorIcon = grey
+        )
+
+        AnswerButton(
+            text = "AnswerButton",
+            onClick = {},
+            enabled = true,
+            backgroundColor = primary.copy(0.7f),
+            borderColor = black
         )
     }
 }

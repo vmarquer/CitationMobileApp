@@ -21,6 +21,7 @@ import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.customBoxHeightQuestion
 import com.example.citationeapp.ui.theme.padding32
+import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing12
 import com.example.citationeapp.ui.theme.spacing2
@@ -48,7 +49,7 @@ fun Question(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(padding32)
+            .padding(padding32, vertical = padding8)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(
@@ -90,7 +91,8 @@ fun Question(
                                 )
                             },
                             enabled = true,
-                            backgroundColor = primary
+                            backgroundColor = primary.copy(0.7f),
+                            borderColor = black
                         )
                     }
                 }
