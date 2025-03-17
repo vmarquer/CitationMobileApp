@@ -65,7 +65,7 @@ fun Settings(
                 color = grey
             )
             CheckableRow(
-                textId = R.string.settings_version_original,
+                text = CitationVersion.VO.displayName,
                 isChecked = version == CitationVersion.VO,
                 onCheckedChange = { isChecked ->
                     if (isChecked) {
@@ -74,7 +74,7 @@ fun Settings(
                 }
             )
             CheckableRow(
-                textId = R.string.settings_version_french,
+                text = CitationVersion.VF.displayName,
                 isChecked = version == CitationVersion.VF,
                 onCheckedChange = { isChecked ->
                     if (isChecked) {

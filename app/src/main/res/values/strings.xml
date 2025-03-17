@@ -27,8 +27,6 @@
     <string name="settings_title">Paramètres</string>
     <string name="settings_profile_title">Profil</string>
     <string name="settings_version_title">Choix de la version</string>
-    <string name="settings_version_original">Version Originale</string>
-    <string name="settings_version_french">Version Française</string>
     <string name="settings_design_system_title">Design System</string>
 
 </resources>
