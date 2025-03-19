@@ -1,22 +1,36 @@
 package com.example.citationeapp.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.citationeapp.data.preferences.PrefsManager
+import androidx.lifecycle.viewModelScope
+import com.example.citationeapp.data.preferences.UserPreferences
+import com.example.citationeapp.viewmodel.CitationVersion.entries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class VersionViewModel @Inject constructor(
-    private val prefsManager: PrefsManager
+    private val userPreferences: UserPreferences
 ) : ViewModel() {
-    private val _version = MutableStateFlow(prefsManager.getVersion())
+
+    private val _version = MutableStateFlow(CitationVersion.VF)
     val version: StateFlow<CitationVersion> = _version
+
+    init {
+        viewModelScope.launch {
+            userPreferences.version.collect { versionString ->
+                _version.value = CitationVersion.fromString(versionString)
+            }
+        }
+    }
 
     fun toggleVersion(version: CitationVersion) {
         _version.value = version
-        prefsManager.saveVersion(version)
+        viewModelScope.launch {
+            userPreferences.saveVersion(version)
+        }
     }
 }
 

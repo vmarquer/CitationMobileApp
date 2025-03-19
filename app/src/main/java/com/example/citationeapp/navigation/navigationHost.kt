@@ -1,8 +1,10 @@
 package com.example.citationeapp.navigation
 
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -15,12 +17,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navOptions
 import com.example.citationeapp.R
+import com.example.citationeapp.data.preferences.UserPreferences
 import com.example.citationeapp.designsystem.DesignSystem
 import com.example.citationeapp.ui.CitationAppUIState
 import com.example.citationeapp.ui.screens.home.Home
 import com.example.citationeapp.ui.screens.play.Answer
 import com.example.citationeapp.ui.screens.play.Play
 import com.example.citationeapp.ui.screens.play.Question
+import com.example.citationeapp.ui.screens.portal.Login
+import com.example.citationeapp.ui.screens.portal.Portal
+import com.example.citationeapp.ui.screens.portal.Register
+import com.example.citationeapp.ui.screens.portal.Validation
 import com.example.citationeapp.ui.screens.profile.Profile
 import com.example.citationeapp.ui.screens.profile.Settings
 import com.example.citationeapp.viewmodel.CitationViewModel
@@ -35,6 +42,30 @@ sealed class Route(
     // Nom de la route à afficher dans la barre de navigation.
     @StringRes val displayName: Int? = null
 ) {
+
+    data object Portal : Route(
+        name = "portal",
+        showTopBar = false,
+        showBottomBar = false,
+    )
+
+    data object Login : Route(
+        name = "login",
+        showTopBar = false,
+        showBottomBar = false,
+    )
+
+    data object Register : Route(
+        name = "register",
+        showTopBar = false,
+        showBottomBar = false,
+    )
+
+    data object Validation : Route(
+        name = "validation",
+        showTopBar = false,
+        showBottomBar = false,
+    )
 
     // Routes utilisées dans la barre de navigation
     sealed class TopLevelRoute(
@@ -122,6 +153,11 @@ sealed class Route(
         fun getRoute(route: String?): Route? {
             return when (route) {
 
+                Portal.name -> Portal
+                Login.name -> Login
+                Register.name -> Register
+                Validation.name -> Validation
+
                 TopLevelRoute.Home.name -> TopLevelRoute.Home
                 TopLevelRoute.Play.name -> TopLevelRoute.Play
                 TopLevelRoute.Settings.name -> TopLevelRoute.Settings
@@ -146,15 +182,47 @@ private const val profileRoutePattern = "profile_graph"
 fun NavigationHost(
     modifier: Modifier = Modifier,
     appUIState: CitationAppUIState,
+    versionViewModel: VersionViewModel = hiltViewModel(),
     citationViewModel: CitationViewModel = hiltViewModel(),
-    versionViewModel: VersionViewModel  = hiltViewModel(),
-    startDestination: String = Route.TopLevelRoute.Home.name
+    userPreferences: UserPreferences,
 ) {
     val navController = appUIState.navController
+    val isAuthenticatedState = userPreferences.isAuthenticated.collectAsState(initial = false)
+    val isAuthenticated = isAuthenticatedState.value
+
+    val initialRoute = if (isAuthenticated) Route.TopLevelRoute.Home.name else Route.Portal.name
 
     NavHost(
-        navController = navController, startDestination = startDestination, modifier = modifier
+        navController = navController, startDestination = initialRoute, modifier = modifier
     ) {
+
+        composable(route = Route.Portal.name) {
+            Portal(
+                goLogin = { navController.navigate(Route.Login.name) },
+                goRegister = { navController.navigate(Route.Register.name) },
+            )
+        }
+
+        composable(route = Route.Login.name) {
+            Login(
+                goRegister = { navController.navigate(Route.Register.name) },
+                goHome = { navController.navigate(Route.TopLevelRoute.Home.name) }
+            )
+        }
+
+        composable(route = Route.Register.name) {
+            Register(
+                goValidation = { navController.navigate(Route.Validation.name) },
+                goLogin = { navController.navigate(Route.Login.name) }
+            )
+        }
+
+        composable(route = Route.Validation.name) {
+            Validation(
+                goLogin = { navController.navigate(Route.Login.name) }
+            )
+        }
+
         composable(route = Route.TopLevelRoute.Home.name) {
             Home()
         }
@@ -195,14 +263,16 @@ fun NavigationHost(
         ) {
             composable(route = Route.TopLevelRoute.Settings.name) {
                 Settings(
-                    showProfile = { navController.navigate(Route.NestedLevelRoute.Profile.name) },
-                    showDesignSystem = { navController.navigate(Route.NestedLevelRoute.DesignSystem.name) },
                     versionViewModel = versionViewModel,
+                    showProfile = { navController.navigate(Route.NestedLevelRoute.Profile.name) },
+                    showDesignSystem = { navController.navigate(Route.NestedLevelRoute.DesignSystem.name) }
                 )
             }
 
             composable(route = Route.NestedLevelRoute.Profile.name) {
-                Profile()
+                Profile(
+                    goPortal = { navController.navigate(Route.Portal.name) }
+                )
             }
 
             composable(route = Route.NestedLevelRoute.DesignSystem.name) {
@@ -228,6 +298,10 @@ fun NavController.navigateToTopLevelDestination(topLevelDestination: Route.TopLe
         Route.TopLevelRoute.Play -> this.navigateToPlay(topLevelNavOptions)
         Route.TopLevelRoute.Settings -> this.navigateToSettings(topLevelNavOptions)
     }
+}
+
+fun NavController.navigateToPortal(navOptions: NavOptions? = null) {
+    this.navigate(Route.Portal.name, navOptions)
 }
 
 fun NavController.navigateToHome(navOptions: NavOptions? = null) {
@@ -258,11 +332,12 @@ fun NavController.navigateToDesignSystem(navOptions: NavOptions? = null) {
     this.navigate(Route.NestedLevelRoute.DesignSystem.name, navOptions)
 }
 
+@SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(navController: NavController): T {
     // le propriétaire de shared view model est l'accueil comme c'est l'écran principal
-    val navGraphRoute = Route.TopLevelRoute.Home.name
-    val parentEntry = remember(this) {
+    val navGraphRoute = Route.Portal.name
+    val parentEntry = remember(navController, navGraphRoute) {
         navController.getBackStackEntry(navGraphRoute)
     }
     return hiltViewModel(parentEntry)

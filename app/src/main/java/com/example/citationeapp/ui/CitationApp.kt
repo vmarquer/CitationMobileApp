@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.citationeapp.R
+import com.example.citationeapp.data.preferences.UserPreferences
 import com.example.citationeapp.navigation.NavigationHost
 import com.example.citationeapp.navigation.Route
 import com.example.citationeapp.navigation.navigateToTopLevelDestination
@@ -46,7 +47,8 @@ import com.example.citationeapp.ui.theme.white
 
 @Composable
 fun CitationApp(
-    appUIState: CitationAppUIState = rememberCitationAppUIState()
+    appUIState: CitationAppUIState = rememberCitationAppUIState(),
+    userPreferences: UserPreferences
 ) {
     Box(modifier = with(Modifier.background(MaterialTheme.colorScheme.background)) {
         fillMaxSize()
@@ -71,7 +73,7 @@ fun CitationApp(
             },
         ) { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
-                NavigationHost(appUIState = appUIState)
+                NavigationHost(appUIState = appUIState, userPreferences = userPreferences)
             }
         }
     }

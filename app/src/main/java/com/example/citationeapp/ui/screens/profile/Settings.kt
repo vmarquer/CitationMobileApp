@@ -11,7 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.citationeapp.R
+import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.CheckableRow
 import com.example.citationeapp.ui.theme.components.TextH3Bold
@@ -21,15 +25,23 @@ import com.example.citationeapp.ui.theme.spacing2
 import com.example.citationeapp.ui.theme.spacing8
 import com.example.citationeapp.viewmodel.CitationVersion
 import com.example.citationeapp.viewmodel.VersionViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @Composable
 fun Settings(
     modifier: Modifier = Modifier,
     versionViewModel: VersionViewModel,
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
     showProfile: () -> Unit,
-    showDesignSystem: () -> Unit,
+    showDesignSystem: () -> Unit
 ) {
     val version by versionViewModel.version.collectAsState()
+
+    val logoutState by settingsViewModel.logoutState.collectAsState()
 
     Column(
         modifier = modifier
@@ -38,7 +50,6 @@ fun Settings(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(spacing8)
     ) {
-
         ProfileButton(
             modifier = Modifier.fillMaxWidth(),
             textId = R.string.settings_profile_title,
@@ -82,30 +93,34 @@ fun Settings(
                     }
                 }
             )
-
-
-//            Row(
-//                modifier = Modifier.fillMaxWidth().clickable { onCheckedChange(!isChecked) },
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.Start
-//            ) {
-//                TextBody2Regular(
-//                    textId = R.string.settings_verion_french,
-//                    modifier = Modifier.weight(2f)
-//                )
-//                Checkbox(
-//                    checked = version == CitationVersion.VF,
-//                    onCheckedChange = { isChecked ->
-//                        if (isChecked) {
-//                            versionViewModel.toggleVersion(CitationVersion.VF)
-//                        }
-//                    },
-//                    colors = CheckboxDefaults.colors(
-//                        checkedColor = primary,
-//                    )
-//                )
-//                Spacer(modifier = Modifier.weight(2f))
-//            }
         }
     }
+}
+
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    private val authRepository: AuthRepositoryInterface
+) : ViewModel() {
+
+    private val _logoutState = MutableStateFlow<LogoutState>(LogoutState.Idle)
+    val logoutState: StateFlow<LogoutState> = _logoutState
+
+    fun logout() {
+        _logoutState.value = LogoutState.Loading
+        viewModelScope.launch {
+            try {
+                authRepository.logout()
+                _logoutState.value = LogoutState.Success
+            } catch (e: Exception) {
+                _logoutState.value = LogoutState.Error(R.string.settings_error_logout_fail)
+            }
+        }
+    }
+}
+
+sealed class LogoutState {
+    object Idle : LogoutState()
+    object Loading : LogoutState()
+    object Success : LogoutState()
+    data class Error(val messageId: Int) : LogoutState()
 }

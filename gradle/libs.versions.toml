@@ -1,12 +1,8 @@
 [versions]
-accompanistPager = "0.31.5-beta"
-accompanistPagerIndicatorsVersion = "0.31.6-rc"
-accompanistPagerVersion = "0.32.0"
-accompanistPagerIndicators = "0.32.0"
 agp = "8.7.0"
 converterGson = "2.9.0"
-googleAccompanistPager = "0.31.6-rc"
-gson = "2.8.8"
+coreKtxVersion = "1.9.0"
+datastorePreferences = "1.0.0"
 hiltAndroid = "2.51.1"
 hiltCompiler = "2.44"
 hiltCompilerVersion = "2.51.1"
@@ -23,20 +19,15 @@ composeBom = "2024.04.01"
 navigationRuntimeAndroid = "2.9.0-alpha07"
 navigationCompose = "2.8.8"
 retrofit = "2.11.0"
-retrofitVersion = "2.9.0"
 roomKtx = "2.6.1"
+securityCryptoKtx = "1.0.0"
 
 [libraries]
-accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
-accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPager" }
-accompanist-pager-indicators-v0316rc = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPagerIndicatorsVersion" }
-accompanist-pager-indicators-v0320 = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPagerIndicators" }
-accompanist-pager-v0316rc = { module = "com.google.accompanist:accompanist-pager", version.ref = "googleAccompanistPager" }
-accompanist-pager-v0320 = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPagerVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-ktx-v190 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroid" }
 hilt-android-v2511 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
@@ -60,8 +51,8 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
 retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
-retrofit-v290 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+androidx-security-crypto-ktx = { group = "androidx.security", name = "security-crypto-ktx", version.ref = "securityCryptoKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

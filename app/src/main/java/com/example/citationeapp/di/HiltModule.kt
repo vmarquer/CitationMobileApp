@@ -1,36 +1,23 @@
 package com.example.citationeapp.di
 
-import android.content.Context
 import com.example.citationeapp.data.domain.mapper.toCitationAnswerResponseDto
 import com.example.citationeapp.data.domain.mapper.toCitationLightDto
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.Film
 import com.example.citationeapp.data.models.getAnswer
-import com.example.citationeapp.data.preferences.PrefsManager
 import com.example.citationeapp.data.remote.dto.CitationAnswerRequestDTO
 import com.example.citationeapp.data.remote.dto.CitationAnswerResponseDTO
 import com.example.citationeapp.data.remote.dto.CitationLightDto
+import com.example.citationeapp.data.remote.repositories.AuthRepository
+import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
 import com.example.citationeapp.data.remote.repositories.CitationRepositoryInterface
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
-
-@Module
-@InstallIn(SingletonComponent::class)
-object PrefsModule {
-
-    @Provides
-    @Singleton
-    fun providePrefsManager(@ApplicationContext context: Context): PrefsManager {
-        return PrefsManager(context)
-    }
-}
 
 
 @Module
@@ -40,7 +27,14 @@ interface HiltModule {
     @Binds
     fun bindsCitationRepository(
         configRepository: FakeCitationRepository
+        // FakeCitationRepository (mocks) ou CitationRepository (réseau)
     ): CitationRepositoryInterface
+
+    @Singleton
+    @Binds
+    fun bindsAuthRepository(
+        configRepository: AuthRepository
+    ): AuthRepositoryInterface
 }
 
 val citationsMock: MutableList<Citation> = citations

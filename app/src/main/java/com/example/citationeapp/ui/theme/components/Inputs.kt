@@ -26,6 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.grey
@@ -109,5 +111,30 @@ fun CheckableRow(
             )
         )
     }
+}
+
+@Composable
+fun AuthTextField(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    isPassword: Boolean = false,
+    @StringRes label: Int = -1,
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { TextBody2Regular(textId = label) },
+        modifier = modifier.fillMaxWidth(),
+        singleLine = true,
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = primary.copy(alpha = 0.1f),
+            focusedContainerColor = primary.copy(alpha = 0.1f),
+            unfocusedIndicatorColor = black,
+            focusedIndicatorColor = primary,
+            cursorColor = black
+        ),
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
+    )
 }
 

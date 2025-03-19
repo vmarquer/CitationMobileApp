@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.spacing24
 
@@ -16,6 +17,7 @@ import com.example.citationeapp.ui.theme.spacing24
 fun Home(
     modifier: Modifier = Modifier,
 ) {
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -26,6 +28,6 @@ fun Home(
             space = spacing24, alignment = Alignment.CenterVertically
         )
     ) {
-
+        TextBody1Regular(text = "Home")
     }
 }

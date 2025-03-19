@@ -9,7 +9,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -18,8 +17,10 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.citationeapp.data.remote.dto.CitationAnswerRequestDTO
 import com.example.citationeapp.ui.theme.CustomBox
 import com.example.citationeapp.ui.theme.black
+import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.customBoxHeightQuestion
+import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.padding32
 import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.primary
@@ -40,12 +41,6 @@ fun Question(
     val uiState = citationViewModel.uiState.collectAsState()
     val version by versionViewModel.version.collectAsState()
 
-    LaunchedEffect(uiState.value.isError) {
-        if (uiState.value.isError) {
-            goHome()
-        }
-    }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -58,6 +53,8 @@ fun Question(
     ) {
         if (uiState.value.isLoading) {
             CircularProgressIndicator()
+        } else if (uiState.value.isError){
+            TextBody1Regular(text = "Erreur réseau", color = fail)
         } else {
             CustomBox(
                 verticalAlignment = Alignment.Center,

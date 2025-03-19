@@ -56,7 +56,6 @@ dependencies {
     // Dépendances Hilt
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android.v2511)
-    implementation(libs.androidx.room.ktx)
     kapt(libs.hilt.compiler.v2511)
 
     // Pour les tests d'instrumentation
@@ -83,6 +82,10 @@ dependencies {
     implementation(libs.converter.gson)
 
     implementation(libs.hilt.android.gradle.plugin)
+
+    implementation(libs.androidx.datastore.preferences)
+
+    implementation("androidx.appcompat:appcompat:1.7.0")
 }
 
 hilt {
