@@ -1,6 +1,7 @@
 package com.example.citationeapp.data.domain.mapper
 
 import com.example.citationeapp.data.models.Citation
+import com.example.citationeapp.data.models.Film
 import com.example.citationeapp.data.remote.dto.CitationAnswerResponseDTO
 import com.example.citationeapp.data.remote.dto.CitationLightDto
 
@@ -15,14 +16,17 @@ fun CitationLightDto.toCitation(): Citation {
     )
 }
 
-fun Citation.updateWithResponse(response: CitationAnswerResponseDTO): Citation {
+fun Citation.updateWithResponse(response: CitationAnswerResponseDTO, userGuessMovie: Film?): Citation {
     return this.copy(
         caracter = response.caracter,
         actor = response.actor,
         answerId = response.answerId,
-        result = response.result
+        result = response.result,
+        userGuessMovieVO = userGuessMovie?.titleVO,
+        userGuessMovieVF = userGuessMovie?.titleVF
     )
 }
+
 
 fun Citation.updateWithUserGuess(userGuessMovieVO: String, userGuessMovieVF: String): Citation {
     return this.copy(
@@ -48,6 +52,6 @@ fun Citation.toCitationAnswerResponseDto(): CitationAnswerResponseDTO {
         caracter = this.caracter?: "",
         actor = this.actor?: "",
         answerId = this.answerId?: -1,
-        result = this.result?: false,
+        result = this.result == true,
     )
 }

@@ -21,16 +21,13 @@ import com.example.citationeapp.data.preferences.UserPreferences
 import com.example.citationeapp.designsystem.DesignSystem
 import com.example.citationeapp.ui.CitationAppUIState
 import com.example.citationeapp.ui.screens.home.Home
-import com.example.citationeapp.ui.screens.play.Answer
 import com.example.citationeapp.ui.screens.play.Play
-import com.example.citationeapp.ui.screens.play.Question
 import com.example.citationeapp.ui.screens.portal.Login
 import com.example.citationeapp.ui.screens.portal.Portal
 import com.example.citationeapp.ui.screens.portal.Register
 import com.example.citationeapp.ui.screens.portal.Validation
 import com.example.citationeapp.ui.screens.profile.Profile
 import com.example.citationeapp.ui.screens.profile.Settings
-import com.example.citationeapp.viewmodel.CitationViewModel
 import com.example.citationeapp.viewmodel.VersionViewModel
 
 
@@ -115,21 +112,6 @@ sealed class Route(
         displayName: Int? = null,
         val parent: TopLevelRoute
     ) : Route(name, showTopBar, showBottomBar, displayName) {
-        data object Question : NestedLevelRoute(
-            name = "question",
-            showTopBar = false,
-            showBottomBar = true,
-            parent = TopLevelRoute.Play,
-            displayName = R.string.play_title,
-        )
-
-        data object Answer : NestedLevelRoute(
-            name = "answer",
-            showTopBar = false,
-            showBottomBar = true,
-            parent = TopLevelRoute.Play,
-            displayName = R.string.play_title,
-        )
 
         // Settings
         data object Profile : NestedLevelRoute(
@@ -162,9 +144,6 @@ sealed class Route(
                 TopLevelRoute.Play.name -> TopLevelRoute.Play
                 TopLevelRoute.Settings.name -> TopLevelRoute.Settings
 
-                NestedLevelRoute.Question.name -> NestedLevelRoute.Question
-                NestedLevelRoute.Answer.name -> NestedLevelRoute.Answer
-
                 NestedLevelRoute.Profile.name -> NestedLevelRoute.Profile
                 NestedLevelRoute.DesignSystem.name -> NestedLevelRoute.DesignSystem
 
@@ -175,7 +154,6 @@ sealed class Route(
 }
 //endregion
 
-private const val playRoutePattern = "play_graph"
 private const val profileRoutePattern = "profile_graph"
 
 @Composable
@@ -183,7 +161,6 @@ fun NavigationHost(
     modifier: Modifier = Modifier,
     appUIState: CitationAppUIState,
     versionViewModel: VersionViewModel = hiltViewModel(),
-    citationViewModel: CitationViewModel = hiltViewModel(),
     userPreferences: UserPreferences,
 ) {
     val navController = appUIState.navController
@@ -226,35 +203,9 @@ fun NavigationHost(
         composable(route = Route.TopLevelRoute.Home.name) {
             Home()
         }
-        navigation(
-            route = playRoutePattern,
-            startDestination = Route.TopLevelRoute.Play.name
-        ) {
-            composable(route = Route.TopLevelRoute.Play.name) {
-                Play (
-                    citationViewModel = citationViewModel,
-                    versionViewModel = versionViewModel,
-                    launchGame = { navController.navigate(Route.NestedLevelRoute.Question.name) }
-                )
-            }
 
-            composable(route = Route.NestedLevelRoute.Question.name) {
-                Question(
-                    citationViewModel = citationViewModel,
-                    versionViewModel = versionViewModel,
-                    goToAnswer = { navController.navigate(Route.NestedLevelRoute.Answer.name) },
-                    goHome = { navController.navigate(Route.TopLevelRoute.Home.name) }
-                )
-            }
-
-            composable(route = Route.NestedLevelRoute.Answer.name) {
-                Answer(
-                    citationViewModel = citationViewModel,
-                    versionViewModel = versionViewModel,
-                    goToNewCitation = { navController.navigate(Route.NestedLevelRoute.Question.name) },
-                    goHome = { navController.navigate(Route.TopLevelRoute.Home.name) }
-                )
-            }
+        composable(route = Route.TopLevelRoute.Play.name) {
+            Play()
         }
 
         navigation(
@@ -314,14 +265,6 @@ fun NavController.navigateToPlay(navOptions: NavOptions? = null) {
 
 fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
     this.navigate(Route.TopLevelRoute.Settings.name, navOptions)
-}
-
-fun NavController.navigateToQuestion(navOptions: NavOptions? = null) {
-    this.navigate(Route.NestedLevelRoute.Question.name, navOptions)
-}
-
-fun NavController.navigateToAnswer(navOptions: NavOptions? = null) {
-    this.navigate(Route.NestedLevelRoute.Answer.name, navOptions)
 }
 
 fun NavController.navigateToProfile(navOptions: NavOptions? = null) {

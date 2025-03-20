@@ -24,7 +24,7 @@ class AuthRepository @Inject constructor(
             if (response.isSuccessful) {
                 val authResponse = response.body()
                 authResponse?.let {
-                    userPreferences.saveAuthToken(it.token, it.refreshToken)
+                    userPreferences.saveAuthToken(it.bearer, it.refresh)
                     return true
                 } ?: run {
                     false

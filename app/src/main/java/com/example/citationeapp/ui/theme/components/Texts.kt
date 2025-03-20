@@ -162,13 +162,15 @@ fun TextBody1Regular(
     modifier: Modifier = Modifier,
     text: String = "",
     @StringRes textId: Int = -1,
-    color: Color = black
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = if (textId == -1) text else stringResource(id = textId),
         modifier = modifier,
         color = color,
-        style = body1Regular
+        style = body1Regular,
+        textAlign = textAlign
     )
 }
 
@@ -177,13 +179,15 @@ fun TextBody1Bold(
     modifier: Modifier = Modifier,
     text: String = "",
     @StringRes textId: Int = -1,
-    color: Color = black
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = if (textId == -1) text else stringResource(id = textId),
         modifier = modifier,
         color = color,
-        style = body1Bold
+        style = body1Bold,
+        textAlign = textAlign
     )
 }
 
@@ -192,13 +196,15 @@ fun TextBody2Regular(
     modifier: Modifier = Modifier,
     text: String = "",
     @StringRes textId: Int = -1,
-    color: Color = black
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = if (textId == -1) text else stringResource(id = textId),
         modifier = modifier,
         color = color,
-        style = body2Regular
+        style = body2Regular,
+        textAlign = textAlign
     )
 }
 
@@ -207,12 +213,14 @@ fun TextBody2Bold(
     modifier: Modifier = Modifier,
     text: String = "",
     @StringRes textId: Int = -1,
-    color: Color = black
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = if (textId == -1) text else stringResource(id = textId),
         modifier = modifier,
         color = color,
-        style = body2Bold
+        style = body2Bold,
+        textAlign = textAlign
     )
 }

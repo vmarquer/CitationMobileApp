@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 interface CitationRepositoryInterface {
     suspend fun getRandomCitation(): Response<CitationLightDto>
-    suspend fun postAnswer(id: Int, answer: CitationAnswerRequestDTO): Response<CitationAnswerResponseDTO>
+    suspend fun postAnswer(citationId: Int, answerId: Int): Response<CitationAnswerResponseDTO>
 }
 
 class CitationRepository @Inject constructor(
@@ -20,8 +20,8 @@ class CitationRepository @Inject constructor(
         return apiService.getRandomCitation()
     }
 
-    override suspend fun postAnswer(id: Int, answer: CitationAnswerRequestDTO): Response<CitationAnswerResponseDTO> {
-        return apiService.postCitationAnswer(id, answer)
+    override suspend fun postAnswer(citationId: Int, userAnswerId: Int): Response<CitationAnswerResponseDTO> {
+        return apiService.postCitationAnswer(citationId, CitationAnswerRequestDTO(userAnswerId))
     }
 }
 

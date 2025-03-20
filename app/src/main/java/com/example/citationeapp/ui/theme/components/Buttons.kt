@@ -29,8 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBody1Bold
+import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.components.TextH2Bold
-import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.heightAnswerButton
 import com.example.citationeapp.ui.theme.iconLargeSize
 import com.example.citationeapp.ui.theme.iconMediumSize
@@ -101,7 +101,7 @@ fun AnswerButton(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            TextH3(
+            TextBody1Regular(
                 text = if (textId == -1) text else stringResource(id = textId),
                 color = white,
                 textAlign = TextAlign.Center,
