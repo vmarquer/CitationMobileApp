@@ -2,7 +2,6 @@ package com.example.citationeapp.ui.screens.play
 
 import AnswerButton
 import ButtonPrimary
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,11 +9,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
@@ -80,13 +81,11 @@ fun Answer(
             modifier = Modifier.height(customBoxHeightAnswerSecondHalf).weight(1f),
             contentAlignment = Alignment.Center
         ) {
-            Image(
+            Icon(
                 modifier = Modifier.height(failSuccessLogoHeight),
-                painter = painterResource(
-                    id = if (citation.result == true) R.drawable.ic_success else R.drawable.ic_fail
-                ),
+                imageVector = if (citation.result == true) Icons.Outlined.CheckCircle else Icons.Outlined.Cancel,
+                tint = if (citation.result == true) success else fail,
                 contentDescription = null,
-                contentScale = ContentScale.Fit
             )
         }
         Column (

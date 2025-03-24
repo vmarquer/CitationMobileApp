@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,21 +27,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.citationeapp.R
-import com.example.citationeapp.data.preferences.UserPreferences
 import com.example.citationeapp.navigation.NavigationHost
 import com.example.citationeapp.navigation.Route
 import com.example.citationeapp.navigation.navigateToTopLevelDestination
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBottomBar
-import com.example.citationeapp.ui.theme.components.TextH2Bold
+import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.iconMediumSize
 import com.example.citationeapp.ui.theme.padding6
 import com.example.citationeapp.ui.theme.primary
@@ -48,7 +47,6 @@ import com.example.citationeapp.ui.theme.white
 @Composable
 fun CitationApp(
     appUIState: CitationAppUIState = rememberCitationAppUIState(),
-    userPreferences: UserPreferences
 ) {
     Box(modifier = with(Modifier.background(MaterialTheme.colorScheme.background)) {
         fillMaxSize()
@@ -73,7 +71,7 @@ fun CitationApp(
             },
         ) { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
-                NavigationHost(appUIState = appUIState, userPreferences = userPreferences)
+                NavigationHost(appUIState = appUIState)
             }
         }
     }
@@ -94,7 +92,7 @@ fun CitationTopBar(
             TopAppBar(
                 title = {
                     route.displayName?.let {
-                        TextH2Bold(
+                        TextH3Bold(
                             textId = it,
                             color = white,
                             textAlign = TextAlign.Start
@@ -108,10 +106,9 @@ fun CitationTopBar(
                             modifier = Modifier.padding(horizontal = padding6)
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                                 contentDescription = null,
                                 tint = white,
-                                modifier = Modifier.size(iconMediumSize)
                             )
                         }
                     }
@@ -153,7 +150,8 @@ fun CitationBottomBar(
                             onClick = { onNavigateToDestination(destination) },
                             icon = {
                                 Icon(
-                                    painter = painterResource(id = destination.iconId),
+                                    imageVector = destination.iconId,
+                                    // painter = painterResource(id = destination.iconId),
                                     contentDescription = null,
                                     modifier = modifier.size(iconMediumSize)
                                 )

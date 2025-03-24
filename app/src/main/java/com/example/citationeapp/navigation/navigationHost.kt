@@ -1,12 +1,15 @@
 package com.example.citationeapp.navigation
 
 import android.annotation.SuppressLint
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.LocalPlay
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
@@ -17,11 +20,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navOptions
 import com.example.citationeapp.R
-import com.example.citationeapp.data.preferences.UserPreferences
 import com.example.citationeapp.designsystem.DesignSystem
 import com.example.citationeapp.ui.CitationAppUIState
 import com.example.citationeapp.ui.screens.home.Home
 import com.example.citationeapp.ui.screens.play.Play
+import com.example.citationeapp.ui.screens.portal.ForgottenPassword
 import com.example.citationeapp.ui.screens.portal.Login
 import com.example.citationeapp.ui.screens.portal.Portal
 import com.example.citationeapp.ui.screens.portal.Register
@@ -52,6 +55,12 @@ sealed class Route(
         showBottomBar = false,
     )
 
+    data object ForgottenPassword : Route(
+        name = "forgotten-password",
+        showTopBar = false,
+        showBottomBar = false,
+    )
+
     data object Register : Route(
         name = "register",
         showTopBar = false,
@@ -70,14 +79,14 @@ sealed class Route(
         showTopBar: Boolean,
         showBottomBar: Boolean,
         displayName: Int,
-        @DrawableRes val iconId: Int,
+        val iconId: ImageVector,
         @StringRes val titleTextId: Int
     ) : Route(name, showTopBar, showBottomBar, displayName) {
         data object Home : TopLevelRoute(
             name = "home",
             showTopBar = true,
             showBottomBar = true,
-            iconId = R.drawable.ic_home,
+            iconId = Icons.Rounded.Home,
             titleTextId = R.string.home_title,
             displayName = R.string.home_title,
         )
@@ -86,7 +95,7 @@ sealed class Route(
             name = "play",
             showTopBar = true,
             showBottomBar = true,
-            iconId = R.drawable.ic_play,
+            iconId = Icons.Rounded.LocalPlay,
             titleTextId = R.string.play_title,
             displayName = R.string.play_title,
         )
@@ -95,7 +104,7 @@ sealed class Route(
             name = "settings",
             showTopBar = true,
             showBottomBar = true,
-            iconId = R.drawable.ic_settings,
+            iconId = Icons.Rounded.Settings,
             titleTextId = R.string.settings_title,
             displayName = R.string.settings_title,
         )
@@ -137,6 +146,7 @@ sealed class Route(
 
                 Portal.name -> Portal
                 Login.name -> Login
+                ForgottenPassword.name -> ForgottenPassword
                 Register.name -> Register
                 Validation.name -> Validation
 
@@ -161,13 +171,9 @@ fun NavigationHost(
     modifier: Modifier = Modifier,
     appUIState: CitationAppUIState,
     versionViewModel: VersionViewModel = hiltViewModel(),
-    userPreferences: UserPreferences,
+    initialRoute: String = Route.Portal.name
 ) {
     val navController = appUIState.navController
-    val isAuthenticatedState = userPreferences.isAuthenticated.collectAsState(initial = false)
-    val isAuthenticated = isAuthenticatedState.value
-
-    val initialRoute = if (isAuthenticated) Route.TopLevelRoute.Home.name else Route.Portal.name
 
     NavHost(
         navController = navController, startDestination = initialRoute, modifier = modifier
@@ -177,13 +183,21 @@ fun NavigationHost(
             Portal(
                 goLogin = { navController.navigate(Route.Login.name) },
                 goRegister = { navController.navigate(Route.Register.name) },
+                goHome = { navController.navigate(Route.TopLevelRoute.Home.name) }
             )
         }
 
         composable(route = Route.Login.name) {
             Login(
                 goRegister = { navController.navigate(Route.Register.name) },
-                goHome = { navController.navigate(Route.TopLevelRoute.Home.name) }
+                goHome = { navController.navigate(Route.TopLevelRoute.Home.name) },
+                goForgottenPassword = { navController.navigate(Route.ForgottenPassword.name) }
+            )
+        }
+
+        composable(route = Route.ForgottenPassword.name) {
+            ForgottenPassword(
+                goLogin = { navController.navigate(Route.Login.name) }
             )
         }
 
@@ -251,10 +265,6 @@ fun NavController.navigateToTopLevelDestination(topLevelDestination: Route.TopLe
     }
 }
 
-fun NavController.navigateToPortal(navOptions: NavOptions? = null) {
-    this.navigate(Route.Portal.name, navOptions)
-}
-
 fun NavController.navigateToHome(navOptions: NavOptions? = null) {
     this.navigate(Route.TopLevelRoute.Home.name, navOptions)
 }
@@ -265,14 +275,6 @@ fun NavController.navigateToPlay(navOptions: NavOptions? = null) {
 
 fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
     this.navigate(Route.TopLevelRoute.Settings.name, navOptions)
-}
-
-fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
-    this.navigate(Route.NestedLevelRoute.Profile.name, navOptions)
-}
-
-fun NavController.navigateToDesignSystem(navOptions: NavOptions? = null) {
-    this.navigate(Route.NestedLevelRoute.DesignSystem.name, navOptions)
 }
 
 @SuppressLint("UnrememberedGetBackStackEntry")

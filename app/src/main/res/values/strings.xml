@@ -20,11 +20,14 @@
     <string name="portal_back_to_connection">Retour à la connexion</string>
     <string name="portal_error_empty_field">Veuillez remplir tous les champs !</string>
     <string name="portal_error_different_passwords">Les mots de passe ne correspondent pas !</string>
-    <string name="portal_error_login_invalid_credentials">Le nom d\'utilisateur ou le mot de passe est erroné</string>
+    <string name="portal_error_login_invalid_credentials">Le nom d\'utilisateur ou le mot de passe est invalide</string>
     <string name="portal_error_login_netword_issue">Erreur réseau !</string>
     <string name="portal_activation_code">Code d\'activation</string>
     <string name="portal_activation_code_submit">Envoyer le code</string>
     <string name="portal_activation_code_error_incorrect_length">Le code d\'activation est composé de 6 chiffres</string>
+    <string name="portal_invalid_activation_code">Le code d\'activation est invalide</string>
+    <string name="portal_invalid_email">L\'email est invalide</string>
+    <string name="portal_forgotten_password_title">Demander un nouveau mot de passe</string>
 
     <!--
         HOME
@@ -49,5 +52,10 @@
     <string name="settings_design_system_title">Design System</string>
     <string name="settings_error_logout_netword_issue">Erreur réseau !</string>
     <string name="settings_error_logout_fail">La déconnexion a échoué !</string>
+    <string name="settings_modify_password_label">Modifier le mot de passe</string>
+    <string name="settings_modify_password_old_password_label">Mot de passe actuel</string>
+    <string name="settings_modify_password_new_password_label">Nouveau mot de passe</string>
+    <string name="settings_modify_password_confirm_new_password_label">Confirmer le nouveau mot de passe</string>
+    <string name="settings_modify_password_error_old_password_invalid">L\'ancien mot de passe est invalide</string>
 
 </resources>

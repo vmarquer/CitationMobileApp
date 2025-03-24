@@ -86,6 +86,8 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     implementation("androidx.appcompat:appcompat:1.7.0")
+
+    implementation(libs.androidx.material.icons.extended)
 }
 
 hilt {
