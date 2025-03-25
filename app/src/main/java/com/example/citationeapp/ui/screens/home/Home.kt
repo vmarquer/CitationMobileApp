@@ -1,6 +1,8 @@
 package com.example.citationeapp.ui.screens.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,6 +11,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.spacing24
@@ -18,16 +23,22 @@ fun Home(
     modifier: Modifier = Modifier,
 ) {
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(padding16)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(
-            space = spacing24, alignment = Alignment.CenterVertically
-        )
     ) {
-        TextBody1Regular(text = "Home")
+        Image(
+            painter = painterResource(id = R.drawable.ic_pattern_randomized),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            // Content
+        }
     }
 }

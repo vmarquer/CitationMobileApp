@@ -1,6 +1,7 @@
 package com.example.citationeapp.ui.screens.play
 
 import AnswerButton
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +19,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.getDifficultyBackgroundColor
 import com.example.citationeapp.data.models.getDifficultyLabel
@@ -30,7 +35,6 @@ import com.example.citationeapp.ui.theme.minHeightChoicesBox
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.padding2
 import com.example.citationeapp.ui.theme.padding20
-import com.example.citationeapp.ui.theme.padding24
 import com.example.citationeapp.ui.theme.padding32
 import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.primary
@@ -45,44 +49,40 @@ fun Question(
     citation: Citation,
     onSubmitAnswer: (Int, Int) -> Unit
 ) {
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
     ) {
-        Box(
+        Image(
+            painter = painterResource(id = R.drawable.ic_pattern_randomized),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+        Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(primary.copy(alpha = 0.8f), shape = RoundedCornerShape(bottomEnd = padding32, bottomStart = padding32))
-                .height(customBoxHeightQuestion),
-            contentAlignment = Alignment.Center,
+                .verticalScroll(rememberScrollState())
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(padding16)
+                    .clip(RoundedCornerShape(padding16))
+                    .height(customBoxHeightQuestion),
+                contentAlignment = Alignment.Center,
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = padding8, start = padding8, end = padding8),
-                    verticalAlignment = Alignment.Top,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    TextBody2Bold(
-                        modifier = modifier
-                            .background(citation.getDifficultyBackgroundColor(), RoundedCornerShape(50))
-                            .padding(horizontal = padding8, vertical = padding2),
-                        text = citation.getDifficultyLabel(),
-                        color = white,
-                    )
-                    TextBody2Bold(
-                        text = citation.getKindLabel(),
-                        color = white,
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                Image(
+                    painter = painterResource(id = R.drawable.ic_wintery_sunburst),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.matchParentSize()
+                )
+
+                Box(
+                    modifier = modifier
+                        .matchParentSize(),
+                    contentAlignment = Alignment.Center,
                 ) {
                     TextH3(
                         modifier = Modifier.padding(horizontal = padding20),
@@ -91,35 +91,51 @@ fun Question(
                         textAlign = TextAlign.Center
                     )
                 }
-                Spacer(modifier = Modifier)
-            }
-        }
 
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(horizontal = padding16)
-                .padding(top = padding16)
-                .weight(1f)
-                .defaultMinSize(minHeight = minHeightChoicesBox)
-                .background(primary.copy(alpha = 0.5f), shape = RoundedCornerShape(topStart = padding32, topEnd = padding32)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Column(
-                modifier = modifier.fillMaxSize().padding(padding24),
-                verticalArrangement = Arrangement.spacedBy(
-                    space = spacing8, alignment = Alignment.CenterVertically)
-            ) {
-                citation.choices.forEach { movie ->
-                    AnswerButton(
-                        text = if (version == CitationVersion.VF) movie.titleVF else movie.titleVO,
-                        onClick = {
-                            onSubmitAnswer(citation.id, movie.id)
-                        },
-                        enabled = true,
-                        backgroundColor = primary.copy(0.6f),
-                        borderColor = primary
+                Box(
+                    modifier = modifier
+                        .matchParentSize()
+                        .padding(padding8),
+                    contentAlignment = Alignment.TopStart,
+                ) {
+                    TextBody2Bold(
+                        modifier = modifier
+                            .background(
+                                citation.getDifficultyBackgroundColor(),
+                                RoundedCornerShape(50)
+                            )
+                            .padding(horizontal = padding8, vertical = padding2),
+                        text = citation.getDifficultyLabel(),
+                        color = white,
                     )
+                }
+            }
+
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .weight(1f)
+                    .defaultMinSize(minHeight = minHeightChoicesBox),
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(
+                    modifier = modifier.fillMaxSize().padding(padding32),
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = spacing8, alignment = Alignment.CenterVertically
+                    )
+                ) {
+                    citation.choices.forEach { movie ->
+                        AnswerButton(
+                            text = if (version == CitationVersion.VF) movie.titleVF else movie.titleVO,
+                            onClick = {
+                                onSubmitAnswer(citation.id, movie.id)
+                            },
+                            enabled = true,
+                            backgroundColor = primary,
+                            borderColor = primary,
+                            textColor = white
+                        )
+                    }
                 }
             }
         }

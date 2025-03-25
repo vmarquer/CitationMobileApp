@@ -1,5 +1,6 @@
 package com.example.citationeapp.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -27,15 +28,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.citationeapp.R
 import com.example.citationeapp.navigation.NavigationHost
 import com.example.citationeapp.navigation.Route
 import com.example.citationeapp.navigation.navigateToTopLevelDestination
+import com.example.citationeapp.ui.screens.toast.GlobalToast
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBottomBar
 import com.example.citationeapp.ui.theme.components.TextH3Bold
@@ -71,6 +76,7 @@ fun CitationApp(
             },
         ) { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
+                GlobalToast()
                 NavigationHost(appUIState = appUIState)
             }
         }
@@ -89,36 +95,46 @@ fun CitationTopBar(
     currentRoute?.let { route ->
         if (route.showTopBar) {
             val parentRouteName: Int? = (route as? Route.NestedLevelRoute)?.parent?.displayName
-            TopAppBar(
-                title = {
-                    route.displayName?.let {
-                        TextH3Bold(
-                            textId = it,
-                            color = white,
-                            textAlign = TextAlign.Start
-                        )
-                    }
-                },
-                navigationIcon = {
-                    if (parentRouteName != null) {
-                        IconButton(
-                            onClick = onBack,
-                            modifier = Modifier.padding(horizontal = padding6)
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                                contentDescription = null,
-                                tint = white,
+            Box(
+                modifier = modifier.fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_liquid_cheese),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.matchParentSize()
+                )
+                TopAppBar(
+                    title = {
+                        route.displayName?.let {
+                            TextH3Bold(
+                                textId = it,
+                                color = white,
+                                textAlign = TextAlign.Start
                             )
                         }
-                    }
-                },
-                modifier = modifier.fillMaxWidth(),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = primary,
-                    titleContentColor = white
+                    },
+                    navigationIcon = {
+                        if (parentRouteName != null) {
+                            IconButton(
+                                onClick = onBack,
+                                modifier = Modifier.padding(horizontal = padding6)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                    contentDescription = null,
+                                    tint = white,
+                                )
+                            }
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth().background(primary.copy(alpha = 0.6f)),
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        titleContentColor = white
+                    )
                 )
-            )
+            }
         }
     }
 }

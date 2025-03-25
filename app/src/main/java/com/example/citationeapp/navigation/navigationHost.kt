@@ -29,6 +29,7 @@ import com.example.citationeapp.ui.screens.portal.Login
 import com.example.citationeapp.ui.screens.portal.Portal
 import com.example.citationeapp.ui.screens.portal.Register
 import com.example.citationeapp.ui.screens.portal.Validation
+import com.example.citationeapp.ui.screens.profile.ModifyPassword
 import com.example.citationeapp.ui.screens.profile.Profile
 import com.example.citationeapp.ui.screens.profile.Settings
 import com.example.citationeapp.viewmodel.VersionViewModel
@@ -138,6 +139,14 @@ sealed class Route(
             parent = TopLevelRoute.Settings,
             displayName = R.string.settings_design_system_title,
         )
+
+        data object ModifyPassword : NestedLevelRoute(
+            name = "modifypassword",
+            showTopBar = true,
+            showBottomBar = false,
+            parent = TopLevelRoute.Settings,
+            displayName = R.string.settings_modify_password_title,
+        )
     }
 
     companion object {
@@ -156,6 +165,7 @@ sealed class Route(
 
                 NestedLevelRoute.Profile.name -> NestedLevelRoute.Profile
                 NestedLevelRoute.DesignSystem.name -> NestedLevelRoute.DesignSystem
+                NestedLevelRoute.ModifyPassword.name -> NestedLevelRoute.ModifyPassword
 
                 else -> null
             }
@@ -236,12 +246,19 @@ fun NavigationHost(
 
             composable(route = Route.NestedLevelRoute.Profile.name) {
                 Profile(
-                    goPortal = { navController.navigate(Route.Portal.name) }
+                    goPortal = { navController.navigate(Route.Portal.name) },
+                    goModifyPassword = { navController.navigate(Route.NestedLevelRoute.ModifyPassword.name) }
                 )
             }
 
             composable(route = Route.NestedLevelRoute.DesignSystem.name) {
                 DesignSystem()
+            }
+
+            composable(route = Route.NestedLevelRoute.ModifyPassword.name) {
+                ModifyPassword(
+                    goProfile = { navController.navigate(Route.NestedLevelRoute.Profile.name) }
+                )
             }
         }
     }

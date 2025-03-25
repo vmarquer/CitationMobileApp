@@ -19,12 +19,16 @@
     <string name="portal_label_email">Email</string>
     <string name="portal_back_to_connection">Retour à la connexion</string>
     <string name="portal_error_empty_field">Veuillez remplir tous les champs !</string>
+    <string name="portal_forgotten_password_error_ask">Demande de nouveau mot de passe rejetée !</string>
+    <string name="portal_forgotten_password_error_send">Problème lors de l\'envoie du nouveau mot de passe !</string>
     <string name="portal_error_different_passwords">Les mots de passe ne correspondent pas !</string>
+    <string name="portal_error_register">Inscription refusée !</string>
     <string name="portal_error_login_invalid_credentials">Le nom d\'utilisateur ou le mot de passe est invalide</string>
     <string name="portal_error_login_netword_issue">Erreur réseau !</string>
     <string name="portal_activation_code">Code d\'activation</string>
     <string name="portal_activation_code_submit">Envoyer le code</string>
     <string name="portal_activation_code_error_incorrect_length">Le code d\'activation est composé de 6 chiffres</string>
+    <string name="portal_activation_code_error_invalid">Le code d\'activation est invalide</string>
     <string name="portal_invalid_activation_code">Le code d\'activation est invalide</string>
     <string name="portal_invalid_email">L\'email est invalide</string>
     <string name="portal_forgotten_password_title">Demander un nouveau mot de passe</string>
@@ -48,6 +52,7 @@
     -->
     <string name="settings_title">Paramètres</string>
     <string name="settings_profile_title">Profil</string>
+    <string name="settings_modify_password_title">Modifier le mot de passe</string>
     <string name="settings_version_title">Choix de la version</string>
     <string name="settings_design_system_title">Design System</string>
     <string name="settings_error_logout_netword_issue">Erreur réseau !</string>
@@ -56,6 +61,6 @@
     <string name="settings_modify_password_old_password_label">Mot de passe actuel</string>
     <string name="settings_modify_password_new_password_label">Nouveau mot de passe</string>
     <string name="settings_modify_password_confirm_new_password_label">Confirmer le nouveau mot de passe</string>
-    <string name="settings_modify_password_error_old_password_invalid">L\'ancien mot de passe est invalide</string>
+    <string name="settings_modify_password_error_old_password_invalid">L\'ancien mot de passe est invalide !</string>
 
 </resources>

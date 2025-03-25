@@ -57,27 +57,6 @@ fun ButtonPrimary(
 }
 
 @Composable
-fun ButtonSecondary(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    text: String = "",
-    @StringRes textId: Int = -1
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier,
-        shape = RoundedCornerShape(padding8),
-        colors = ButtonDefaults.buttonColors(containerColor = white),
-    ) {
-        TextBody1Bold(
-            text = (if (textId == -1) text else stringResource(id = textId)),
-            color = primary,
-            modifier = Modifier
-        )
-    }
-}
-
-@Composable
 fun AnswerButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
@@ -85,7 +64,8 @@ fun AnswerButton(
     @StringRes textId: Int = -1,
     enabled: Boolean,
     backgroundColor: Color,
-    borderColor: Color
+    borderColor: Color,
+    textColor: Color,
 ) {
     var isPressed by remember { mutableStateOf(false) }
     Button(
@@ -117,7 +97,7 @@ fun AnswerButton(
         ) {
             TextBody1Regular(
                 text = if (textId == -1) text else stringResource(id = textId),
-                color = white,
+                color = textColor,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )

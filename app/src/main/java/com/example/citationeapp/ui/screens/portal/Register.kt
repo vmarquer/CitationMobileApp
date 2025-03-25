@@ -155,15 +155,11 @@ class RegisterViewModel @Inject constructor(
         }
         _registerState.value = RegisterState.Loading
         viewModelScope.launch {
-            try {
-                val success = authRepository.register(username, email, password)
-                if (success) {
-                    _registerState.value = RegisterState.Success
-                } else {
-                    _registerState.value = RegisterState.Error(R.string.portal_error_login_invalid_credentials)
-                }
-            } catch (e: Exception) {
-                _registerState.value = RegisterState.Error(R.string.portal_error_login_netword_issue)
+            val success = authRepository.register(username, email, password)
+            if (success) {
+                _registerState.value = RegisterState.Success
+            } else {
+                _registerState.value = RegisterState.Error(R.string.portal_error_register)
             }
         }
     }

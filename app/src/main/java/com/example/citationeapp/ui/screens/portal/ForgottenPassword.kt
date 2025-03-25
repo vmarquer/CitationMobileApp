@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -79,6 +80,8 @@ fun ForgottenPassword(
                 )
                 if (askNewPasswordState is AskNewPasswordState.Error) {
                     TextBody1Regular(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
                         textId = (askNewPasswordState as AskNewPasswordState.Error).messageId,
                         color = fail,
                     )
@@ -116,6 +119,8 @@ fun ForgottenPassword(
 
                 if (passwordActivationCodeState is PasswordActivationCodeState.Error) {
                     TextBody1Regular(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
                         textId = (passwordActivationCodeState as PasswordActivationCodeState.Error).messageId,
                         color = fail,
                     )
@@ -161,15 +166,11 @@ class ForgottenPasswordViewModel @Inject constructor(
         }
         _askNewPasswordState.value = AskNewPasswordState.Loading
         viewModelScope.launch {
-            try {
-                val success = authRepository.askNewPassword(email)
-                if (success) {
-                    _askNewPasswordState.value = AskNewPasswordState.Success
-                } else {
-                    _askNewPasswordState.value = AskNewPasswordState.Error(R.string.portal_invalid_activation_code)
-                }
-            } catch (e: Exception) {
-                _askNewPasswordState.value = AskNewPasswordState.Error(R.string.portal_error_login_netword_issue)
+            val success = authRepository.askNewPassword(email)
+            if (success) {
+                _askNewPasswordState.value = AskNewPasswordState.Success
+            } else {
+                _askNewPasswordState.value = AskNewPasswordState.Error(R.string.portal_forgotten_password_error_ask)
             }
         }
     }
@@ -185,15 +186,11 @@ class ForgottenPasswordViewModel @Inject constructor(
         }
         _passwordActivationCodeState.value = PasswordActivationCodeState.Loading
         viewModelScope.launch {
-            try {
-                val success = authRepository.sendNewPassword(email, activationCode, newPassword)
-                if (success) {
-                    _passwordActivationCodeState.value = PasswordActivationCodeState.Success
-                } else {
-                    _passwordActivationCodeState.value = PasswordActivationCodeState.Error(R.string.portal_invalid_activation_code)
-                }
-            } catch (e: Exception) {
-                _passwordActivationCodeState.value = PasswordActivationCodeState.Error(R.string.portal_error_login_netword_issue)
+            val success = authRepository.sendNewPassword(email, activationCode, newPassword)
+            if (success) {
+                _passwordActivationCodeState.value = PasswordActivationCodeState.Success
+            } else {
+                _passwordActivationCodeState.value = PasswordActivationCodeState.Error(R.string.portal_forgotten_password_error_send)
             }
         }
     }

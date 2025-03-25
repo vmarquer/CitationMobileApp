@@ -21,6 +21,7 @@ import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing24
+import com.example.citationeapp.utils.ToastManager
 import com.example.citationeapp.viewmodel.CitationVersion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -111,10 +112,10 @@ class PlayViewModel @Inject constructor(
                         _playState.value = PlayState.Question
                     }
                 } else {
-                    _playState.value = PlayState.Error("Erreur ${response.code()} : ${response.message()}")
+                    ToastManager.showMessage("${response.code()} : ${response.message()}", fail)
                 }
             } catch (e: Exception) {
-                _playState.value = PlayState.Error("Exception : ${e.message}")
+                ToastManager.showMessage("Exception : ${e.message}", fail)
             }
         }
     }

@@ -90,6 +90,8 @@ fun Login(
 
             if (loginState is LoginState.Error) {
                 TextBody1Regular(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
                     textId = (loginState as LoginState.Error).messageId,
                     color = fail,
                 )
@@ -147,17 +149,14 @@ class LoginViewModel @Inject constructor(
         }
         _loginState.value = LoginState.Loading
         viewModelScope.launch {
-            try {
-                val success = authRepository.login(email, password)
-                if (success) {
-                    _loginState.value = LoginState.Success
-                } else {
-                    _loginState.value = LoginState.Error(R.string.portal_error_login_invalid_credentials)
-                }
-            } catch (e: Exception) {
-                _loginState.value = LoginState.Error(R.string.portal_error_login_netword_issue)
+            val success = authRepository.login(email, password)
+            if (success) {
+                _loginState.value = LoginState.Success
+            } else {
+                _loginState.value = LoginState.Error(R.string.portal_error_login_invalid_credentials)
             }
         }
+
     }
 }
 

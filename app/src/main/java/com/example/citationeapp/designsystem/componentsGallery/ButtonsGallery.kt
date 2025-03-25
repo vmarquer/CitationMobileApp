@@ -16,6 +16,7 @@ import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.grey
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing10
+import com.example.citationeapp.ui.theme.white
 
 
 @Composable
@@ -38,7 +39,8 @@ fun DesignSystemButtons(modifier: Modifier = Modifier) {
             onClick = {},
             enabled = true,
             backgroundColor = primary.copy(0.7f),
-            borderColor = black
+            borderColor = black,
+            textColor = white
         )
 
         ProfileButton(

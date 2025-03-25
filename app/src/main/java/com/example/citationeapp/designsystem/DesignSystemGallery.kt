@@ -12,7 +12,6 @@ import com.example.citationeapp.designsystem.componentsGallery.DesignSystemButto
 import com.example.citationeapp.designsystem.componentsGallery.DesignSystemColors
 import com.example.citationeapp.designsystem.componentsGallery.DesignSystemInputs
 import com.example.citationeapp.designsystem.componentsGallery.DesignSystemLabels
-import com.example.citationeapp.designsystem.componentsGallery.DesignSystemLayouts
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.spacing16
 
@@ -30,7 +29,6 @@ fun DesignSystem(
         DesignSystemInputs()
         DesignSystemButtons()
         DesignSystemLabels()
-        DesignSystemLayouts()
         DesignSystemColors()
     }
 }

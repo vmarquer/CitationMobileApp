@@ -120,15 +120,11 @@ class ValidationViewModel @Inject constructor(
         }
         _validationState.value = ValidationState.Loading
         viewModelScope.launch {
-            try {
-                val success = authRepository.activate(code)
-                if (success) {
-                    _validationState.value = ValidationState.Success
-                } else {
-                    _validationState.value = ValidationState.Error(R.string.portal_invalid_activation_code)
-                }
-            } catch (e: Exception) {
-                _validationState.value = ValidationState.Error(R.string.portal_error_login_netword_issue)
+            val success = authRepository.activate(code)
+            if (success) {
+                _validationState.value = ValidationState.Success
+            } else {
+                _validationState.value = ValidationState.Error(R.string.portal_activation_code_error_invalid)
             }
         }
     }
