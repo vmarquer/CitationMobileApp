@@ -1,5 +1,10 @@
 package com.example.citationeapp.data.models
 
+import androidx.compose.ui.graphics.Color
+import com.example.citationeapp.ui.theme.fail
+import com.example.citationeapp.ui.theme.success
+import com.example.citationeapp.ui.theme.yellow
+
 data class Citation(
     val id: Int,
     val quoteVO: String,
@@ -17,4 +22,30 @@ data class Citation(
 
 fun Citation.getAnswer(): Film ? {
     return choices.find { it.id == answerId }
+}
+
+fun Citation.getDifficultyLabel(): String {
+    return when (difficulty) {
+        1 -> "Facile"
+        2 -> "Moyen"
+        3 -> "Difficile"
+        else -> "Inconnue"
+    }
+}
+
+fun Citation.getKindLabel(): String {
+    return when (kind) {
+        "movie" -> "Film"
+        "serie" -> "Série"
+        else -> "Inconnue"
+    }
+}
+
+fun Citation.getDifficultyBackgroundColor(): Color {
+    return when (difficulty) {
+        1 -> success
+        2 -> yellow
+        3 -> fail
+        else -> fail
+    }
 }

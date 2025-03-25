@@ -45,5 +45,6 @@ val customBoxHeightQuestion = 250.dp
 val customBoxHeightAnswer = 150.dp
 val customBoxHeightAnswerSecondHalf = 80.dp
 val heightAnswerButton = 56.dp
+val minHeightChoicesBox = 270.dp
 val failSuccessLogoHeight = 50.dp
 

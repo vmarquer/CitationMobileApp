@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,8 +19,7 @@ import com.example.citationeapp.data.remote.repositories.CitationRepositoryInter
 import com.example.citationeapp.data.remote.repositories.VersionRepository
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.fail
-import com.example.citationeapp.ui.theme.padding16
-import com.example.citationeapp.ui.theme.spacing16
+import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing24
 import com.example.citationeapp.viewmodel.CitationVersion
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,45 +36,41 @@ fun Play(
     val playState = viewModel.playState.collectAsState().value
     val citation = viewModel.citation.collectAsState().value
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(padding16)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(
-            space = spacing16, alignment = Alignment.CenterVertically
-        )
-    ) {
-
-        when (playState) {
-            is PlayState.Loading -> CircularProgressIndicator()
-
-            is PlayState.Question -> citation?.let {
-                Question(
-                    citation = it,
-                    version = viewModel.version,
-                    onSubmitAnswer = { citationId, userAnswerId,  ->
-                        viewModel.submitAnswer(citationId, userAnswerId)
-                    }
-                )
+    when (playState) {
+        is PlayState.Loading ->
+            Column(
+                modifier = modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                CircularProgressIndicator(color = primary)
             }
 
-            is PlayState.Answer -> citation?.let {
-                Answer(
-                    citation = it,
-                    version = viewModel.version,
-                    onPlayAgain = { viewModel.playAgain() }
-                )
-            }
+        is PlayState.Question -> citation?.let {
+            Question(
+                citation = it,
+                version = viewModel.version,
+                onSubmitAnswer = { citationId, userAnswerId ->
+                    viewModel.submitAnswer(citationId, userAnswerId)
+                }
+            )
+        }
 
-            is PlayState.Error -> {
-                TextBody1Regular(
-                    text = "Erreur : ${playState.message}",
-                    color = fail,
-                    modifier = Modifier.padding(spacing24)
-                )
-            }
+        is PlayState.Answer -> citation?.let {
+            Answer(
+                citation = it,
+                version = viewModel.version,
+                onPlayAgain = { viewModel.playAgain() }
+            )
+        }
+
+        is PlayState.Error -> {
+            TextBody1Regular(
+                text = "Erreur : ${playState.message}",
+                color = fail,
+                modifier = Modifier.padding(spacing24)
+            )
         }
     }
 }

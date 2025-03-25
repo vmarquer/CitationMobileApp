@@ -27,6 +27,7 @@ import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing10
 import com.example.citationeapp.ui.theme.success
 import com.example.citationeapp.ui.theme.white
+import com.example.citationeapp.ui.theme.yellow
 import kotlin.math.floor
 import kotlin.math.sqrt
 
@@ -48,6 +49,7 @@ fun DesignSystemColors(
             Pair("Grey", grey),
             Pair("DarkBlue", dark_blue),
             Pair("Success", success),
+            Pair("Yellow", yellow),
             Pair("Fail", fail),
         )
 
