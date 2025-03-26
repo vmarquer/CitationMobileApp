@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,20 +31,17 @@ import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.getDifficultyBackgroundColor
 import com.example.citationeapp.data.models.getDifficultyLabel
-import com.example.citationeapp.data.models.getKindLabel
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.components.TextBody2Bold
 import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.customBoxHeightAnswer
 import com.example.citationeapp.ui.theme.customBoxHeightAnswerSecondHalf
-import com.example.citationeapp.ui.theme.customBoxHeightQuestion
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.failSuccessLogoHeight
 import com.example.citationeapp.ui.theme.minHeightChoicesBox
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.padding2
 import com.example.citationeapp.ui.theme.padding20
-import com.example.citationeapp.ui.theme.padding24
 import com.example.citationeapp.ui.theme.padding32
 import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.primary
@@ -118,7 +114,7 @@ fun Answer(
                                 RoundedCornerShape(50)
                             )
                             .padding(horizontal = padding8, vertical = padding2),
-                        text = citation.getDifficultyLabel(),
+                        textId = citation.getDifficultyLabel(),
                         color = white,
                     )
                 }

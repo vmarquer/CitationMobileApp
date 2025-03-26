@@ -1,6 +1,7 @@
 package com.example.citationeapp.data.models
 
 import androidx.compose.ui.graphics.Color
+import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.success
 import com.example.citationeapp.ui.theme.yellow
@@ -24,20 +25,20 @@ fun Citation.getAnswer(): Film ? {
     return choices.find { it.id == answerId }
 }
 
-fun Citation.getDifficultyLabel(): String {
+fun Citation.getDifficultyLabel(): Int {
     return when (difficulty) {
-        1 -> "Facile"
-        2 -> "Moyen"
-        3 -> "Difficile"
-        else -> "Inconnue"
+        1 -> R.string.play_difficulty_easy
+        2 -> R.string.play_difficulty_medium
+        3 -> R.string.play_difficulty_difficult
+        else -> R.string.play_difficulty_easy
     }
 }
 
-fun Citation.getKindLabel(): String {
+fun Citation.getKindLabel(): Int {
     return when (kind) {
-        "movie" -> "Film"
-        "serie" -> "Série"
-        else -> "Inconnue"
+        "movie" -> R.string.play_kind_movie
+        "serie" -> R.string.play_kind_serie
+        else -> R.string.play_kind_movie
     }
 }
 

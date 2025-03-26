@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.citationeapp.R
 import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
 import com.example.citationeapp.ui.theme.components.ConfirmationDialog
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
@@ -77,8 +78,8 @@ fun Profile(
 
     if (showLogoutDialog) {
         ConfirmationDialog(
-            title = "Déconnexion",
-            message = "Êtes-vous sûr de vouloir vous déconnecter ?",
+            titleId = R.string.profile_logout_dialog_title,
+            messageId = R.string.profile_logout_dialog_message,
             onConfirm = {
                 showLogoutDialog = false
                 viewModel.logout()

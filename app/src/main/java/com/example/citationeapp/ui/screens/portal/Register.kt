@@ -69,26 +69,26 @@ fun Register(
         if (registerState is RegisterState.Loading) {
             CircularProgressIndicator()
         } else {
-            TextBody1Bold(textId = R.string.portal_create_account)
+            TextBody1Bold(textId = R.string.register_title)
 
             AuthTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = R.string.portal_label_email,
+                label = R.string.field_email,
                 icon = Icons.Rounded.Email
             )
 
             AuthTextField(
                 value = username,
                 onValueChange = { username = it },
-                label = R.string.portal_label_username,
+                label = R.string.field_username,
                 icon = Icons.Rounded.PermIdentity
             )
 
             AuthTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = R.string.portal_label_password,
+                label = R.string.field_password,
                 isPassword = true,
                 icon = Icons.Rounded.Password
             )
@@ -96,7 +96,7 @@ fun Register(
             AuthTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
-                label = R.string.portal_label_password_confirm,
+                label = R.string.field_confirm_password,
                 isPassword = true,
                 icon = Icons.Rounded.Password
             )
@@ -111,7 +111,7 @@ fun Register(
             ButtonPrimary(
                 onClick = { viewModel.register(email, username, password, confirmPassword) },
                 modifier = Modifier.fillMaxWidth(),
-                textId = R.string.portal_sign_up
+                textId = R.string.button_register
             )
 
             HorizontalDivider(
@@ -124,7 +124,7 @@ fun Register(
             ButtonPrimary(
                 onClick = goLogin,
                 modifier = Modifier.fillMaxWidth(),
-                textId = R.string.portal_back_to_connection
+                textId = R.string.button_back_to_login
             )
         }
 
@@ -146,11 +146,11 @@ class RegisterViewModel @Inject constructor(
 
     fun register(email: String, username: String, password: String, confirmPassword: String) {
         if (username.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
-            _registerState.value = RegisterState.Error(R.string.portal_error_empty_field)
+            _registerState.value = RegisterState.Error(R.string.error_empty_field)
             return
         }
         if (password != confirmPassword) {
-            _registerState.value = RegisterState.Error(R.string.portal_error_different_passwords)
+            _registerState.value = RegisterState.Error(R.string.error_different_passwords)
             return
         }
         _registerState.value = RegisterState.Loading
@@ -158,8 +158,6 @@ class RegisterViewModel @Inject constructor(
             val success = authRepository.register(username, email, password)
             if (success) {
                 _registerState.value = RegisterState.Success
-            } else {
-                _registerState.value = RegisterState.Error(R.string.portal_error_register)
             }
         }
     }

@@ -43,7 +43,7 @@ fun Settings(
     ) {
         ProfileButton(
             modifier = Modifier.fillMaxWidth(),
-            textId = R.string.settings_profile_title,
+            textId = R.string.profile_title,
             onClick = showProfile,
             iconId = Icons.Filled.Person,
             colorIcon = black
@@ -51,7 +51,7 @@ fun Settings(
 
         ProfileButton(
             modifier = Modifier.fillMaxWidth(),
-            textId = R.string.settings_design_system_title,
+            textId = R.string.design_system_title,
             onClick = showDesignSystem,
             iconId = Icons.Filled.DesignServices,
             colorIcon = black
@@ -63,11 +63,11 @@ fun Settings(
             verticalArrangement = Arrangement.spacedBy(spacing2)
         ) {
             TextH3Bold(
-                textId = R.string.settings_version_title,
+                textId = R.string.settings_version_label,
                 color = grey
             )
             CheckableRow(
-                text = CitationVersion.VO.displayName,
+                textId = CitationVersion.VO.displayNameRes,
                 isChecked = version == CitationVersion.VO,
                 onCheckedChange = { isChecked ->
                     if (isChecked) {
@@ -76,7 +76,7 @@ fun Settings(
                 }
             )
             CheckableRow(
-                text = CitationVersion.VF.displayName,
+                textId = CitationVersion.VF.displayNameRes,
                 isChecked = version == CitationVersion.VF,
                 onCheckedChange = { isChecked ->
                     if (isChecked) {

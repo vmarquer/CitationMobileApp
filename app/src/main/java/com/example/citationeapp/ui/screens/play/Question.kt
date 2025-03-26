@@ -6,11 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -27,7 +24,6 @@ import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.getDifficultyBackgroundColor
 import com.example.citationeapp.data.models.getDifficultyLabel
-import com.example.citationeapp.data.models.getKindLabel
 import com.example.citationeapp.ui.theme.components.TextBody2Bold
 import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.customBoxHeightQuestion
@@ -105,7 +101,7 @@ fun Question(
                                 RoundedCornerShape(50)
                             )
                             .padding(horizontal = padding8, vertical = padding2),
-                        text = citation.getDifficultyLabel(),
+                        textId = citation.getDifficultyLabel(),
                         color = white,
                     )
                 }

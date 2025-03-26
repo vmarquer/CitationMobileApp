@@ -43,7 +43,7 @@ class AuthRepository @Inject constructor(
                 ToastManager.showMessage("Inscription réussie !", success)
                 true
             } else {
-                ToastManager.showMessage("Erreur d'inscription !", fail)
+                ToastManager.showMessage("${response.code()} : ${response.message()}", fail)
                 false
             }
         } catch (e: Exception) {
@@ -58,7 +58,7 @@ class AuthRepository @Inject constructor(
                 ToastManager.showMessage("Code validé !", success)
                 true
             } else {
-                ToastManager.showMessage("Code invalide !", fail)
+                ToastManager.showMessage("${response.code()} : ${response.message()}", fail)
                 false
             }
         } catch (e: Exception) {
@@ -94,7 +94,7 @@ class AuthRepository @Inject constructor(
             if (response.isSuccessful) {
                 true
             } else {
-                ToastManager.showMessage("Demande rejetée !", fail)
+                ToastManager.showMessage("${response.code()} : ${response.message()}", fail)
                 false
             }
         } catch (e: Exception) {
@@ -109,6 +109,7 @@ class AuthRepository @Inject constructor(
             if (response.isSuccessful) {
                 true
             } else {
+                ToastManager.showMessage("${response.code()} : ${response.message()}", fail)
                 false
             }
         } catch (e: Exception) {
@@ -125,7 +126,7 @@ class AuthRepository @Inject constructor(
                 ToastManager.showMessage("Mot de passe modifié !", success)
                 true
             } else {
-                ToastManager.showMessage("Mot de passe non modifié !", fail)
+                ToastManager.showMessage("${response.code()} : ${response.message()}", fail)
                 false
             }
         } catch (e: Exception) {

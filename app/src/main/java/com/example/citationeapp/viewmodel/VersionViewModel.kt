@@ -1,7 +1,9 @@
 package com.example.citationeapp.viewmodel
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.citationeapp.R
 import com.example.citationeapp.data.preferences.UserPreferences
 import com.example.citationeapp.viewmodel.CitationVersion.entries
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,9 +36,9 @@ class VersionViewModel @Inject constructor(
     }
 }
 
-enum class CitationVersion(val displayName: String) {
-    VO("Version Originale"),
-    VF("Version Française");
+enum class CitationVersion(@StringRes val displayNameRes: Int) {
+    VO(R.string.settings_version_original),
+    VF(R.string.settings_version_french);
 
     companion object {
         fun fromString(value: String): CitationVersion {

@@ -15,8 +15,8 @@ import com.example.citationeapp.ui.theme.white
 @Composable
 fun ConfirmationDialog(
     modifier: Modifier = Modifier,
-    title: String,
-    message: String,
+    titleId: Int,
+    messageId: Int,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -25,14 +25,14 @@ fun ConfirmationDialog(
         title = {
             TextBody1Bold(
                 modifier = modifier.fillMaxWidth(),
-                text = title,
+                textId = titleId,
                 textAlign = TextAlign.Center
             )
         },
         text = {
             TextBody1Regular(
                 modifier = modifier.fillMaxWidth(),
-                text = message,
+                textId = messageId,
                 textAlign = TextAlign.Center
             )
                },

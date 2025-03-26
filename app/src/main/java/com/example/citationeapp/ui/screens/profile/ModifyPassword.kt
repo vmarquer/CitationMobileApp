@@ -44,7 +44,7 @@ fun ModifyPassword(
     goProfile: () -> Unit
 ) {
     val modifyPasswordState by viewModel.modifyPasswordState.collectAsState()
-    var oldPassword by remember { mutableStateOf("") }
+    var currentPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmNewPassword by remember { mutableStateOf("") }
     var showModifyPasswordDialog by remember { mutableStateOf(false) }
@@ -66,23 +66,23 @@ fun ModifyPassword(
                 verticalArrangement = Arrangement.spacedBy(spacing8)
             ) {
                 AuthTextField(
-                    value = oldPassword,
-                    onValueChange = { oldPassword = it },
-                    label = R.string.settings_modify_password_old_password_label,
+                    value = currentPassword,
+                    onValueChange = { currentPassword = it },
+                    label = R.string.field_current_password,
                     isPassword = true,
                     icon = Icons.Rounded.Password
                 )
                 AuthTextField(
                     value = newPassword,
                     onValueChange = { newPassword = it },
-                    label = R.string.settings_modify_password_new_password_label,
+                    label = R.string.field_new_password,
                     isPassword = true,
                     icon = Icons.Rounded.Password
                 )
                 AuthTextField(
                     value = confirmNewPassword,
                     onValueChange = { confirmNewPassword = it },
-                    label = R.string.settings_modify_password_confirm_new_password_label,
+                    label = R.string.field_confirm_new_password,
                     isPassword = true,
                     icon = Icons.Rounded.Password
                 )
@@ -97,7 +97,7 @@ fun ModifyPassword(
                 ButtonPrimary(
                     onClick = { showModifyPasswordDialog = true },
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Modifier son mot de passe"
+                    textId = R.string.button_modify_password
                 )
             }
         }
@@ -111,11 +111,11 @@ fun ModifyPassword(
 
     if (showModifyPasswordDialog) {
         ConfirmationDialog(
-            title = "Modification du mot de passe",
-            message = "Êtes-vous sûr de vouloir modifier le mot de passe ?",
+            titleId = R.string.modify_password_dialog_title,
+            messageId = R.string.modify_password_dialog_message,
             onConfirm = {
                 showModifyPasswordDialog = false
-                viewModel.modifyPassword(oldPassword, newPassword, confirmNewPassword)
+                viewModel.modifyPassword(currentPassword, newPassword, confirmNewPassword)
             },
             onDismiss = { showModifyPasswordDialog = false }
         )
@@ -131,11 +131,11 @@ class ModifyPasswordViewModel @Inject constructor(
 
     fun modifyPassword(oldPassword: String, newPassword: String, confirmNewPassword: String) {
         if (oldPassword.isBlank() || newPassword.isBlank() || confirmNewPassword.isBlank()) {
-            _modifyPasswordState.value = ModifyPasswordState.Error(R.string.portal_error_empty_field)
+            _modifyPasswordState.value = ModifyPasswordState.Error(R.string.error_empty_field)
             return
         }
         if (newPassword != confirmNewPassword) {
-            _modifyPasswordState.value = ModifyPasswordState.Error(R.string.portal_error_different_passwords)
+            _modifyPasswordState.value = ModifyPasswordState.Error(R.string.error_different_passwords)
             return
         }
         _modifyPasswordState.value = ModifyPasswordState.Loading
@@ -143,8 +143,6 @@ class ModifyPasswordViewModel @Inject constructor(
             val response = authRepository.modifyPassword(oldPassword, newPassword)
             if (response) {
                 _modifyPasswordState.value = ModifyPasswordState.Success
-            } else {
-                _modifyPasswordState.value = ModifyPasswordState.Error(R.string.settings_modify_password_error_old_password_invalid)
             }
         }
     }

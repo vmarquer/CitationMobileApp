@@ -65,7 +65,7 @@ fun ForgottenPassword(
             space = spacing24, alignment = Alignment.CenterVertically
         )
     ) {
-        TextBody1Bold(textId = R.string.portal_forgotten_password_title)
+        TextBody1Bold(textId = R.string.forgotten_password_title)
 
         if (askNewPasswordState is AskNewPasswordState.Loading || askNewPasswordState is AskNewPasswordState.Loading) {
             CircularProgressIndicator()
@@ -75,7 +75,7 @@ fun ForgottenPassword(
                 AuthTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = R.string.portal_label_email,
+                    label = R.string.field_email,
                     icon = Icons.Rounded.Email
                 )
                 if (askNewPasswordState is AskNewPasswordState.Error) {
@@ -91,28 +91,28 @@ fun ForgottenPassword(
                         viewModel.askNewPassword(email)
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Demander un nouveau mot de passe"
+                    textId = R.string.button_ask_new_password
                 )
             } else {
                 TextBody2Regular(text = "Code d'activation et nouveau mot de passe")
                 AuthTextField(
                     value = activationCode,
                     onValueChange = { activationCode = it },
-                    label = R.string.portal_activation_code,
+                    label = R.string.field_activation_code,
                     isPassword = false
                 )
 
                 AuthTextField(
                     value = newPassword,
                     onValueChange = { newPassword = it },
-                    label = R.string.settings_modify_password_new_password_label,
+                    label = R.string.field_new_password,
                     isPassword = true,
                     icon = Icons.Rounded.Password
                 )
                 AuthTextField(
                     value = confirmNewPassword,
                     onValueChange = { confirmNewPassword = it },
-                    label = R.string.settings_modify_password_confirm_new_password_label,
+                    label = R.string.field_confirm_new_password,
                     isPassword = true,
                     icon = Icons.Rounded.Password
                 )
@@ -137,7 +137,7 @@ fun ForgottenPassword(
         ButtonPrimary(
             onClick = goLogin,
             modifier = Modifier.fillMaxWidth(),
-            textId = R.string.portal_back_to_connection
+            textId = R.string.button_back_to_login
         )
     }
 
@@ -161,7 +161,7 @@ class ForgottenPasswordViewModel @Inject constructor(
 
     fun askNewPassword(email: String) {
         if (email.isBlank()) {
-            _askNewPasswordState.value = AskNewPasswordState.Error(R.string.portal_error_empty_field)
+            _askNewPasswordState.value = AskNewPasswordState.Error(R.string.error_empty_field)
             return
         }
         _askNewPasswordState.value = AskNewPasswordState.Loading
@@ -169,19 +169,17 @@ class ForgottenPasswordViewModel @Inject constructor(
             val success = authRepository.askNewPassword(email)
             if (success) {
                 _askNewPasswordState.value = AskNewPasswordState.Success
-            } else {
-                _askNewPasswordState.value = AskNewPasswordState.Error(R.string.portal_forgotten_password_error_ask)
             }
         }
     }
 
     fun sendNewPassword(email: String, activationCode: String, newPassword: String, confirmNewPassword: String) {
         if (!activationCode.matches(Regex("^\\d{6}$"))) {
-            _passwordActivationCodeState.value = PasswordActivationCodeState.Error(R.string.portal_activation_code_error_incorrect_length)
+            _passwordActivationCodeState.value = PasswordActivationCodeState.Error(R.string.error_activation_code_incorrect_length)
             return
         }
         if (activationCode.isBlank() || newPassword.isBlank() || confirmNewPassword.isBlank()) {
-            _passwordActivationCodeState.value = PasswordActivationCodeState.Error(R.string.portal_error_empty_field)
+            _passwordActivationCodeState.value = PasswordActivationCodeState.Error(R.string.error_empty_field)
             return
         }
         _passwordActivationCodeState.value = PasswordActivationCodeState.Loading
@@ -189,8 +187,6 @@ class ForgottenPasswordViewModel @Inject constructor(
             val success = authRepository.sendNewPassword(email, activationCode, newPassword)
             if (success) {
                 _passwordActivationCodeState.value = PasswordActivationCodeState.Success
-            } else {
-                _passwordActivationCodeState.value = PasswordActivationCodeState.Error(R.string.portal_forgotten_password_error_send)
             }
         }
     }

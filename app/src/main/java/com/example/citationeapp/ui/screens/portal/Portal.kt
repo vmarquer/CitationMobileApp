@@ -81,7 +81,7 @@ fun Portal(
                     onClick = goLogin,
                     modifier = Modifier
                         .fillMaxWidth(0.7f),
-                    textId = R.string.portal_login
+                    textId = R.string.button_login
                 )
 
                 HorizontalDivider(
@@ -95,7 +95,7 @@ fun Portal(
                     onClick = goRegister,
                     modifier = Modifier
                         .fillMaxWidth(0.7f),
-                    textId = R.string.portal_sign_up
+                    textId = R.string.button_register
                 )
             }
         }

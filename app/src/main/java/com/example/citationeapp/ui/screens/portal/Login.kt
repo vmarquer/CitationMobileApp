@@ -71,19 +71,19 @@ fun Login(
         if (loginState is LoginState.Loading) {
             CircularProgressIndicator()
         } else {
-            TextBody1Bold(textId = R.string.portal_login)
+            TextBody1Bold(textId = R.string.login_title)
 
             AuthTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = R.string.portal_label_email,
+                label = R.string.field_email,
                 icon = Icons.Rounded.Email
             )
 
             AuthTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = R.string.portal_label_password,
+                label = R.string.field_password,
                 isPassword = true,
                 icon = Icons.Rounded.Password
             )
@@ -109,7 +109,7 @@ fun Login(
                     viewModel.login(email, password)
                 },
                 modifier = Modifier.fillMaxWidth(),
-                textId = R.string.portal_login
+                textId = R.string.button_login
             )
 
             HorizontalDivider(
@@ -122,7 +122,7 @@ fun Login(
             ButtonPrimary(
                 onClick = goRegister,
                 modifier = Modifier.fillMaxWidth(),
-                textId = R.string.portal_create_account
+                textId = R.string.button_create_account
             )
         }
     }
@@ -144,7 +144,7 @@ class LoginViewModel @Inject constructor(
 
     fun login(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) {
-            _loginState.value = LoginState.Error(R.string.portal_error_empty_field)
+            _loginState.value = LoginState.Error(R.string.error_empty_field)
             return
         }
         _loginState.value = LoginState.Loading
@@ -153,7 +153,7 @@ class LoginViewModel @Inject constructor(
             if (success) {
                 _loginState.value = LoginState.Success
             } else {
-                _loginState.value = LoginState.Error(R.string.portal_error_login_invalid_credentials)
+                _loginState.value = LoginState.Error(R.string.login_invalid_credentials)
             }
         }
 

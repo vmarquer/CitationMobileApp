@@ -21,7 +21,6 @@ import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing24
-import com.example.citationeapp.utils.ToastManager
 import com.example.citationeapp.viewmodel.CitationVersion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,11 +66,18 @@ fun Play(
         }
 
         is PlayState.Error -> {
-            TextBody1Regular(
-                text = "Erreur : ${playState.message}",
-                color = fail,
-                modifier = Modifier.padding(spacing24)
-            )
+            Column(
+                modifier = modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                TextBody1Regular(
+                    text = playState.message,
+                    color = fail,
+                    modifier = Modifier.padding(spacing24)
+                )
+            }
         }
     }
 }
@@ -112,10 +118,10 @@ class PlayViewModel @Inject constructor(
                         _playState.value = PlayState.Question
                     }
                 } else {
-                    ToastManager.showMessage("${response.code()} : ${response.message()}", fail)
+                    _playState.value = PlayState.Error("${response.code()} : ${response.message()}")
                 }
             } catch (e: Exception) {
-                ToastManager.showMessage("Exception : ${e.message}", fail)
+                _playState.value = PlayState.Error("Exception : ${e.message}")
             }
         }
     }
@@ -132,10 +138,10 @@ class PlayViewModel @Inject constructor(
                             _playState.value = PlayState.Answer
                         }
                     } else {
-                        _playState.value = PlayState.Error("Erreur lors de l'envoi de la réponse.")
+                        _playState.value = PlayState.Error("${response.code()} : ${response.message()}")
                     }
                 } catch (e: Exception) {
-                    _playState.value = PlayState.Error("Une erreur s'est produite : ${e.message}")
+                    _playState.value = PlayState.Error("Exception : ${e.message}")
                 }
             }
         }

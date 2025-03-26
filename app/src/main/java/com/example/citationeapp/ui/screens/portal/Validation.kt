@@ -61,12 +61,12 @@ fun Validation(
         if (validationState is ValidationState.Loading) {
             CircularProgressIndicator()
         } else {
-            TextBody1Bold(textId = R.string.portal_activation_code)
+            TextBody1Bold(textId = R.string.validation_title)
 
             AuthTextField(
                 value = activationCode,
                 onValueChange = { activationCode = it },
-                label = R.string.portal_activation_code,
+                label = R.string.field_activation_code,
                 isPassword = false
             )
 
@@ -80,7 +80,7 @@ fun Validation(
             ButtonPrimary(
                 onClick = { viewModel.activate(activationCode) },
                 modifier = Modifier.fillMaxWidth(),
-                textId = R.string.portal_activation_code_submit
+                textId = R.string.button_activation_code
             )
 
             HorizontalDivider(
@@ -93,7 +93,7 @@ fun Validation(
             ButtonPrimary(
                 onClick = goLogin,
                 modifier = Modifier.fillMaxWidth(),
-                textId = R.string.portal_back_to_connection
+                textId = R.string.button_back_to_login
             )
         }
     }
@@ -115,7 +115,7 @@ class ValidationViewModel @Inject constructor(
 
     fun activate(code: String) {
         if (!code.matches(Regex("^\\d{6}$"))) {
-            _validationState.value = ValidationState.Error(R.string.portal_activation_code_error_incorrect_length)
+            _validationState.value = ValidationState.Error(R.string.error_activation_code_incorrect_length)
             return
         }
         _validationState.value = ValidationState.Loading
@@ -123,8 +123,6 @@ class ValidationViewModel @Inject constructor(
             val success = authRepository.activate(code)
             if (success) {
                 _validationState.value = ValidationState.Success
-            } else {
-                _validationState.value = ValidationState.Error(R.string.portal_activation_code_error_invalid)
             }
         }
     }
