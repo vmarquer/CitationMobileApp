@@ -22,7 +22,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object CitationModule {
 
-    private const val BASE_URL = "https://c1bc-37-66-31-102.ngrok-free.app/api/"
+    private const val BASE_URL = "https://d327-37-66-31-102.ngrok-free.app/api/"
 
     class AuthInterceptor(private val userPreferences: UserPreferences) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {

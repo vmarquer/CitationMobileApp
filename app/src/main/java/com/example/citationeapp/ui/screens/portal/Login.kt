@@ -153,7 +153,7 @@ class LoginViewModel @Inject constructor(
             if (success) {
                 _loginState.value = LoginState.Success
             } else {
-                _loginState.value = LoginState.Error(R.string.login_invalid_credentials)
+                _loginState.value = LoginState.Error(R.string.error_login_invalid_credentials)
             }
         }
 

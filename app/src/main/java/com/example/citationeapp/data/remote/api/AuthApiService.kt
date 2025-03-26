@@ -36,5 +36,5 @@ interface AuthApiService {
     suspend fun sendNewPassword(@Body request: NewPasswordRequestDTO): Response<Void>
 
     @POST("refresh-token")
-    suspend fun refreshToken(@Body request: RefreshTokenRequestDTO): AuthResponseDTO
+    suspend fun refreshToken(@Body request: RefreshTokenRequestDTO): Response<AuthResponseDTO>
 }

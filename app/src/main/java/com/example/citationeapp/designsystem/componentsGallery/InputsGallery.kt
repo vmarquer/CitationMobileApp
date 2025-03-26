@@ -40,7 +40,7 @@ fun DesignSystemInputs(modifier: Modifier = Modifier) {
         AuthTextField(
             value = text,
             onValueChange = { text = it },
-            label = R.string.portal_label_email,
+            label = R.string.field_email,
             icon = Icons.Rounded.Email
         )
 

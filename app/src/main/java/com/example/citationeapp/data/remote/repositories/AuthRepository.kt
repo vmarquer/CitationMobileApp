@@ -138,7 +138,7 @@ class AuthRepository @Inject constructor(
     override suspend fun logout(): Boolean {
         return try {
             authApiService.logout()
-            userPreferences.clearAuthToken()
+            userPreferences.clearAuthTokens()
             ToastManager.showMessage("Déconnexion réussie !", success)
             true
         } catch (e: Exception) {

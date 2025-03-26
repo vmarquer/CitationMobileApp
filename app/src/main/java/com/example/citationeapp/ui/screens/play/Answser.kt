@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
+import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.models.getDifficultyBackgroundColor
 import com.example.citationeapp.data.models.getDifficultyLabel
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
@@ -48,7 +49,6 @@ import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing8
 import com.example.citationeapp.ui.theme.success
 import com.example.citationeapp.ui.theme.white
-import com.example.citationeapp.viewmodel.CitationVersion
 
 @Composable
 fun Answer(

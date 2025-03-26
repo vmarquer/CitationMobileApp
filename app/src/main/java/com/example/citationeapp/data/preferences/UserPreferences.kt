@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.citationeapp.viewmodel.CitationVersion
+import com.example.citationeapp.data.models.CitationVersion
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -47,14 +47,10 @@ class UserPreferences(context: Context) {
         preferences[KEY_REFRESH_TOKEN]
     }
 
-    suspend fun clearAuthToken() {
+    suspend fun clearAuthTokens() {
         dataStore.edit { preferences ->
             preferences.remove(KEY_AUTH_TOKEN)
             preferences.remove(KEY_REFRESH_TOKEN)
         }
-    }
-
-    val isAuthenticated: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[KEY_AUTH_TOKEN]?.isNotEmpty() == true
     }
 }

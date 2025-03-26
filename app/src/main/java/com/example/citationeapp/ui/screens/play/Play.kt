@@ -15,13 +15,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.citationeapp.data.domain.mapper.toCitation
 import com.example.citationeapp.data.domain.mapper.updateWithResponse
 import com.example.citationeapp.data.models.Citation
+import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.remote.repositories.CitationRepositoryInterface
 import com.example.citationeapp.data.remote.repositories.VersionRepository
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing24
-import com.example.citationeapp.viewmodel.CitationVersion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

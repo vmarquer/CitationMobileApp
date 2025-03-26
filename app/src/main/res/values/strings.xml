@@ -116,6 +116,7 @@
     <string name="error_empty_field">Veuillez remplir tous les champs !</string>
     <string name="error_different_passwords">Les mots de passe ne correspondent pas !</string>
     <string name="error_old_password_invalid">L\'ancien mot de passe est invalide !</string>
-    <string name="error_activation_code_incorrect_length">Le code d\'activation est composé de 6 chiffres</string>
-    <string name="login_invalid_credentials">Le nom d\'utilisateur ou le mot de passe est invalide</string>
+    <string name="error_activation_code_incorrect_length">Le code d\'activation est composé de 6 chiffres !</string>
+    <string name="error_login_invalid_credentials">Le nom d\'utilisateur ou le mot de passe est invalide !</string>
+    <string name="error_modify_password_no_email">L\'email est introuvable !</string>
 </resources>

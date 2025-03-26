@@ -1,7 +1,7 @@
 package com.example.citationeapp.data.remote.repositories
 
+import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.preferences.UserPreferences
-import com.example.citationeapp.viewmodel.CitationVersion
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
