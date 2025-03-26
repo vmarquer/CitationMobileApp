@@ -32,7 +32,6 @@ import com.example.citationeapp.ui.screens.portal.Validation
 import com.example.citationeapp.ui.screens.profile.ModifyPassword
 import com.example.citationeapp.ui.screens.profile.Profile
 import com.example.citationeapp.ui.screens.profile.Settings
-import com.example.citationeapp.viewmodel.VersionViewModel
 
 
 //region Liste des routes
@@ -129,7 +128,7 @@ sealed class Route(
             showTopBar = true,
             showBottomBar = true,
             parent = TopLevelRoute.Settings,
-            displayName = R.string.settings_profile_title,
+            displayName = R.string.profile_title,
         )
 
         data object DesignSystem : NestedLevelRoute(
@@ -137,7 +136,7 @@ sealed class Route(
             showTopBar = true,
             showBottomBar = false,
             parent = TopLevelRoute.Settings,
-            displayName = R.string.settings_design_system_title,
+            displayName = R.string.design_system_title,
         )
 
         data object ModifyPassword : NestedLevelRoute(
@@ -145,7 +144,7 @@ sealed class Route(
             showTopBar = true,
             showBottomBar = false,
             parent = TopLevelRoute.Settings,
-            displayName = R.string.settings_modify_password_title,
+            displayName = R.string.modify_password_title,
         )
     }
 
@@ -180,7 +179,6 @@ private const val profileRoutePattern = "profile_graph"
 fun NavigationHost(
     modifier: Modifier = Modifier,
     appUIState: CitationAppUIState,
-    versionViewModel: VersionViewModel = hiltViewModel(),
     initialRoute: String = Route.Portal.name
 ) {
     val navController = appUIState.navController
@@ -238,7 +236,6 @@ fun NavigationHost(
         ) {
             composable(route = Route.TopLevelRoute.Settings.name) {
                 Settings(
-                    versionViewModel = versionViewModel,
                     showProfile = { navController.navigate(Route.NestedLevelRoute.Profile.name) },
                     showDesignSystem = { navController.navigate(Route.NestedLevelRoute.DesignSystem.name) }
                 )
