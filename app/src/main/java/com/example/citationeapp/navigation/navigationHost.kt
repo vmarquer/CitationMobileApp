@@ -227,7 +227,9 @@ fun NavigationHost(
         }
 
         composable(route = Route.TopLevelRoute.Play.name) {
-            Play()
+            Play(
+                onForceLogin = { navController.navigate(Route.Portal.name) }
+            )
         }
 
         navigation(
@@ -244,7 +246,7 @@ fun NavigationHost(
             composable(route = Route.NestedLevelRoute.Profile.name) {
                 Profile(
                     goPortal = { navController.navigate(Route.Portal.name) },
-                    goModifyPassword = { navController.navigate(Route.NestedLevelRoute.ModifyPassword.name) }
+                    goModifyPassword = { navController.navigate(Route.NestedLevelRoute.ModifyPassword.name) },
                 )
             }
 
@@ -254,7 +256,8 @@ fun NavigationHost(
 
             composable(route = Route.NestedLevelRoute.ModifyPassword.name) {
                 ModifyPassword(
-                    goProfile = { navController.navigate(Route.NestedLevelRoute.Profile.name) }
+                    goProfile = { navController.navigate(Route.NestedLevelRoute.Profile.name) },
+                    onForceLogin = { navController.navigate(Route.Portal.name) }
                 )
             }
         }

@@ -18,7 +18,7 @@ class UserPreferences(context: Context) {
 
     companion object {
         private val KEY_VERSION = stringPreferencesKey("citation_version")
-        private val KEY_AUTH_TOKEN = stringPreferencesKey("auth_token")
+        private val KEY_BEARER_TOKEN = stringPreferencesKey("bearer_token")
         private val KEY_REFRESH_TOKEN = stringPreferencesKey("refresh_token")
     }
 
@@ -32,15 +32,15 @@ class UserPreferences(context: Context) {
         preferences[KEY_VERSION] ?: CitationVersion.VF.name
     }
 
-    suspend fun saveAuthToken(token: String, refreshToken: String) {
+    suspend fun saveAuthTokens(token: String, refreshToken: String) {
         dataStore.edit { preferences ->
-            preferences[KEY_AUTH_TOKEN] = token
+            preferences[KEY_BEARER_TOKEN] = token
             preferences[KEY_REFRESH_TOKEN] = refreshToken
         }
     }
 
-    val authToken: Flow<String?> = dataStore.data.map { preferences ->
-        preferences[KEY_AUTH_TOKEN]
+    val bearerToken: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[KEY_BEARER_TOKEN]
     }
 
     val refreshToken: Flow<String?> = dataStore.data.map { preferences ->
@@ -49,7 +49,7 @@ class UserPreferences(context: Context) {
 
     suspend fun clearAuthTokens() {
         dataStore.edit { preferences ->
-            preferences.remove(KEY_AUTH_TOKEN)
+            preferences.remove(KEY_BEARER_TOKEN)
             preferences.remove(KEY_REFRESH_TOKEN)
         }
     }

@@ -41,7 +41,8 @@ import javax.inject.Inject
 fun ModifyPassword(
     modifier: Modifier = Modifier,
     viewModel: ModifyPasswordViewModel = hiltViewModel(),
-    goProfile: () -> Unit
+    goProfile: () -> Unit,
+    onForceLogin: () -> Unit,
 ) {
     val modifyPasswordState by viewModel.modifyPasswordState.collectAsState()
     var currentPassword by remember { mutableStateOf("") }
@@ -115,7 +116,7 @@ fun ModifyPassword(
             messageId = R.string.modify_password_dialog_message,
             onConfirm = {
                 showModifyPasswordDialog = false
-                viewModel.modifyPassword(currentPassword, newPassword, confirmNewPassword)
+                viewModel.modifyPassword(currentPassword, newPassword, confirmNewPassword, onForceLogin)
             },
             onDismiss = { showModifyPasswordDialog = false }
         )
@@ -124,12 +125,17 @@ fun ModifyPassword(
 
 @HiltViewModel
 class ModifyPasswordViewModel @Inject constructor(
-    private val authRepository: AuthRepositoryInterface
+    private val authRepository: AuthRepositoryInterface,
 ) : ViewModel() {
     private val _modifyPasswordState = MutableStateFlow<ModifyPasswordState>(ModifyPasswordState.Idle)
     val modifyPasswordState: StateFlow<ModifyPasswordState> = _modifyPasswordState
 
-    fun modifyPassword(oldPassword: String, newPassword: String, confirmNewPassword: String) {
+    fun modifyPassword(
+        oldPassword: String,
+        newPassword: String,
+        confirmNewPassword: String,
+        onForceLogin: () -> Unit
+    ) {
         if (oldPassword.isBlank() || newPassword.isBlank() || confirmNewPassword.isBlank()) {
             _modifyPasswordState.value = ModifyPasswordState.Error(R.string.error_empty_field)
             return
@@ -140,9 +146,20 @@ class ModifyPasswordViewModel @Inject constructor(
         }
         _modifyPasswordState.value = ModifyPasswordState.Loading
         viewModelScope.launch {
-            val response = authRepository.modifyPassword(oldPassword, newPassword)
-            if (response) {
-                _modifyPasswordState.value = ModifyPasswordState.Success
+            if (authRepository.isBearerTokenExpired(authRepository.getBearerToken())) {
+                val response = authRepository.askRefreshToken(authRepository.getRefreshToken())
+                if (!response) {
+                    authRepository.logout()
+                    onForceLogin()
+                    return@launch
+                }
+            }
+            val email = authRepository.extractEmailFromToken()
+            if (email != null) {
+                val response = authRepository.modifyPassword(email, oldPassword, newPassword)
+                if (response) {
+                    _modifyPasswordState.value = ModifyPasswordState.Success
+                }
             }
         }
     }

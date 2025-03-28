@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +17,8 @@ import com.example.citationeapp.data.domain.mapper.toCitation
 import com.example.citationeapp.data.domain.mapper.updateWithResponse
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
+import com.example.citationeapp.data.remote.repositories.AuthRepository
+import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
 import com.example.citationeapp.data.remote.repositories.CitationRepositoryInterface
 import com.example.citationeapp.data.remote.repositories.VersionRepository
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
@@ -32,9 +35,14 @@ import javax.inject.Inject
 fun Play(
     modifier: Modifier = Modifier,
     viewModel: PlayViewModel = hiltViewModel(),
+    onForceLogin: () -> Unit,
 ) {
     val playState = viewModel.playState.collectAsState().value
     val citation = viewModel.citation.collectAsState().value
+
+    LaunchedEffect(Unit) {
+        viewModel.loadRandomCitation(onForceLogin)
+    }
 
     when (playState) {
         is PlayState.Loading ->
@@ -52,7 +60,7 @@ fun Play(
                 citation = it,
                 version = viewModel.version,
                 onSubmitAnswer = { citationId, userAnswerId ->
-                    viewModel.submitAnswer(citationId, userAnswerId)
+                    viewModel.submitAnswer(citationId, userAnswerId, onForceLogin)
                 }
             )
         }
@@ -61,7 +69,7 @@ fun Play(
             Answer(
                 citation = it,
                 version = viewModel.version,
-                onPlayAgain = { viewModel.playAgain() }
+                onPlayAgain = { viewModel.loadRandomCitation(onForceLogin) }
             )
         }
 
@@ -85,6 +93,7 @@ fun Play(
 @HiltViewModel
 class PlayViewModel @Inject constructor(
     private val citationRepository: CitationRepositoryInterface,
+    private val authRepository: AuthRepositoryInterface,
     private val versionRepository: VersionRepository
 ) : ViewModel() {
 
@@ -98,7 +107,6 @@ class PlayViewModel @Inject constructor(
         private set
 
     init {
-        loadRandomCitation()
         viewModelScope.launch {
             versionRepository.versionFlow.collect { newVersion ->
                 version = newVersion
@@ -106,10 +114,18 @@ class PlayViewModel @Inject constructor(
         }
     }
 
-    fun loadRandomCitation() {
+    fun loadRandomCitation(onForceLogin: () -> Unit) {
         _playState.value = PlayState.Loading
         viewModelScope.launch {
             try {
+                if (authRepository.isBearerTokenExpired(authRepository.getBearerToken())) {
+                    val response = authRepository.askRefreshToken(authRepository.getRefreshToken())
+                    if (!response) {
+                        authRepository.logout()
+                        onForceLogin()
+                        return@launch
+                    }
+                }
                 val response = citationRepository.getRandomCitation()
                 if (response.isSuccessful) {
                     response.body()?.let { citationLight ->
@@ -126,10 +142,17 @@ class PlayViewModel @Inject constructor(
         }
     }
 
-    fun submitAnswer(citationId: Int, userAnswerId: Int) {
+    fun submitAnswer(citationId: Int, userAnswerId: Int, onForceLogin: () -> Unit) {
         viewModelScope.launch {
             _citation.value?.let { currentCitation ->
                 try {
+                    if (authRepository.isBearerTokenExpired(authRepository.getBearerToken())) {
+                        val response = authRepository.askRefreshToken(authRepository.getRefreshToken())
+                        if (!response) {
+                            onForceLogin
+                            return@launch
+                        }
+                    }
                     val response = citationRepository.postAnswer(citationId, userAnswerId)
                     if (response.isSuccessful) {
                         response.body()?.let { answerResponse ->
@@ -145,10 +168,6 @@ class PlayViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun playAgain() {
-        loadRandomCitation()
     }
 }
 

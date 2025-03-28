@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.citationeapp.R
-import com.example.citationeapp.data.remote.repositories.AuthRepository
+import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.lineHeightSmall
 import com.example.citationeapp.ui.theme.padding16
@@ -104,7 +104,7 @@ fun Portal(
 
 @HiltViewModel
 class PortalViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepositoryInterface
 ) : ViewModel() {
 
     var isLoading = mutableStateOf(true)

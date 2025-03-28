@@ -105,9 +105,8 @@ class ProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val token = authRepository.getAuthToken()
-            _email.value = token?.let { authRepository.extractEmailFromToken(it) }
-            _username.value = token?.let { authRepository.extractUsernameFromToken(it) }
+            _email.value = authRepository.extractEmailFromToken()
+            _username.value = authRepository.extractUsernameFromToken()
         }
     }
 

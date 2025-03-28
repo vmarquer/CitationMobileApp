@@ -26,7 +26,7 @@ object CitationModule {
 
     class AuthInterceptor(private val userPreferences: UserPreferences) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
-            val token = runBlocking { userPreferences.authToken.first() }
+            val token = runBlocking { userPreferences.bearerToken.first() }
             val request = chain.request().newBuilder()
             token?.let {
                 request.addHeader("Authorization", "Bearer $it")

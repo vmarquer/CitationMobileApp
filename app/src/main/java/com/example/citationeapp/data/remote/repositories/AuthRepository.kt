@@ -8,6 +8,7 @@ import com.example.citationeapp.data.remote.dto.AskNewPasswordDTO
 import com.example.citationeapp.data.remote.dto.AuthRequestDTO
 import com.example.citationeapp.data.remote.dto.ModifyPasswordDTO
 import com.example.citationeapp.data.remote.dto.NewPasswordRequestDTO
+import com.example.citationeapp.data.remote.dto.RefreshTokenRequestDTO
 import com.example.citationeapp.data.remote.dto.RegisterRequestDTO
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.success
@@ -15,6 +16,7 @@ import com.example.citationeapp.utils.ToastManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
+import java.util.Date
 import javax.inject.Inject
 
 interface AuthRepositoryInterface {
@@ -23,12 +25,16 @@ interface AuthRepositoryInterface {
     suspend fun login(username: String, password: String): Boolean
     suspend fun askNewPassword(email: String): Boolean
     suspend fun sendNewPassword(email: String, newPassword: String, code: String): Boolean
-    suspend fun modifyPassword(oldPassword: String, newPassword: String): Boolean
+    suspend fun modifyPassword(email: String, oldPassword: String, newPassword: String): Boolean
     suspend fun logout(): Boolean
-    fun getAuthToken(): String?
+    fun getBearerToken(): String?
+    fun getRefreshToken(): String?
+    fun saveAuthTokens(token: String, refreshToken: String)
+    fun extractEmailFromToken(): String?
+    fun extractUsernameFromToken(): String?
     suspend fun checkAuthentication(): Boolean
-    fun extractEmailFromToken(token: String?): String?
-    fun extractUsernameFromToken(token: String?): String?
+    suspend fun askRefreshToken(refreshToken: String?): Boolean
+    fun isBearerTokenExpired(token: String?): Boolean
 }
 
 class AuthRepository @Inject constructor(
@@ -74,7 +80,7 @@ class AuthRepository @Inject constructor(
             if (response.isSuccessful) {
                 val authResponse = response.body()
                 authResponse?.let {
-                    userPreferences.saveAuthToken(it.bearer, it.refresh)
+                    userPreferences.saveAuthTokens(it.bearer, it.refresh)
                     return true
                 } ?: run {
                     false
@@ -118,9 +124,8 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    override suspend fun modifyPassword(oldPassword: String, newPassword: String): Boolean {
+    override suspend fun modifyPassword(email: String, oldPassword: String, newPassword: String): Boolean {
         return try {
-            val email = getAuthToken()?.let { extractEmailFromToken(it) } ?: return false
             val response = authApiService.modifyPassword(ModifyPasswordDTO(email, oldPassword, newPassword))
             if (response.isSuccessful) {
                 ToastManager.showMessage("Mot de passe modifié !", success)
@@ -147,16 +152,20 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    override fun getAuthToken(): String? {
-        return runBlocking { userPreferences.authToken.first() }
+    override fun getBearerToken(): String? {
+        return runBlocking { userPreferences.bearerToken.first() }
     }
 
-    override suspend fun checkAuthentication(): Boolean {
-        val token = getAuthToken()
-        return token != null && token.isNotEmpty()
+    override fun getRefreshToken(): String? {
+        return runBlocking { userPreferences.refreshToken.first() }
     }
 
-    override fun extractEmailFromToken(token: String?): String? {
+    override fun saveAuthTokens(token: String, refreshToken: String) {
+        runBlocking { userPreferences.saveAuthTokens(token, refreshToken) }
+    }
+
+    override fun extractEmailFromToken(): String? {
+        val token = getBearerToken()
         if (token.isNullOrBlank()) return null
         return try {
             val parts = token.split(".")
@@ -169,7 +178,8 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    override fun extractUsernameFromToken(token: String?): String? {
+    override fun extractUsernameFromToken(): String? {
+        val token = getBearerToken()
         if (token.isNullOrBlank()) return null
         return try {
             val parts = token.split(".")
@@ -179,6 +189,45 @@ class AuthRepository @Inject constructor(
             json.optString("name", null)
         } catch (e: Exception) {
             null
+        }
+    }
+
+    override suspend fun checkAuthentication(): Boolean {
+        val token = getBearerToken()
+        return token != null && token.isNotEmpty()
+    }
+
+    override suspend fun askRefreshToken(refreshToken: String?): Boolean {
+        if (refreshToken.isNullOrBlank()) return false
+        return try {
+            val response = authApiService.refreshToken(RefreshTokenRequestDTO(refreshToken))
+            if (response.isSuccessful) {
+                val authResponse = response.body()
+                authResponse?.let {
+                    userPreferences.saveAuthTokens(it.bearer, it.refresh)
+                    return true
+                }
+                false
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    override fun isBearerTokenExpired(bearerToken: String?): Boolean {
+        if (bearerToken.isNullOrBlank()) return true
+        return try {
+            val parts = bearerToken.split(".")
+            if (parts.size != 3) return true
+            val payload = String(Base64.decode(parts[1], Base64.DEFAULT))
+            val json = JSONObject(payload)
+            val exp = json.optLong("exp", 0)
+            val expirationDate = Date(exp * 1000)
+            expirationDate.before(Date())
+        } catch (e: Exception) {
+            true
         }
     }
 }

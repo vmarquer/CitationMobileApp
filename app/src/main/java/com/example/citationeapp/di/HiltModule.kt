@@ -27,7 +27,6 @@ interface HiltModule {
     @Binds
     fun bindsCitationRepository(
         configRepository: CitationRepository
-        // FakeCitationRepository (mocks) ou CitationRepository (réseau)
     ): CitationRepositoryInterface
 
     @Singleton
@@ -62,7 +61,6 @@ class FakeCitationRepository @Inject constructor() : CitationRepositoryInterface
             userGuessMovieVO = movieAnswer?.titleVO,
             result = result
         )
-        // citationsMock[citationsMock.indexOf(citation)] = updatedCitation
         return Response.success(updatedCitation.toCitationAnswerResponseDto())
     }
 }
