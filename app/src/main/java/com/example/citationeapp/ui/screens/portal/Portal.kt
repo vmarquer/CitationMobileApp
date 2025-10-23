@@ -3,6 +3,7 @@ package com.example.citationeapp.ui.screens.portal
 import ButtonPrimary
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -51,53 +52,64 @@ fun Portal(
         portalViewModel.checkAuthentication(goHome)
     }
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .padding(padding16)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(
-            space = spacing24, alignment = Alignment.CenterVertically
-        )
     ) {
         if (isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            Image(
-                painter = painterResource(id = R.drawable.ic_app),
-                contentDescription = null,
-                modifier = Modifier.height(250.dp).clip(CircleShape),
-                contentScale = ContentScale.Fit
-            )
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(
-                    space = spacing12, alignment = Alignment.CenterVertically
+                    space = spacing24, alignment = Alignment.CenterVertically
                 )
             ) {
-                ButtonPrimary(
-                    onClick = goLogin,
+                Image(
+                    painter = painterResource(id = R.drawable.ic_app),
+                    contentDescription = null,
                     modifier = Modifier
-                        .fillMaxWidth(0.7f),
-                    textId = R.string.button_login
+                        .height(250.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Fit
                 )
-
-                HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f),
-                    thickness = lineHeightSmall,
-                    color = black
-                )
-
-                ButtonPrimary(
-                    onClick = goRegister,
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f),
-                    textId = R.string.button_register
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = spacing12, alignment = Alignment.CenterVertically
+                    )
+                ) {
+                    ButtonPrimary(
+                        onClick = goLogin,
+                        modifier = Modifier.fillMaxWidth(0.7f),
+                        textId = R.string.button_login
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(0.5f),
+                        thickness = lineHeightSmall,
+                        color = black
+                    )
+                    ButtonPrimary(
+                        onClick = goRegister,
+                        modifier = Modifier.fillMaxWidth(0.7f),
+                        textId = R.string.button_register
+                    )
+                }
             }
+            Image(
+                painter = painterResource(id = R.drawable.popcorn),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .height(150.dp)
+                    .padding(padding16),
+                contentScale = ContentScale.Fit
+            )
         }
     }
 }
