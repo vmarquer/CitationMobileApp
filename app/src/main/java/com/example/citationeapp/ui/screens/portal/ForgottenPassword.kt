@@ -127,7 +127,14 @@ fun ForgottenPassword(
                 }
 
                 ButtonPrimary(
-                    onClick = { viewModel.sendNewPassword(email, activationCode, newPassword, confirmNewPassword) },
+                    onClick = {
+                        viewModel.sendNewPassword(
+                            email,
+                            activationCode,
+                            newPassword,
+                            confirmNewPassword
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     text = "Envoyer le nouveau mot de passe"
                 )
@@ -153,11 +160,14 @@ class ForgottenPasswordViewModel @Inject constructor(
     private val authRepository: AuthRepositoryInterface
 ) : ViewModel() {
 
-    private val _askNewPasswordState = MutableStateFlow<AskNewPasswordState>(AskNewPasswordState.Idle)
+    private val _askNewPasswordState =
+        MutableStateFlow<AskNewPasswordState>(AskNewPasswordState.Idle)
     val askNewPasswordState: StateFlow<AskNewPasswordState> = _askNewPasswordState
 
-    private val _passwordActivationCodeState = MutableStateFlow<PasswordActivationCodeState>(PasswordActivationCodeState.Idle)
-    val passwordActivationCodeState: StateFlow<PasswordActivationCodeState> = _passwordActivationCodeState
+    private val _passwordActivationCodeState =
+        MutableStateFlow<PasswordActivationCodeState>(PasswordActivationCodeState.Idle)
+    val passwordActivationCodeState: StateFlow<PasswordActivationCodeState> =
+        _passwordActivationCodeState
 
     fun askNewPassword(email: String) {
         if (email.isBlank()) {
@@ -173,13 +183,20 @@ class ForgottenPasswordViewModel @Inject constructor(
         }
     }
 
-    fun sendNewPassword(email: String, activationCode: String, newPassword: String, confirmNewPassword: String) {
+    fun sendNewPassword(
+        email: String,
+        activationCode: String,
+        newPassword: String,
+        confirmNewPassword: String
+    ) {
         if (!activationCode.matches(Regex("^\\d{6}$"))) {
-            _passwordActivationCodeState.value = PasswordActivationCodeState.Error(R.string.error_activation_code_incorrect_length)
+            _passwordActivationCodeState.value =
+                PasswordActivationCodeState.Error(R.string.error_activation_code_incorrect_length)
             return
         }
         if (activationCode.isBlank() || newPassword.isBlank() || confirmNewPassword.isBlank()) {
-            _passwordActivationCodeState.value = PasswordActivationCodeState.Error(R.string.error_empty_field)
+            _passwordActivationCodeState.value =
+                PasswordActivationCodeState.Error(R.string.error_empty_field)
             return
         }
         _passwordActivationCodeState.value = PasswordActivationCodeState.Loading

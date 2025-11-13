@@ -25,4 +25,7 @@ interface CitationApiService {
 
     @GET("citation/random")
     suspend fun getRandomCitation(): Response<CitationLightDto>
+
+    @GET("citation/random/{kind}")
+    suspend fun getRandomCitationByKind( @Path("kind") kind: String): Response<CitationLightDto>
 }

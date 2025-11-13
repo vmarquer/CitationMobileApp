@@ -116,7 +116,12 @@ fun ModifyPassword(
             messageId = R.string.modify_password_dialog_message,
             onConfirm = {
                 showModifyPasswordDialog = false
-                viewModel.modifyPassword(currentPassword, newPassword, confirmNewPassword, onForceLogin)
+                viewModel.modifyPassword(
+                    currentPassword,
+                    newPassword,
+                    confirmNewPassword,
+                    onForceLogin
+                )
             },
             onDismiss = { showModifyPasswordDialog = false }
         )
@@ -127,7 +132,8 @@ fun ModifyPassword(
 class ModifyPasswordViewModel @Inject constructor(
     private val authRepository: AuthRepositoryInterface,
 ) : ViewModel() {
-    private val _modifyPasswordState = MutableStateFlow<ModifyPasswordState>(ModifyPasswordState.Idle)
+    private val _modifyPasswordState =
+        MutableStateFlow<ModifyPasswordState>(ModifyPasswordState.Idle)
     val modifyPasswordState: StateFlow<ModifyPasswordState> = _modifyPasswordState
 
     fun modifyPassword(
@@ -141,7 +147,8 @@ class ModifyPasswordViewModel @Inject constructor(
             return
         }
         if (newPassword != confirmNewPassword) {
-            _modifyPasswordState.value = ModifyPasswordState.Error(R.string.error_different_passwords)
+            _modifyPasswordState.value =
+                ModifyPasswordState.Error(R.string.error_different_passwords)
             return
         }
         _modifyPasswordState.value = ModifyPasswordState.Loading

@@ -2,7 +2,6 @@ package com.example.citationeapp.data.models
 
 import androidx.annotation.StringRes
 import com.example.citationeapp.R
-import com.example.citationeapp.data.models.CitationVersion.entries
 
 enum class CitationVersion(@StringRes val displayNameRes: Int) {
     VO(R.string.settings_version_original),

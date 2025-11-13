@@ -2,64 +2,42 @@ package com.example.citationeapp.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.citationeapp.R
 import com.example.citationeapp.navigation.NavigationHost
-import com.example.citationeapp.navigation.Route
-import com.example.citationeapp.navigation.navigateToTopLevelDestination
 import com.example.citationeapp.ui.screens.toast.GlobalToast
-import com.example.citationeapp.ui.theme.black
-import com.example.citationeapp.ui.theme.components.TextBottomBar
-import com.example.citationeapp.ui.theme.components.TextH3Bold
-import com.example.citationeapp.ui.theme.iconMediumSize
-import com.example.citationeapp.ui.theme.padding6
-import com.example.citationeapp.ui.theme.primary
-import com.example.citationeapp.ui.theme.white
+import com.example.citationeapp.ui.theme.padding16
 
 @Composable
 fun CitationApp(
     appUIState: CitationAppUIState = rememberCitationAppUIState(),
 ) {
-    Box(modifier = with(Modifier.background(MaterialTheme.colorScheme.background)) {
+    Box(
+        modifier = with(Modifier.background(MaterialTheme.colorScheme.background)) {
         fillMaxSize()
     }) {
         Scaffold(
             contentColor = Color.Transparent,
             containerColor = Color.Transparent,
-            topBar = {
+/*            topBar = {
                 CitationTopBar(
                     currentDestination = appUIState.currentDestination,
                     onBack = { appUIState.navController.popBackStack() }
@@ -73,17 +51,25 @@ fun CitationApp(
                         onNavigateToDestination = appUIState.navController::navigateToTopLevelDestination
                     )
                 }
-            },
+            },*/
         ) { paddingValues ->
+//            Image(
+//                painter = painterResource(id = R.drawable.ic_pattern_randomized),
+//                contentDescription = null,
+//                modifier = Modifier.fillMaxSize(),
+//                contentScale = ContentScale.Crop
+//            )
+            GlobalToast()
             Box(modifier = Modifier.padding(paddingValues)) {
-                GlobalToast()
-                NavigationHost(appUIState = appUIState)
+                NavigationHost(
+                    navController = appUIState.navController
+                )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+/*@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CitationTopBar(
     currentDestination: NavDestination?,
@@ -128,7 +114,9 @@ fun CitationTopBar(
                             }
                         }
                     },
-                    modifier = Modifier.fillMaxWidth().background(primary.copy(alpha = 0.6f)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(primary.copy(alpha = 0.6f)),
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,
                         titleContentColor = white
@@ -197,25 +185,14 @@ fun CitationBottomBar(
             }
         }
     }
-}
-
-
-// Vérification si on a une route de premier niveau
-private fun NavDestination?.isTopLevelDestinationInHierarchy(topLevelRoute: Route.TopLevelRoute) =
-    this?.hierarchy?.any {
-        it.route?.contains(topLevelRoute.name, true) ?: false
-    } ?: false
+}*/
 
 @Composable
 fun rememberCitationAppUIState(
     navController: NavHostController = rememberNavController(),
 ): CitationAppUIState {
-    return remember(
-        navController,
-    ) {
-        CitationAppUIState(
-            navController
-        )
+    return remember(navController) {
+        CitationAppUIState(navController)
     }
 }
 
@@ -223,11 +200,8 @@ fun rememberCitationAppUIState(
 class CitationAppUIState(
     val navController: NavHostController,
 ) {
-    val topLevelDestinations: List<Route.TopLevelRoute> = Route.TopLevelRoute.entries
-
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
-
-    val shouldShowBottomBar: Boolean
-        @Composable get() = Route.getRoute(currentDestination?.route)?.showBottomBar ?: true
+    val currentRoute: String?
+        @Composable get() = currentDestination?.route
 }

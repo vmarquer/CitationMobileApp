@@ -21,7 +21,7 @@ data class Citation(
     val result: Boolean? = null
 )
 
-fun Citation.getAnswer(): Film ? {
+fun Citation.getAnswer(): Film? {
     return choices.find { it.id == answerId }
 }
 

@@ -65,14 +65,15 @@ fun DesignSystemColors(
         ) {
             items(colors.size) { index ->
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Spacer(modifier = modifier
-                        .size(width = spacerSize, height = spacerSize)
-                        .drawBehind {
-                            drawCircle(
-                                color = colors[index].second,
-                                radius = circleRadius
-                            )
-                        })
+                    Spacer(
+                        modifier = modifier
+                            .size(width = spacerSize, height = spacerSize)
+                            .drawBehind {
+                                drawCircle(
+                                    color = colors[index].second,
+                                    radius = circleRadius
+                                )
+                            })
 
                     TextBody1Bold(text = String.format("#%08X", colors[index].second.toArgb()))
                     TextBody2Regular(text = colors[index].first)

@@ -27,7 +27,9 @@ import com.example.citationeapp.ui.theme.spacing2
 @Composable
 fun DesignSystemLabels(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.fillMaxWidth().padding(horizontal = padding16),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = padding16),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(spacing10),
     ) {

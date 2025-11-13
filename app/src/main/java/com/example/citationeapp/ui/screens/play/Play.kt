@@ -13,11 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.citationeapp.data.domain.mapper.toCitation
-import com.example.citationeapp.data.domain.mapper.updateWithResponse
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
-import com.example.citationeapp.data.remote.repositories.AuthRepository
 import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
 import com.example.citationeapp.data.remote.repositories.CitationRepositoryInterface
 import com.example.citationeapp.data.remote.repositories.VersionRepository
@@ -26,7 +23,6 @@ import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing24
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,17 +31,17 @@ import javax.inject.Inject
 fun Play(
     modifier: Modifier = Modifier,
     viewModel: PlayViewModel = hiltViewModel(),
+    goHome: () -> Unit,
     onForceLogin: () -> Unit,
 ) {
-    val playState = viewModel.playState.collectAsState().value
-    val citation = viewModel.citation.collectAsState().value
+    val playState = viewModel.uiState.collectAsState().value
 
     LaunchedEffect(Unit) {
         viewModel.loadRandomCitation(onForceLogin)
     }
 
     when (playState) {
-        is PlayState.Loading ->
+        is PlayUiState.Loading ->
             Column(
                 modifier = modifier
                     .fillMaxSize(),
@@ -55,25 +51,40 @@ fun Play(
                 CircularProgressIndicator(color = primary)
             }
 
-        is PlayState.Question -> citation?.let {
+        is PlayUiState.Question ->  {
             Question(
-                citation = it,
+                citation = playState.citation,
                 version = viewModel.version,
+                currentIndex = playState.currentIndex,
+                quizSize = playState.quizSize,
                 onSubmitAnswer = { citationId, userAnswerId ->
                     viewModel.submitAnswer(citationId, userAnswerId, onForceLogin)
                 }
             )
         }
 
-        is PlayState.Answer -> citation?.let {
+        is PlayUiState.Answer -> {
             Answer(
-                citation = it,
+                citation = playState.citation,
                 version = viewModel.version,
+                currentIndex = playState.currentIndex,
+                quizSize = playState.quizSize,
                 onPlayAgain = { viewModel.loadRandomCitation(onForceLogin) }
             )
         }
 
-        is PlayState.Error -> {
+        is PlayUiState.Result -> {
+            Result(
+                currentIndex = playState.currentIndex,
+                quizSize = playState.quizSize,
+                goHome = {
+                    viewModel.resetValues()
+                    goHome()
+                }
+            )
+        }
+
+        is PlayUiState.Error -> {
             Column(
                 modifier = modifier
                     .fillMaxSize(),
@@ -81,7 +92,7 @@ fun Play(
                 verticalArrangement = Arrangement.Center
             ) {
                 TextBody1Regular(
-                    text = playState.message,
+                    textId = playState.messageId,
                     color = fail,
                     modifier = Modifier.padding(spacing24)
                 )
@@ -96,13 +107,7 @@ class PlayViewModel @Inject constructor(
     private val authRepository: AuthRepositoryInterface,
     private val versionRepository: VersionRepository
 ) : ViewModel() {
-
-    private val _citation = MutableStateFlow<Citation?>(null)
-    val citation: StateFlow<Citation?> = _citation
-
-    private var _playState = MutableStateFlow<PlayState>(PlayState.Loading)
-    val playState: StateFlow<PlayState> = _playState
-
+    val uiState: StateFlow<PlayUiState> = citationRepository.uiState
     var version: CitationVersion = CitationVersion.VF
         private set
 
@@ -115,65 +120,50 @@ class PlayViewModel @Inject constructor(
     }
 
     fun loadRandomCitation(onForceLogin: () -> Unit) {
-        _playState.value = PlayState.Loading
         viewModelScope.launch {
-            try {
-                if (authRepository.isBearerTokenExpired(authRepository.getBearerToken())) {
-                    val response = authRepository.askRefreshToken(authRepository.getRefreshToken())
-                    if (!response) {
-                        authRepository.logout()
-                        onForceLogin()
-                        return@launch
-                    }
+            if (authRepository.isBearerTokenExpired(authRepository.getBearerToken())) {
+                val refreshed = authRepository.askRefreshToken(authRepository.getRefreshToken())
+                if (!refreshed) {
+                    authRepository.logout()
+                    onForceLogin()
+                    return@launch
                 }
-                val response = citationRepository.getRandomCitation()
-                if (response.isSuccessful) {
-                    response.body()?.let { citationLight ->
-                        val newCitation = citationLight.toCitation()
-                        _citation.value = newCitation
-                        _playState.value = PlayState.Question
-                    }
-                } else {
-                    _playState.value = PlayState.Error("${response.code()} : ${response.message()}")
-                }
-            } catch (e: Exception) {
-                _playState.value = PlayState.Error("Exception : ${e.message}")
             }
+            citationRepository.getRandomCitation()
         }
     }
 
     fun submitAnswer(citationId: Int, userAnswerId: Int, onForceLogin: () -> Unit) {
         viewModelScope.launch {
-            _citation.value?.let { currentCitation ->
-                try {
-                    if (authRepository.isBearerTokenExpired(authRepository.getBearerToken())) {
-                        val response = authRepository.askRefreshToken(authRepository.getRefreshToken())
-                        if (!response) {
-                            onForceLogin
-                            return@launch
-                        }
-                    }
-                    val response = citationRepository.postAnswer(citationId, userAnswerId)
-                    if (response.isSuccessful) {
-                        response.body()?.let { answerResponse ->
-                            val userGuessMovie = currentCitation.choices.find { it.id == userAnswerId }
-                            _citation.value = currentCitation.updateWithResponse(answerResponse, userGuessMovie)
-                            _playState.value = PlayState.Answer
-                        }
-                    } else {
-                        _playState.value = PlayState.Error("${response.code()} : ${response.message()}")
-                    }
-                } catch (e: Exception) {
-                    _playState.value = PlayState.Error("Exception : ${e.message}")
+            if (authRepository.isBearerTokenExpired(authRepository.getBearerToken())) {
+                val refreshed = authRepository.askRefreshToken(authRepository.getRefreshToken())
+                if (!refreshed) {
+                    authRepository.logout()
+                    onForceLogin()
+                    return@launch
                 }
             }
+            citationRepository.submitAnswer(citationId, userAnswerId)
         }
+    }
+
+    fun resetValues() {
+        citationRepository.resetValues()
     }
 }
 
-sealed class PlayState {
-    object Loading : PlayState()
-    object Question : PlayState()
-    object Answer : PlayState()
-    data class Error(val message: String) : PlayState()
+sealed class PlayUiState {
+    object Loading : PlayUiState()
+    data class Question(
+        val citation: Citation,
+        val currentIndex: Int,
+        val quizSize: Int
+    ) : PlayUiState()
+    data class Answer(
+        val citation: Citation,
+        val currentIndex: Int,
+        val quizSize: Int
+    ) : PlayUiState()
+    data class Result(val currentIndex: Int, val quizSize: Int) : PlayUiState()
+    data class Error(val messageId: Int) : PlayUiState()
 }

@@ -98,7 +98,9 @@ fun Login(
             }
 
             TextBody1Regular(
-                modifier = modifier.fillMaxWidth().clickable{ goForgottenPassword() },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .clickable { goForgottenPassword() },
                 text = "Mot de passe oublié ?",
                 color = primary,
                 textAlign = TextAlign.Center

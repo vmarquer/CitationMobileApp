@@ -35,7 +35,7 @@ fun ConfirmationDialog(
                 textId = messageId,
                 textAlign = TextAlign.Center
             )
-               },
+        },
         confirmButton = {
             Row(
                 modifier = Modifier.fillMaxWidth(),

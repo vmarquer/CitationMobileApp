@@ -38,7 +38,9 @@ fun CheckableRow(
     ) {
         TextBody2Regular(
             text = (if (textId == -1) text else stringResource(id = textId)),
-            modifier = Modifier.weight(3f).padding(start = padding8)
+            modifier = Modifier
+                .weight(3f)
+                .padding(start = padding8)
         )
         Checkbox(
             checked = isChecked,

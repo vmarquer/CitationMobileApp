@@ -60,6 +60,8 @@
         HOME
     -->
     <string name="home_title">Accueil</string>
+    <string name="home_mode_selection_title">Sélectionne le mode de jeu :</string>
+    <string name="home_launch_game">Jouer</string>
 
 
     <!--
@@ -74,6 +76,8 @@
     <string name="play_answer_good_answer">Bravo, bonne réponse !</string>
     <string name="play_answer_bad_answer">Aïe, mauvaise réponse…</string>
     <string name="play_answer_go_next_quote">Passer à la citation suivante</string>
+    <string name="play_see_result">Voir les résultats</string>
+    <string name="play_result_title">Résultats</string>
 
 
     <!--
@@ -93,7 +97,6 @@
     <string name="profile_email_label">Email</string>
     <string name="profile_logout_dialog_title">Déconnexion</string>
     <string name="profile_logout_dialog_message">Êtes-vous sûr de vouloir vous déconnecter ?</string>
-
 
 
     <!--
@@ -119,4 +122,14 @@
     <string name="error_activation_code_incorrect_length">Le code d\'activation est composé de 6 chiffres !</string>
     <string name="error_login_invalid_credentials">Le nom d\'utilisateur ou le mot de passe est invalide !</string>
     <string name="error_modify_password_no_email">L\'email est introuvable !</string>
+    <string name="error_empty_answer_from_server">Réponse vide du serveur !</string>
+    <string name="error_no_internet">Pas de connexion Internet</string>
+    <string name="error_timeout">Le serveur ne répond pas</string>
+    <string name="error_unknown">Erreur inconnue</string>
+    <string name="error_unauthorized">Non autorisé</string>
+    <string name="error_forbidden">Accès refusé</string>
+    <string name="error_not_found">Ressource introuvable</string>
+    <string name="error_server">Erreur interne du serveur</string>
+    <string name="error_no_current_citation">Aucune citation en cours</string>
+    <string name="error_no_email">Email introuvable</string>
 </resources>

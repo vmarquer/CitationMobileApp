@@ -72,8 +72,10 @@ fun AnswerButton(
         onClick = {
             isPressed = true
             onClick()
-                  },
-        modifier = modifier.fillMaxWidth().heightIn(min = heightAnswerButton)
+        },
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = heightAnswerButton)
             .background(backgroundColor, shape = RoundedCornerShape(padding8))
             .border(lineHeightSmall, borderColor, shape = RoundedCornerShape(padding8))
             .pointerInput(Unit) {
@@ -120,7 +122,9 @@ fun ProfileButton(
         colors = ButtonDefaults.buttonColors(containerColor = primary.copy(0.2f)),
     ) {
         Row(
-            modifier = modifier.fillMaxWidth().padding(vertical = padding2),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = padding2),
             horizontalArrangement = Arrangement.spacedBy(
                 spacing16, alignment = Alignment.Start
             ),

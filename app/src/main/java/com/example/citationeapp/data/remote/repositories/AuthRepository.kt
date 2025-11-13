@@ -57,6 +57,7 @@ class AuthRepository @Inject constructor(
             false
         }
     }
+
     override suspend fun activate(code: String): Boolean {
         return try {
             val response = authApiService.activate(ActivationRequestDTO(code))
@@ -109,9 +110,14 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    override suspend fun sendNewPassword(email: String, newPassword: String, code: String): Boolean {
+    override suspend fun sendNewPassword(
+        email: String,
+        newPassword: String,
+        code: String
+    ): Boolean {
         return try {
-            val response = authApiService.sendNewPassword(NewPasswordRequestDTO(email, newPassword, code))
+            val response =
+                authApiService.sendNewPassword(NewPasswordRequestDTO(email, newPassword, code))
             if (response.isSuccessful) {
                 true
             } else {
@@ -124,9 +130,14 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    override suspend fun modifyPassword(email: String, oldPassword: String, newPassword: String): Boolean {
+    override suspend fun modifyPassword(
+        email: String,
+        oldPassword: String,
+        newPassword: String
+    ): Boolean {
         return try {
-            val response = authApiService.modifyPassword(ModifyPasswordDTO(email, oldPassword, newPassword))
+            val response =
+                authApiService.modifyPassword(ModifyPasswordDTO(email, oldPassword, newPassword))
             if (response.isSuccessful) {
                 ToastManager.showMessage("Mot de passe modifié !", success)
                 true

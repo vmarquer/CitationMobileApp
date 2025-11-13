@@ -16,7 +16,10 @@ fun CitationLightDto.toCitation(): Citation {
     )
 }
 
-fun Citation.updateWithResponse(response: CitationAnswerResponseDTO, userGuessMovie: Film?): Citation {
+fun Citation.updateWithResponse(
+    response: CitationAnswerResponseDTO,
+    userGuessMovie: Film?
+): Citation {
     return this.copy(
         caracter = response.caracter,
         actor = response.actor,
@@ -49,9 +52,9 @@ fun Citation.toCitationLightDto(): CitationLightDto {
 fun Citation.toCitationAnswerResponseDto(): CitationAnswerResponseDTO {
     return CitationAnswerResponseDTO(
         id = id,
-        caracter = this.caracter?: "",
-        actor = this.actor?: "",
-        answerId = this.answerId?: -1,
+        caracter = this.caracter ?: "",
+        actor = this.actor ?: "",
+        answerId = this.answerId ?: -1,
         result = this.result == true,
     )
 }

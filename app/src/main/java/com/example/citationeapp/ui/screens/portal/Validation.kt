@@ -115,7 +115,8 @@ class ValidationViewModel @Inject constructor(
 
     fun activate(code: String) {
         if (!code.matches(Regex("^\\d{6}$"))) {
-            _validationState.value = ValidationState.Error(R.string.error_activation_code_incorrect_length)
+            _validationState.value =
+                ValidationState.Error(R.string.error_activation_code_incorrect_length)
             return
         }
         _validationState.value = ValidationState.Loading
