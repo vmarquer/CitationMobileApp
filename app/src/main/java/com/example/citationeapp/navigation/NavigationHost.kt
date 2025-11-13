@@ -12,9 +12,8 @@ import com.example.citationeapp.ui.screens.portal.Login
 import com.example.citationeapp.ui.screens.portal.Portal
 import com.example.citationeapp.ui.screens.portal.Register
 import com.example.citationeapp.ui.screens.portal.Validation
-import com.example.citationeapp.ui.screens.profile.ModifyPassword
-import com.example.citationeapp.ui.screens.profile.Profile
-import com.example.citationeapp.ui.screens.profile.Settings
+import com.example.citationeapp.ui.screens.settings.ModifyPassword
+import com.example.citationeapp.ui.screens.settings.Profile
 
 @Composable
 fun NavigationHost(
@@ -29,14 +28,14 @@ fun NavigationHost(
             Portal(
                 goLogin = { navController.navigate(Route.Login.name) },
                 goRegister = { navController.navigate(Route.Register.name) },
-                goHome = { navController.navigate(Route.Home.name) }
+                goHome = { navController.navigate(Route.TopLevelRoute.Home.name) }
             )
         }
 
         composable(Route.Login.name) {
             Login(
                 goRegister = { navController.navigate(Route.Register.name) },
-                goHome = { navController.navigate(Route.Home.name) },
+                goHome = { navController.navigate(Route.TopLevelRoute.Home.name) },
                 goForgottenPassword = { navController.navigate(Route.ForgottenPassword.name) }
             )
         }
@@ -60,42 +59,36 @@ fun NavigationHost(
             )
         }
 
-        composable(Route.Home.name) {
+        composable(Route.TopLevelRoute.Home.name) {
             Home(
-                goSettings = { navController.navigate(Route.Settings.name) },
-                launchGame = { navController.navigate(Route.Play.name) }
+                goProfile = { navController.navigate(Route.NestedLevelRoute.Profile.name) },
+                goDesignSystem = { navController.navigate(Route.NestedLevelRoute.DesignSystem.name) },
+                launchGame = { navController.navigate(Route.TopLevelRoute.Play.name) }
             )
     }
 
-        composable(route = Route.Play.name) {
+        composable(route = Route.TopLevelRoute.Play.name) {
             Play(
-                goHome = { navController.navigate(Route.Home.name) },
+                goHome = { navController.navigate(Route.TopLevelRoute.Home.name) },
                 onForceLogin = { navController.navigate(Route.Portal.name) }
             )
         }
 
-        composable(route = Route.Settings.name) {
-            Settings(
-                showProfile = { navController.navigate(Route.Profile.name) },
-                showDesignSystem = { navController.navigate(Route.DesignSystem.name) }
-            )
-        }
-
-        composable(route = Route.Profile.name) {
+        composable(route = Route.NestedLevelRoute.Profile.name) {
             Profile(
                 goPortal = { navController.navigate(Route.Portal.name) },
-                goModifyPassword = { navController.navigate(Route.ModifyPassword.name) },
+                goModifyPassword = { navController.navigate(Route.NestedLevelRoute.ModifyPassword.name) },
             )
         }
 
-        composable(Route.ModifyPassword.name) {
+        composable(Route.NestedLevelRoute.ModifyPassword.name) {
             ModifyPassword(
-                goProfile = { navController.popBackStack(Route.Profile.name, inclusive = false) },
+                goProfile = { navController.popBackStack(Route.NestedLevelRoute.Profile.name, inclusive = false) },
                 onForceLogin = { navController.navigate(Route.Portal.name) }
             )
         }
 
-        composable(Route.DesignSystem.name) {
+        composable(Route.NestedLevelRoute.DesignSystem.name) {
             DesignSystem()
         }
     }

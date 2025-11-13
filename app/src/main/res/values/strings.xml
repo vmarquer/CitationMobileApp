@@ -85,9 +85,9 @@
         SETTINGS
     -->
     <string name="settings_title">Paramètres</string>
-    <string name="settings_version_label">Choix de la version</string>
-    <string name="settings_version_original">Version Originale</string>
-    <string name="settings_version_french">Version Française</string>
+    <string name="settings_version_label">Version</string>
+    <string name="settings_version_original">VO</string>
+    <string name="settings_version_french">VF</string>
 
 
     <!--

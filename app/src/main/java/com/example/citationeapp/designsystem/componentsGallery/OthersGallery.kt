@@ -39,6 +39,7 @@ import com.example.citationeapp.ui.theme.grey
 import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.spacing10
 import com.example.citationeapp.ui.theme.spacing2
+import com.example.citationeapp.ui.theme.white
 import kotlinx.coroutines.launch
 
 data class PagerStep(val text: String)
@@ -107,12 +108,18 @@ fun DesignSystemOthers(modifier: Modifier = Modifier) {
                         TextBody1Bold(text = pagerStep.text)
                     }
                 }
+                ButtonPrimary(
+                    modifier = Modifier,
+                    text = "Show bottom sheet",
+                    onClick = { showBottomSheet = true }
+                )
             }
         }
     }
     if (showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = { showBottomSheet = false },
+            containerColor = white,
             sheetState = sheetState
         ) {
             Column(

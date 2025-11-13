@@ -7,6 +7,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -14,10 +15,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonColors
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +37,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.components.TextBody2Bold
@@ -164,53 +172,29 @@ fun FloatingButton(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> SingleChoiceSegmentedButton(
     options: List<T>,
     modifier: Modifier = Modifier,
-    initialSelection: Int = 0,
-    getText: (T) -> String,
-    onSelectionChanged: (selectedOption: T) -> Unit = {}
+    selectedOption: T,
+    getText: @Composable (T) -> String,
+    onSelectionChanged: (T) -> Unit = {}
 ) {
-    var selectedIndex by remember { mutableStateOf(initialSelection) }
-    Row(
+    SingleChoiceSegmentedButtonRow(
         modifier = modifier
-            .border(lineHeightSmall, primary, RoundedCornerShape(padding16))
-            .clip(RoundedCornerShape(padding16)),
-        horizontalArrangement = Arrangement.spacedBy(dimZero)
     ) {
         options.forEachIndexed { index, option ->
-            val isSelected = index == selectedIndex
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(if (isSelected) primary else white)
-                    .clickable {
-                        selectedIndex = index
-                        onSelectionChanged(option)
-                    }
-                    .padding(vertical = padding8),
-                contentAlignment = Alignment.Center
-            ) {
-                if (isSelected) {
-                    TextBody2Bold(
-                        text = getText(option),
-                        color = white
-                    )
-                } else {
+            SegmentedButton(
+                selected = option == selectedOption,
+                onClick = { onSelectionChanged(option) },
+                shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+                label = {
                     TextBody2Regular(
                         text = getText(option),
-                        color = primary
                     )
                 }
-            }
-            if (index < options.lastIndex) {
-                Box(
-                    modifier = Modifier
-                        .width(lineHeightSmall)
-                        .background(primary)
-                )
-            }
+            )
         }
     }
 }

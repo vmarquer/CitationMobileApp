@@ -91,12 +91,13 @@ fun DesignSystemButtons(modifier: Modifier = Modifier) {
                 )
                 SingleChoiceSegmentedButton(
                     options = segmentedButtonOptions,
+                    selectedOption = segmentedButtonSelectedOption,
                     getText = { it.text },
                     onSelectionChanged = { selectedOption ->
                         segmentedButtonSelectedOption = selectedOption
                     }
                 )
-                TextBody2Regular(text= segmentedButtonSelectedOption.text)
+                TextBody2Regular(text = "Selected: ${segmentedButtonSelectedOption.text}")
             }
         }
     }

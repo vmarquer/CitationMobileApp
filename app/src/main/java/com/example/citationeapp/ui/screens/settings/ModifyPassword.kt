@@ -1,4 +1,4 @@
-package com.example.citationeapp.ui.screens.profile
+package com.example.citationeapp.ui.screens.settings
 
 import ButtonPrimary
 import androidx.compose.foundation.layout.Arrangement
