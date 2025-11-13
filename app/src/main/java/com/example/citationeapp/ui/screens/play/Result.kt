@@ -16,15 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.citationeapp.R
-import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextBody2Bold
 import com.example.citationeapp.ui.theme.components.TextH1Bold
 import com.example.citationeapp.ui.theme.padding32
 import com.example.citationeapp.ui.theme.padding64
 import com.example.citationeapp.ui.theme.primary
-import com.example.citationeapp.ui.theme.spacing10
 import com.example.citationeapp.ui.theme.spacing32
-import com.example.citationeapp.ui.theme.spacing8
 
 @Composable
 fun Result(

@@ -1,7 +1,6 @@
 package com.example.citationeapp.ui.theme.components
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -35,23 +34,6 @@ fun TextBottomBar(
         color = color,
         maxLines = maxLines,
         textAlign = textAlign
-    )
-}
-
-@Composable
-fun TextScreenTitle(
-    modifier: Modifier = Modifier,
-    text: String = "",
-    @StringRes textId: Int = -1,
-    color: Color = black,
-    textAlign: TextAlign = TextAlign.Start
-) {
-    Text(
-        text = (if (textId == -1) text else stringResource(id = textId)),
-        modifier = modifier.fillMaxWidth(),
-        color = color,
-        textAlign = textAlign,
-        style = h1Bold
     )
 }
 

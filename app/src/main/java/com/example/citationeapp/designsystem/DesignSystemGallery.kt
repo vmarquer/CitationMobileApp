@@ -9,9 +9,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.citationeapp.designsystem.componentsGallery.DesignSystemButtons
+import com.example.citationeapp.designsystem.componentsGallery.DesignSystemCards
 import com.example.citationeapp.designsystem.componentsGallery.DesignSystemColors
 import com.example.citationeapp.designsystem.componentsGallery.DesignSystemInputs
 import com.example.citationeapp.designsystem.componentsGallery.DesignSystemLabels
+import com.example.citationeapp.designsystem.componentsGallery.DesignSystemOthers
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.spacing16
 
@@ -26,9 +28,11 @@ fun DesignSystem(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(spacing16)
     ) {
-        DesignSystemInputs()
         DesignSystemButtons()
         DesignSystemLabels()
+        DesignSystemInputs()
         DesignSystemColors()
+        DesignSystemCards()
+        DesignSystemOthers()
     }
 }

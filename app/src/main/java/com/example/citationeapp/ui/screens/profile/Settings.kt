@@ -1,15 +1,12 @@
 package com.example.citationeapp.ui.screens.profile
 
-import ProfileButton
+import ButtonPrimary
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DesignServices
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,7 +15,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.remote.repositories.VersionRepository
-import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.CheckableRow
 import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.grey
@@ -43,22 +39,16 @@ fun Settings(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(spacing8)
     ) {
-        ProfileButton(
-            modifier = Modifier.fillMaxWidth(),
+        ButtonPrimary(
+            modifier = Modifier,
             textId = R.string.profile_title,
-            onClick = showProfile,
-            iconId = Icons.Filled.Person,
-            colorIcon = black
+            onClick = showProfile
         )
-
-        ProfileButton(
-            modifier = Modifier.fillMaxWidth(),
+        ButtonPrimary(
+            modifier = Modifier,
             textId = R.string.design_system_title,
-            onClick = showDesignSystem,
-            iconId = Icons.Filled.DesignServices,
-            colorIcon = black
+            onClick = showDesignSystem
         )
-
         Column(
             modifier = modifier
                 .fillMaxWidth(),

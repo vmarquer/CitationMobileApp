@@ -27,7 +27,6 @@ import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.models.getDifficultyBackgroundColor
 import com.example.citationeapp.data.models.getDifficultyLabel
-import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBody2Bold
 import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.customBoxHeightQuestion

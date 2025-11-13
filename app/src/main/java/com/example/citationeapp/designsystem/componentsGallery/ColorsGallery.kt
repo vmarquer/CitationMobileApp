@@ -1,15 +1,27 @@
 package com.example.citationeapp.designsystem.componentsGallery
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -23,8 +35,10 @@ import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.dark_blue
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.grey
+import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing10
+import com.example.citationeapp.ui.theme.spacing2
 import com.example.citationeapp.ui.theme.success
 import com.example.citationeapp.ui.theme.white
 import com.example.citationeapp.ui.theme.yellow
@@ -35,48 +49,71 @@ import kotlin.math.sqrt
 fun DesignSystemColors(
     modifier: Modifier = Modifier
 ) {
+    var expanded by remember { mutableStateOf(false) }
+    val colors = listOf(
+        Pair("Primary", primary),
+        Pair("White", white),
+        Pair("Black", black),
+        Pair("Grey", grey),
+        Pair("DarkBlue", dark_blue),
+        Pair("Success", success),
+        Pair("Yellow", yellow),
+        Pair("Fail", fail),
+    )
+    val spacerSize = 80.dp
+    val circleRadius = with(LocalDensity.current) { (spacerSize / 2).toPx() }
+    val colorPerLine: Int = floor(sqrt(colors.size.toFloat())).toInt()
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(spacing10),
+        verticalArrangement = Arrangement.spacedBy(spacing2),
     ) {
-        TextH3Bold(text = "Colors")
-
-        val colors = listOf(
-            Pair("Primary", primary),
-            Pair("White", white),
-            Pair("Black", black),
-            Pair("Grey", grey),
-            Pair("DarkBlue", dark_blue),
-            Pair("Success", success),
-            Pair("Yellow", yellow),
-            Pair("Fail", fail),
-        )
-
-        // Couleurs dans des carrés
-        val spacerSize = 80.dp
-        val circleRadius = with(LocalDensity.current) { (spacerSize / 2).toPx() }
-        val colorPerLine: Int = floor(sqrt(colors.size.toFloat())).toInt()
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(colorPerLine),
-            modifier = modifier.heightIn(max = 500.dp),
-            contentPadding = PaddingValues(8.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { expanded = !expanded }
+                .padding(vertical = padding8),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            items(colors.size) { index ->
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Spacer(
-                        modifier = modifier
-                            .size(width = spacerSize, height = spacerSize)
-                            .drawBehind {
-                                drawCircle(
-                                    color = colors[index].second,
-                                    radius = circleRadius
+            TextH3Bold(text = "Colors")
+            Icon(
+                imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                contentDescription = null,
+                tint = grey
+            )
+        }
+        AnimatedVisibility(visible = expanded) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(spacing10)
+            ) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(colorPerLine),
+                    modifier = modifier.heightIn(max = 500.dp),
+                    contentPadding = PaddingValues(8.dp)
+                ) {
+                    items(colors.size) { index ->
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Spacer(
+                                modifier = modifier
+                                    .size(width = spacerSize, height = spacerSize)
+                                    .drawBehind {
+                                        drawCircle(
+                                            color = colors[index].second,
+                                            radius = circleRadius
+                                        )
+                                    })
+                            TextBody1Bold(
+                                text = String.format(
+                                    "#%08X",
+                                    colors[index].second.toArgb()
                                 )
-                            })
-
-                    TextBody1Bold(text = String.format("#%08X", colors[index].second.toArgb()))
-                    TextBody2Regular(text = colors[index].first)
+                            )
+                            TextBody2Regular(text = colors[index].first)
+                        }
+                    }
                 }
             }
         }

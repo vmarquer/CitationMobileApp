@@ -16,6 +16,7 @@
     <string name="button_modify_password">Modifier son mot de passe</string>
     <string name="button_activation_code">Envoyer le code</string>
     <string name="button_ask_new_password">Demander un nouveau mot de passe</string>
+    <string name="button_close">Close</string>
 
 
     <!--
