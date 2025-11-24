@@ -3,6 +3,7 @@ package com.example.citationeapp.ui.screens.home
 import ButtonPrimary
 import FloatingButton
 import SingleChoiceSegmentedButton
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,12 +23,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.SettingsSuggest
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -54,21 +53,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.remote.repositories.CitationRepositoryInterface
-import com.example.citationeapp.data.remote.repositories.VersionRepository
 import com.example.citationeapp.ui.theme.black
-import com.example.citationeapp.ui.theme.components.CheckableRow
 import com.example.citationeapp.ui.theme.components.TextBody1Bold
-import com.example.citationeapp.ui.theme.components.TextH2
-import com.example.citationeapp.ui.theme.components.TextH3
+import com.example.citationeapp.ui.theme.components.TextBody2Regular
 import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.grey
 import com.example.citationeapp.ui.theme.padding12
 import com.example.citationeapp.ui.theme.padding16
+import com.example.citationeapp.ui.theme.padding24
 import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.primary
-import com.example.citationeapp.ui.theme.spacing10
 import com.example.citationeapp.ui.theme.spacing16
-import com.example.citationeapp.ui.theme.spacing2
+import com.example.citationeapp.ui.theme.spacing32
 import com.example.citationeapp.ui.theme.spacing4
 import com.example.citationeapp.ui.theme.white
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -84,12 +80,15 @@ fun Home(
     launchGame: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+    BackHandler(enabled = true) {}
+
     val pagerState = rememberPagerState(pageCount = { viewModel.modeCount })
     val coroutineScope = rememberCoroutineScope()
     val modes = viewModel.modes
     var showSettings by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val version by viewModel.versionFlow.collectAsState(initial = CitationVersion.VF)
+    val quizSize by viewModel.quizSizeFlow.collectAsState(initial = 5)
 
     Box(
         modifier = modifier
@@ -206,54 +205,78 @@ fun Home(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(24.dp)
+                    .padding(padding24)
                     .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(spacing4)
+                verticalArrangement = Arrangement.spacedBy(spacing32)
             ) {
                 TextH3Bold(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     textId = R.string.settings_title
                 )
-                Row(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(
-                            onClick = {
-                                showSettings = false
-                                goDesignSystem()
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(spacing4)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextBody2Regular(
+                            textId = R.string.settings_version_label,
+                            color = grey
+                        )
+                        SingleChoiceSegmentedButton(
+                            options = CitationVersion.entries,
+                            selectedOption = version,
+                            getText = { stringResource(id = it.displayNameRes) },
+                            onSelectionChanged = { selectedVersion ->
+                                viewModel.toggleVersion(selectedVersion)
                             }
-                        ),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextH3(
-                        textId = R.string.design_system_title,
-                        color = grey
-                    )
-                    Icon(
-                        modifier = Modifier.size(32.dp),
-                        imageVector = Icons.Filled.ChevronRight,
-                        contentDescription = null,
-                        tint = black
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextH3(
-                        textId = R.string.settings_version_label,
-                        color = grey
-                    )
-                    SingleChoiceSegmentedButton(
-                        options = CitationVersion.entries,
-                        selectedOption = version,
-                        getText = { stringResource(id = it.displayNameRes) },
-                        onSelectionChanged = { selectedVersion ->
-                            viewModel.toggleVersion(selectedVersion)
-                        }
-                    )
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextBody2Regular(
+                            textId = R.string.settings_quiz_size_label,
+                            color = grey
+                        )
+                        SingleChoiceSegmentedButton(
+                            options = viewModel.quizSizeEntries.toList(),
+                            selectedOption = quizSize,
+                            getText = { it.toString() },
+                            onSelectionChanged = { size ->
+                                viewModel.updateQuizSize(size)
+                            }
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                onClick = {
+                                    showSettings = false
+                                    goDesignSystem()
+                                }
+                            ),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextBody2Regular(
+                            textId = R.string.design_system_title,
+                            color = grey
+                        )
+                        Icon(
+                            modifier = Modifier.size(32.dp),
+                            imageVector = Icons.Filled.ChevronRight,
+                            contentDescription = null,
+                            tint = black
+                        )
+                    }
                 }
             }
         }
@@ -272,27 +295,36 @@ enum class GameMode(val iconRes: Int) {
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val citationRepository: CitationRepositoryInterface,
-    private val versionRepository: VersionRepository
+    private val citationRepository: CitationRepositoryInterface
 ) : ViewModel() {
     val modes = GameMode.entries
     private val _currentMode = mutableIntStateOf(0)
     val modeCount: Int get() = modes.size
-    var version by mutableStateOf(CitationVersion.VF)
+    val versionFlow = citationRepository.version
+    var quizSize by mutableStateOf(5)
         private set
-    val versionFlow = versionRepository.versionFlow
+    val quizSizeFlow = citationRepository.quizSize
+    val quizSizeEntries = intArrayOf(5, 10, 20)
+
     init {
         viewModelScope.launch {
-            versionRepository.versionFlow.collect { newVersion ->
-                version = newVersion
+            citationRepository.quizSize.collect { size ->
+                quizSize = size
             }
         }
     }
     fun toggleVersion(citationVersion: CitationVersion) {
         viewModelScope.launch {
-            versionRepository.saveVersion(citationVersion)
+            citationRepository.updateVersion(citationVersion)
         }
     }
+
+    fun updateQuizSize(size: Int) {
+        viewModelScope.launch {
+            citationRepository.updateQuizSize(size)
+        }
+    }
+
     fun onModeChanged(index: Int) {
         _currentMode.intValue = index
         citationRepository.setGameMode(modes[index])

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.citationeapp.data.models.CitationVersion
@@ -18,6 +19,7 @@ class UserPreferences(context: Context) {
 
     companion object {
         private val KEY_VERSION = stringPreferencesKey("citation_version")
+        private val KEY_QUIZ_SIZE = intPreferencesKey("quiz_size")
         private val KEY_BEARER_TOKEN = stringPreferencesKey("bearer_token")
         private val KEY_REFRESH_TOKEN = stringPreferencesKey("refresh_token")
     }
@@ -30,6 +32,16 @@ class UserPreferences(context: Context) {
 
     val version: Flow<String> = dataStore.data.map { preferences ->
         preferences[KEY_VERSION] ?: CitationVersion.VF.name
+    }
+
+    suspend fun saveQuizSize(size: Int) {
+        dataStore.edit { preferences ->
+            preferences[KEY_QUIZ_SIZE] = size
+        }
+    }
+
+    val quizSize: Flow<Int> = dataStore.data.map { preferences ->
+        preferences[KEY_QUIZ_SIZE] ?: 5
     }
 
     suspend fun saveAuthTokens(token: String, refreshToken: String) {

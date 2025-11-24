@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.citationeapp.R
+import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.ui.theme.components.TextBody2Bold
 import com.example.citationeapp.ui.theme.components.TextH1Bold
 import com.example.citationeapp.ui.theme.padding32
@@ -26,10 +27,11 @@ import com.example.citationeapp.ui.theme.spacing32
 @Composable
 fun Result(
     modifier: Modifier = Modifier,
-    currentIndex: Int,
+    usedCitations: List<Citation>,
     quizSize: Int,
     goHome: () -> Unit
 ) {
+    val successCount = usedCitations.count { it.result == true }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -46,13 +48,13 @@ fun Result(
             modifier = modifier.size(80.dp)
         ) {
             CircularProgressIndicator(
-                progress = {currentIndex.toFloat() / quizSize.toFloat()},
+                progress = { successCount.toFloat() / quizSize.toFloat() },
                 strokeWidth = 8.dp,
                 modifier = Modifier.fillMaxSize(),
                 color = primary
             )
             TextBody2Bold(
-                text = "${currentIndex}/${quizSize}",
+                text = "${successCount}/${quizSize}",
             )
         }
         ButtonPrimary(

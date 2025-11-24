@@ -2,16 +2,10 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -21,7 +15,6 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonColors
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
@@ -31,22 +24,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
-import com.example.citationeapp.ui.theme.components.TextBody2Bold
 import com.example.citationeapp.ui.theme.components.TextBody2Regular
-import com.example.citationeapp.ui.theme.dimZero
+import com.example.citationeapp.ui.theme.grey
 import com.example.citationeapp.ui.theme.heightAnswerButton
 import com.example.citationeapp.ui.theme.lineHeightSmall
-import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.white
@@ -189,9 +178,15 @@ fun <T> SingleChoiceSegmentedButton(
                 selected = option == selectedOption,
                 onClick = { onSelectionChanged(option) },
                 shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+                colors = SegmentedButtonDefaults.colors(
+                    activeContainerColor = primary,
+                    inactiveContainerColor = white,
+                    activeContentColor = white
+                ),
                 label = {
                     TextBody2Regular(
                         text = getText(option),
+                        color = if (option == selectedOption) white else black
                     )
                 }
             )

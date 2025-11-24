@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.citationeapp.R
+import com.example.citationeapp.data.remote.dto.UtilisateurInfosDTO
 import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
 import com.example.citationeapp.ui.theme.components.ConfirmationDialog
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
@@ -39,8 +40,7 @@ fun Profile(
     goPortal: () -> Unit
 ) {
     val logoutState by viewModel.logoutState.collectAsState()
-    val email by viewModel.email.collectAsState()
-    val username by viewModel.username.collectAsState()
+    val userInfos by viewModel.userInfos.collectAsState()
     var showLogoutDialog by remember { mutableStateOf(false) }
 
     Column(
@@ -53,8 +53,10 @@ fun Profile(
         if (logoutState is LogoutState.Loading) {
             CircularProgressIndicator()
         } else {
-            TextBody1Regular(text = "Nom d'utilisateur: ${username ?: "Non disponible"}")
-            TextBody1Regular(text = "Email: ${email ?: "Non disponible"}")
+            TextBody1Regular(text = "Email: ${userInfos.email}")
+            TextBody1Regular(text = "Nom d'utilisateur: ${userInfos.username}")
+            TextBody1Regular(text = "Role: ${userInfos.role}")
+            TextBody1Regular(text = "Ratio: ${userInfos.goodAnswers}/${userInfos.answers}")
 
             ButtonPrimary(
                 onClick = goModifyPassword,
@@ -97,16 +99,11 @@ class ProfileViewModel @Inject constructor(
     private val _logoutState = MutableStateFlow<LogoutState>(LogoutState.Idle)
     val logoutState: StateFlow<LogoutState> = _logoutState
 
-    private val _email = MutableStateFlow<String?>(null)
-    val email: StateFlow<String?> = _email
-
-    private val _username = MutableStateFlow<String?>(null)
-    val username: StateFlow<String?> = _username
+    val userInfos: StateFlow<UtilisateurInfosDTO> = authRepository.userInfos
 
     init {
         viewModelScope.launch {
-            _email.value = authRepository.extractEmailFromToken()
-            _username.value = authRepository.extractUsernameFromToken()
+            authRepository.getUserInfos()
         }
     }
 

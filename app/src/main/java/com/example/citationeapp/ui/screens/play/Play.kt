@@ -1,27 +1,40 @@
 package com.example.citationeapp.ui.screens.play
 
+import ButtonPrimary
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
 import com.example.citationeapp.data.remote.repositories.CitationRepositoryInterface
-import com.example.citationeapp.data.remote.repositories.VersionRepository
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
+import com.example.citationeapp.ui.theme.components.TextBody2Regular
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing24
+import com.example.citationeapp.ui.theme.white
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -34,6 +47,11 @@ fun Play(
     goHome: () -> Unit,
     onForceLogin: () -> Unit,
 ) {
+    var showExitDialog by remember { mutableStateOf(false) }
+    BackHandler(enabled = true) {
+        showExitDialog = true
+    }
+
     val playState = viewModel.uiState.collectAsState().value
 
     LaunchedEffect(Unit) {
@@ -75,7 +93,7 @@ fun Play(
 
         is PlayUiState.Result -> {
             Result(
-                currentIndex = playState.currentIndex,
+                usedCitations = playState.usedCitations,
                 quizSize = playState.quizSize,
                 goHome = {
                     viewModel.resetValues()
@@ -99,22 +117,65 @@ fun Play(
             }
         }
     }
+    if (showExitDialog) {
+        AlertDialog(
+            onDismissRequest = { showExitDialog = false },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Warning,
+                    contentDescription = null
+                )
+            },
+            title = {
+                TextBody2Regular(textId = R.string.play_exit_dialog_title)
+            },
+            text = {
+                TextBody2Regular(textId = R.string.play_exit_dialog_message)
+            },
+            confirmButton = {
+                ButtonPrimary(
+                    modifier = Modifier,
+                    textId = R.string.button_yes,
+                    onClick = {
+                        showExitDialog = false
+                        viewModel.resetValues()
+                        goHome()
+                    }
+                )
+            },
+            dismissButton = {
+                ButtonPrimary(
+                    modifier = Modifier,
+                    textId = R.string.button_no,
+                    onClick = { showExitDialog = false }
+                )
+            },
+            containerColor = white
+        )
+    }
 }
 
 @HiltViewModel
 class PlayViewModel @Inject constructor(
     private val citationRepository: CitationRepositoryInterface,
-    private val authRepository: AuthRepositoryInterface,
-    private val versionRepository: VersionRepository
+    private val authRepository: AuthRepositoryInterface
 ) : ViewModel() {
     val uiState: StateFlow<PlayUiState> = citationRepository.uiState
     var version: CitationVersion = CitationVersion.VF
         private set
 
+    var quizSize by mutableStateOf(5)
+        private set
+
     init {
         viewModelScope.launch {
-            versionRepository.versionFlow.collect { newVersion ->
+            citationRepository.version.collect { newVersion ->
                 version = newVersion
+            }
+        }
+        viewModelScope.launch {
+            citationRepository.quizSize.collect { size ->
+                quizSize = size
             }
         }
     }
@@ -164,6 +225,6 @@ sealed class PlayUiState {
         val currentIndex: Int,
         val quizSize: Int
     ) : PlayUiState()
-    data class Result(val currentIndex: Int, val quizSize: Int) : PlayUiState()
+    data class Result(val usedCitations: List<Citation>, val quizSize: Int) : PlayUiState()
     data class Error(val messageId: Int) : PlayUiState()
 }

@@ -4,21 +4,30 @@ import com.example.citationeapp.R
 import com.example.citationeapp.data.domain.mapper.toCitation
 import com.example.citationeapp.data.domain.mapper.updateWithResponse
 import com.example.citationeapp.data.models.Citation
+import com.example.citationeapp.data.models.CitationVersion
+import com.example.citationeapp.data.preferences.UserPreferences
 import com.example.citationeapp.data.remote.api.CitationApiService
 import com.example.citationeapp.data.remote.dto.CitationAnswerRequestDTO
 import com.example.citationeapp.data.remote.dto.CitationAnswerResponseDTO
 import com.example.citationeapp.data.remote.dto.CitationLightDto
 import com.example.citationeapp.ui.screens.home.GameMode
 import com.example.citationeapp.ui.screens.play.PlayUiState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
 interface CitationRepositoryInterface {
     val uiState: StateFlow<PlayUiState>
+    val quizSize: StateFlow<Int>
+    val version: StateFlow<CitationVersion>
     fun setGameMode(mode: GameMode)
+    suspend fun updateQuizSize(size: Int)
+    suspend fun updateVersion(version: CitationVersion)
     suspend fun getRandomCitation()
     suspend fun submitAnswer(citationId: Int, answerId: Int)
     fun resetValues()
@@ -26,61 +35,96 @@ interface CitationRepositoryInterface {
 
 class CitationRepository @Inject constructor(
     private val apiService: CitationApiService,
-    private val authRepository: AuthRepositoryInterface
+    private val authRepository: AuthRepositoryInterface,
+    private val userPreferences: UserPreferences
 ) : CitationRepositoryInterface {
-
-    companion object {
-        private const val QUIZ_SIZE = 2
-    }
     private val _uiState = MutableStateFlow<PlayUiState>(PlayUiState.Loading)
     override val uiState = _uiState.asStateFlow()
+    private val _quizSize = MutableStateFlow(5)
+    override val quizSize: StateFlow<Int> = _quizSize.asStateFlow()
+    private val _version = MutableStateFlow(CitationVersion.VF)
+    override val version: StateFlow<CitationVersion> = _version.asStateFlow()
     private val _currentCitation = MutableStateFlow<Citation?>(null)
     private val _gameMode = MutableStateFlow<GameMode>(GameMode.ALL)
     private var currentIndex = 0
+    private val usedCitations = mutableListOf<Citation>()
+
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            userPreferences.quizSize.collect { size ->
+                _quizSize.value = size
+            }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            userPreferences.version.collect { versionString ->
+                _version.value = CitationVersion.fromString(versionString)
+            }
+        }
+    }
 
     override fun setGameMode(mode: GameMode) {
         _gameMode.value = mode
     }
 
+    override suspend fun updateQuizSize(size: Int) {
+        userPreferences.saveQuizSize(size)
+    }
+
+    override suspend fun updateVersion(version: CitationVersion) {
+        userPreferences.saveVersion(version)
+    }
+
     override suspend fun getRandomCitation() {
-        if(currentIndex == QUIZ_SIZE) {
+        val size = quizSize.value
+        if (currentIndex == size) {
             _uiState.value = PlayUiState.Result(
-                currentIndex = currentIndex,
-                quizSize = QUIZ_SIZE
+                usedCitations = usedCitations,
+                quizSize = size
             )
             return
         }
-        currentIndex ++
         _uiState.value = PlayUiState.Loading
         try {
-            val response: Response<CitationLightDto> = when (_gameMode.value) {
-                GameMode.ALL -> apiService.getRandomCitation()
-                GameMode.FILMS -> apiService.getRandomCitationByKind("movie")
-                GameMode.SERIES -> apiService.getRandomCitationByKind("serie")
-            }
-            if (response.isSuccessful) {
+            var citation: Citation? = null
+            var retries = 0
+            val maxRetries = 10
+            while (citation == null && retries < maxRetries) {
+                retries++
+                val response: Response<CitationLightDto> = when (_gameMode.value) {
+                    GameMode.ALL -> apiService.getRandomCitation()
+                    GameMode.FILMS -> apiService.getRandomCitationByKind("movie")
+                    GameMode.SERIES -> apiService.getRandomCitationByKind("serie")
+                }
+                if (!response.isSuccessful) {
+                    val messageId = when (response.code()) {
+                        401 -> R.string.error_unauthorized
+                        403 -> R.string.error_forbidden
+                        404 -> R.string.error_not_found
+                        500 -> R.string.error_server
+                        else -> R.string.error_unknown
+                    }
+                    _uiState.value = PlayUiState.Error(messageId)
+                    return
+                }
                 response.body()?.let { dto ->
-                    val citation = dto.toCitation()
-                    _currentCitation.value = citation
-                    _uiState.value = PlayUiState.Question(
-                        citation = citation,
-                        currentIndex = currentIndex,
-                        quizSize = QUIZ_SIZE
-                    )
-                } ?: run {
-                    _uiState.value = PlayUiState.Error(R.string.error_empty_answer_from_server)
+                    val newCitation = dto.toCitation()
+                    if (usedCitations.any { it.id == newCitation.id }) {
+                        return@let
+                    }
+                    citation = newCitation
                 }
-            } else {
-                val messageId = when (response.code()) {
-                    401 -> R.string.error_unauthorized
-                    403 -> R.string.error_forbidden
-                    404 -> R.string.error_not_found
-                    500 -> R.string.error_server
-                    else -> R.string.error_unknown
-                }
-                _uiState.value = PlayUiState.Error(messageId)
             }
-
+            if (citation == null) {
+                _uiState.value = PlayUiState.Error(R.string.error_no_current_citation)
+                return
+            }
+            currentIndex++
+            _currentCitation.value = citation
+            _uiState.value = PlayUiState.Question(
+                citation = citation,
+                currentIndex = currentIndex,
+                quizSize = size
+            )
         } catch (e: Exception) {
             val messageId = when (e) {
                 is java.net.UnknownHostException -> R.string.error_no_internet
@@ -89,10 +133,10 @@ class CitationRepository @Inject constructor(
             }
             _uiState.value = PlayUiState.Error(messageId)
         }
-
     }
 
     override suspend fun submitAnswer(citationId: Int, userAnswerId: Int) {
+        val size = quizSize.value
         val currentCitation = _currentCitation.value
         if (currentCitation == null) {
             _uiState.value = PlayUiState.Error(R.string.error_no_current_citation)
@@ -113,10 +157,16 @@ class CitationRepository @Inject constructor(
                     val updatedCitation =
                         currentCitation.updateWithResponse(answerResponse, userGuessMovie)
                     _currentCitation.value = updatedCitation
+                    val existingIndex = usedCitations.indexOfFirst { it.id == updatedCitation.id }
+                    if (existingIndex >= 0) {
+                        usedCitations[existingIndex] = updatedCitation
+                    } else {
+                        usedCitations.add(updatedCitation)
+                    }
                     _uiState.value = PlayUiState.Answer(
                         citation = updatedCitation,
                         currentIndex = currentIndex,
-                        quizSize = QUIZ_SIZE
+                        quizSize = size
                     )
                 } ?: run {
                     _uiState.value = PlayUiState.Error(R.string.error_empty_answer_from_server)
@@ -144,6 +194,7 @@ class CitationRepository @Inject constructor(
     override fun resetValues() {
         _gameMode.value = GameMode.ALL
         currentIndex = 0
+        usedCitations.clear()
     }
 }
 

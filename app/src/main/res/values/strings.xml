@@ -11,6 +11,7 @@
     <string name="button_register">S\'inscrire</string>
     <string name="button_create_account">Créer un compte</string>
     <string name="button_yes">Oui</string>
+    <string name="button_no">Non</string>
     <string name="button_cancel">Annuler</string>
     <string name="button_next_citation">Passer à la citation suivante</string>
     <string name="button_modify_password">Modifier son mot de passe</string>
@@ -79,6 +80,8 @@
     <string name="play_answer_go_next_quote">Passer à la citation suivante</string>
     <string name="play_see_result">Voir les résultats</string>
     <string name="play_result_title">Résultats</string>
+    <string name="play_exit_dialog_title">Retourner au menu ?</string>
+    <string name="play_exit_dialog_message">Êtes-vous sûr de vouloir retourner au Menu ? Votre progression ne sera pas sauvegardé.</string>
 
 
     <!--
@@ -88,6 +91,7 @@
     <string name="settings_version_label">Version</string>
     <string name="settings_version_original">VO</string>
     <string name="settings_version_french">VF</string>
+    <string name="settings_quiz_size_label">Nombre de questions</string>
 
 
     <!--

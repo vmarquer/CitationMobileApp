@@ -1,25 +1,37 @@
 package com.example.citationeapp.data.remote.repositories
 
 import android.util.Base64
+import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.preferences.UserPreferences
 import com.example.citationeapp.data.remote.api.AuthApiService
 import com.example.citationeapp.data.remote.dto.ActivationRequestDTO
 import com.example.citationeapp.data.remote.dto.AskNewPasswordDTO
+import com.example.citationeapp.data.remote.dto.AskUtilisateurInfos
 import com.example.citationeapp.data.remote.dto.AuthRequestDTO
+import com.example.citationeapp.data.remote.dto.CitationLightDto
 import com.example.citationeapp.data.remote.dto.ModifyPasswordDTO
 import com.example.citationeapp.data.remote.dto.NewPasswordRequestDTO
 import com.example.citationeapp.data.remote.dto.RefreshTokenRequestDTO
 import com.example.citationeapp.data.remote.dto.RegisterRequestDTO
+import com.example.citationeapp.data.remote.dto.UtilisateurInfosDTO
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.success
 import com.example.citationeapp.utils.ToastManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
+import retrofit2.Response
 import java.util.Date
 import javax.inject.Inject
 
 interface AuthRepositoryInterface {
+    val userInfos: StateFlow<UtilisateurInfosDTO>
     suspend fun register(username: String, email: String, password: String): Boolean
     suspend fun activate(code: String): Boolean
     suspend fun login(username: String, password: String): Boolean
@@ -34,6 +46,7 @@ interface AuthRepositoryInterface {
     fun extractUsernameFromToken(): String?
     suspend fun checkAuthentication(): Boolean
     suspend fun askRefreshToken(refreshToken: String?): Boolean
+    suspend fun getUserInfos(): Boolean
     fun isBearerTokenExpired(token: String?): Boolean
 }
 
@@ -41,6 +54,9 @@ class AuthRepository @Inject constructor(
     private val authApiService: AuthApiService,
     private val userPreferences: UserPreferences
 ) : AuthRepositoryInterface {
+
+    private val _userInfos = MutableStateFlow(UtilisateurInfosDTO("", "", "", 0, 0))
+    override val userInfos: StateFlow<UtilisateurInfosDTO> = _userInfos.asStateFlow()
 
     override suspend fun register(username: String, email: String, password: String): Boolean {
         return try {
@@ -223,6 +239,30 @@ class AuthRepository @Inject constructor(
                 false
             }
         } catch (e: Exception) {
+            false
+        }
+    }
+
+    override suspend fun getUserInfos(): Boolean {
+        val email  = extractEmailFromToken()
+        if (email == null) {
+            return false
+        }
+        return try {
+            val response = authApiService.getUserInfos(AskUtilisateurInfos(email))
+            if (response.isSuccessful) {
+                response.body()?.let { infos ->
+                    _userInfos.value = infos
+                    return true
+                }
+                false
+            } else {
+                ToastManager.showMessage("${response.code()} : ${response.message()}", fail)
+                false
+            }
+        } catch (e: Exception) {
+            print("Exception : ${e.message}")
+            ToastManager.showMessage("Exception : ${e.message}", fail)
             false
         }
     }

@@ -65,7 +65,7 @@ fun NavigationHost(
                 goDesignSystem = { navController.navigate(Route.NestedLevelRoute.DesignSystem.name) },
                 launchGame = { navController.navigate(Route.TopLevelRoute.Play.name) }
             )
-    }
+        }
 
         composable(route = Route.TopLevelRoute.Play.name) {
             Play(

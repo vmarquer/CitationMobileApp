@@ -2,6 +2,7 @@ package com.example.citationeapp.di
 
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
+import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.models.Film
 import com.example.citationeapp.data.models.getAnswer
 import com.example.citationeapp.data.remote.repositories.AuthRepository
@@ -43,6 +44,10 @@ class FakeCitationRepository @Inject constructor() : CitationRepositoryInterface
 
     private val _uiState = MutableStateFlow<PlayUiState>(PlayUiState.Loading)
     override val uiState: StateFlow<PlayUiState> = _uiState.asStateFlow()
+    private val _quizSize = MutableStateFlow(5)
+    override val quizSize: StateFlow<Int> = _quizSize.asStateFlow()
+    private val _version = MutableStateFlow(CitationVersion.VF)
+    override val version: StateFlow<CitationVersion> = _version.asStateFlow()
 
     private val _gameMode = MutableStateFlow<GameMode>(GameMode.ALL)
 
@@ -51,6 +56,14 @@ class FakeCitationRepository @Inject constructor() : CitationRepositoryInterface
 
     override fun setGameMode(mode: GameMode) {
         _gameMode.value = mode
+    }
+
+    override suspend fun updateQuizSize(size: Int) {
+       _quizSize.value = size
+    }
+
+    override suspend fun updateVersion(version: CitationVersion) {
+        _version.value = version
     }
 
     override suspend fun getRandomCitation() {
