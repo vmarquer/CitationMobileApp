@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
@@ -55,7 +54,8 @@ fun Play(
     val playState = viewModel.uiState.collectAsState().value
 
     LaunchedEffect(Unit) {
-        viewModel.loadRandomCitation(onForceLogin)
+        viewModel.resetValues()
+        viewModel.startQuiz(onForceLogin)
     }
 
     when (playState) {
@@ -87,14 +87,19 @@ fun Play(
                 version = viewModel.version,
                 currentIndex = playState.currentIndex,
                 quizSize = playState.quizSize,
-                onPlayAgain = { viewModel.loadRandomCitation(onForceLogin) }
+                onPlayAgain = { viewModel.goToNextCitation() }
             )
         }
 
         is PlayUiState.Result -> {
             Result(
+                version = viewModel.version,
                 usedCitations = playState.usedCitations,
                 quizSize = playState.quizSize,
+                playAgain = {
+                    viewModel.resetValues()
+                    viewModel.startQuiz(onForceLogin)
+                },
                 goHome = {
                     viewModel.resetValues()
                     goHome()
@@ -180,7 +185,7 @@ class PlayViewModel @Inject constructor(
         }
     }
 
-    fun loadRandomCitation(onForceLogin: () -> Unit) {
+    fun startQuiz(onForceLogin: () -> Unit) {
         viewModelScope.launch {
             if (authRepository.isBearerTokenExpired(authRepository.getBearerToken())) {
                 val refreshed = authRepository.askRefreshToken(authRepository.getRefreshToken())
@@ -190,7 +195,7 @@ class PlayViewModel @Inject constructor(
                     return@launch
                 }
             }
-            citationRepository.getRandomCitation()
+            citationRepository.startQuiz()
         }
     }
 
@@ -206,6 +211,10 @@ class PlayViewModel @Inject constructor(
             }
             citationRepository.submitAnswer(citationId, userAnswerId)
         }
+    }
+
+    fun goToNextCitation() {
+        citationRepository.goToNextCitation()
     }
 
     fun resetValues() {

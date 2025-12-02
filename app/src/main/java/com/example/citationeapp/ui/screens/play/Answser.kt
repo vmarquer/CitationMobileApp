@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -28,14 +29,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.models.getDifficultyBackgroundColor
 import com.example.citationeapp.data.models.getDifficultyLabel
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
-import com.example.citationeapp.ui.theme.components.TextBody2Bold
-import com.example.citationeapp.ui.theme.components.TextH3
+import com.example.citationeapp.ui.theme.components.TextBody2Regular
+import com.example.citationeapp.ui.theme.components.TextBody3Bold
 import com.example.citationeapp.ui.theme.customBoxHeightAnswer
 import com.example.citationeapp.ui.theme.customBoxHeightAnswerSecondHalf
 import com.example.citationeapp.ui.theme.fail
@@ -46,9 +48,9 @@ import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.padding2
 import com.example.citationeapp.ui.theme.padding20
 import com.example.citationeapp.ui.theme.padding32
-import com.example.citationeapp.ui.theme.padding64
 import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.primary
+import com.example.citationeapp.ui.theme.spacing4
 import com.example.citationeapp.ui.theme.spacing8
 import com.example.citationeapp.ui.theme.success
 import com.example.citationeapp.ui.theme.white
@@ -88,9 +90,9 @@ fun Answer(
                     .matchParentSize(),
                 contentAlignment = Alignment.Center,
             ) {
-                TextH3(
+                TextBody1Regular(
                     modifier = Modifier.padding(horizontal = padding20),
-                    text = if (version == CitationVersion.VF) citation.quoteVF else citation.quoteVO,
+                    text = if (version == CitationVersion.VF) "\"${citation.quoteVF}\"" else "\"${citation.quoteVO}\"",
                     color = white,
                     textAlign = TextAlign.Center
                 )
@@ -102,7 +104,7 @@ fun Answer(
                     .padding(padding8),
                 contentAlignment = Alignment.TopStart,
             ) {
-                TextBody2Bold(
+                TextBody3Bold(
                     modifier = modifier
                         .background(
                             citation.getDifficultyBackgroundColor(),
@@ -152,7 +154,7 @@ fun Answer(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(
-                        spacing8, alignment = Alignment.CenterHorizontally
+                        spacing4, alignment = Alignment.CenterHorizontally
                     ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -172,14 +174,24 @@ fun Answer(
                     Column(
                         modifier = Modifier.weight(3f),
                     ) {
-                        TextH3(
+                        TextBody1Regular(
                             textId = if (citation.result == true) R.string.play_answer_good_answer
                             else R.string.play_answer_bad_answer,
                             color = if (citation.result == true) success else fail
                         )
-                        TextBody1Regular(
-                            text = "${citation.actor} - ${citation.caracter}",
+                        TextBody2Regular(
+                            text = "${citation.caracter}, ${citation.actor}",
                             color = if (citation.result == true) success else fail
+                        )
+                    }
+                    citation.image?.let {
+                        Image(
+                            bitmap = it,
+                            contentDescription = null,
+                            contentScale = ContentScale.Fit,
+                            modifier = modifier
+                                .width(80.dp)
+                                .clip(RoundedCornerShape(10.dp))
                         )
                     }
                 }
@@ -204,7 +216,7 @@ fun Answer(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(padding64)
+                .padding(padding32)
         ) {
             LinearProgressIndicator(
                 progress = {currentIndex.toFloat() / quizSize.toFloat()},

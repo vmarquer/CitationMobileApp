@@ -1,5 +1,6 @@
 package com.example.citationeapp.data.domain.mapper
 
+import androidx.compose.ui.graphics.ImageBitmap
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.Film
 import com.example.citationeapp.data.remote.dto.CitationAnswerResponseDTO
@@ -26,7 +27,16 @@ fun Citation.updateWithResponse(
         answerId = response.answerId,
         result = response.result,
         userGuessMovieVO = userGuessMovie?.titleVO,
-        userGuessMovieVF = userGuessMovie?.titleVF
+        userGuessMovieVF = userGuessMovie?.titleVF,
+        image = this.image
+    )
+}
+
+fun Citation.updateWithImage(
+    image: ImageBitmap?,
+): Citation {
+    return this.copy(
+        image = image
     )
 }
 

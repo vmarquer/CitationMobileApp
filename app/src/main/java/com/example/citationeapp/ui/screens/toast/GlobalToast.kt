@@ -2,6 +2,7 @@ package com.example.citationeapp.ui.screens.toast
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.citationeapp.ui.theme.padding24
 import com.example.citationeapp.ui.theme.white
 import com.example.citationeapp.utils.ToastManager
 import kotlinx.coroutines.delay
@@ -37,10 +39,14 @@ fun GlobalToast() {
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
         SnackbarHost(
             hostState = snackbarHostState,
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = padding24),
             snackbar = { snackbarData: SnackbarData ->
                 Snackbar(
                     snackbarData = snackbarData,

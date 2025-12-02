@@ -27,7 +27,7 @@ import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.models.getDifficultyBackgroundColor
 import com.example.citationeapp.data.models.getDifficultyLabel
-import com.example.citationeapp.ui.theme.components.TextBody2Bold
+import com.example.citationeapp.ui.theme.components.TextBody3Bold
 import com.example.citationeapp.ui.theme.components.TextH3
 import com.example.citationeapp.ui.theme.customBoxHeightQuestion
 import com.example.citationeapp.ui.theme.grey
@@ -78,7 +78,7 @@ fun Question(
             ) {
                 TextH3(
                     modifier = Modifier.padding(horizontal = padding20),
-                    text = if (version == CitationVersion.VF) citation.quoteVF else citation.quoteVO,
+                    text = if (version == CitationVersion.VF) "\"${citation.quoteVF}\"" else "\"${citation.quoteVO}\"",
                     color = white,
                     textAlign = TextAlign.Center
                 )
@@ -90,7 +90,7 @@ fun Question(
                     .padding(padding8),
                 contentAlignment = Alignment.TopStart,
             ) {
-                TextBody2Bold(
+                TextBody3Bold(
                     modifier = modifier
                         .background(
                             citation.getDifficultyBackgroundColor(),

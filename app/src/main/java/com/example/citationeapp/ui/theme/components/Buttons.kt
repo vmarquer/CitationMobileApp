@@ -32,8 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
-import com.example.citationeapp.ui.theme.components.TextBody2Regular
-import com.example.citationeapp.ui.theme.grey
+import com.example.citationeapp.ui.theme.components.TextBody3Regular
 import com.example.citationeapp.ui.theme.heightAnswerButton
 import com.example.citationeapp.ui.theme.lineHeightSmall
 import com.example.citationeapp.ui.theme.padding8
@@ -184,7 +183,7 @@ fun <T> SingleChoiceSegmentedButton(
                     activeContentColor = white
                 ),
                 label = {
-                    TextBody2Regular(
+                    TextBody3Regular(
                         text = getText(option),
                         color = if (option == selectedOption) white else black
                     )

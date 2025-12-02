@@ -69,7 +69,7 @@ fun Login(
     ) {
 
         if (loginState is LoginState.Loading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = primary)
         } else {
             TextBody1Bold(textId = R.string.login_title)
 

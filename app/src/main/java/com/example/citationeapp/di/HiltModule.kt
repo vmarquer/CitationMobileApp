@@ -1,5 +1,6 @@
 package com.example.citationeapp.di
 
+import androidx.compose.ui.graphics.ImageBitmap
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
@@ -40,18 +41,16 @@ interface HiltModule {
 
 class FakeCitationRepository @Inject constructor() : CitationRepositoryInterface {
 
-    private val _currentCitation = MutableStateFlow<Citation?>(null)
-
     private val _uiState = MutableStateFlow<PlayUiState>(PlayUiState.Loading)
     override val uiState: StateFlow<PlayUiState> = _uiState.asStateFlow()
     private val _quizSize = MutableStateFlow(5)
     override val quizSize: StateFlow<Int> = _quizSize.asStateFlow()
     private val _version = MutableStateFlow(CitationVersion.VF)
     override val version: StateFlow<CitationVersion> = _version.asStateFlow()
-
     private val _gameMode = MutableStateFlow<GameMode>(GameMode.ALL)
-
-    private val citationsMock: MutableList<Citation> = citations
+    private var quizCitations: MutableList<Citation> = mutableListOf()
+    private var currentIndex = 0
+    private val citationsMock: List<Citation> = citations
     private val moviesMock: List<Film> = movies
 
     override fun setGameMode(mode: GameMode) {
@@ -59,75 +58,85 @@ class FakeCitationRepository @Inject constructor() : CitationRepositoryInterface
     }
 
     override suspend fun updateQuizSize(size: Int) {
-       _quizSize.value = size
+        _quizSize.value = size
     }
 
     override suspend fun updateVersion(version: CitationVersion) {
         _version.value = version
     }
 
-    override suspend fun getRandomCitation() {
+    override suspend fun startQuiz() {
         _uiState.value = PlayUiState.Loading
         try {
-            val citation = citationsMock.random()
-            val choices = moviesMock
-                .filter { it.kind == citation.kind && it.id != citation.answerId }
-                .take(3)
-                .toMutableList()
+            quizCitations = citationsMock.shuffled().take(quizSize.value).map { citation ->
+                val choices = moviesMock
+                    .filter { it.kind == citation.kind && it.id != citation.answerId }
+                    .take(3)
+                    .toMutableList()
+                moviesMock.find { it.id == citation.answerId }?.let { choices.add(it) }
+                citation.copy(choices = choices.shuffled())
+            }.toMutableList()
 
-            moviesMock.find { it.id == citation.answerId }?.let { choices.add(it) }
-
-            val citationWithChoices = citation.copy(choices = choices.shuffled())
-
-            _currentCitation.value = citationWithChoices
-            _uiState.value = PlayUiState.Question(
-                citation = citationWithChoices,
-                currentIndex = 0,
-                quizSize = 0
-            )
+            currentIndex = 0
+            showCurrentQuestion()
         } catch (e: Exception) {
             _uiState.value = PlayUiState.Error(R.string.error_unknown)
+        }
+    }
+
+    private fun showCurrentQuestion() {
+        if (currentIndex < quizCitations.size) {
+            _uiState.value = PlayUiState.Question(
+                citation = quizCitations[currentIndex],
+                currentIndex = currentIndex + 1,
+                quizSize = quizCitations.size
+            )
+        } else {
+            _uiState.value = PlayUiState.Result(
+                usedCitations = quizCitations,
+                quizSize = quizCitations.size
+            )
         }
     }
 
     override suspend fun submitAnswer(citationId: Int, answerId: Int) {
-        val current = _currentCitation.value
-        if (current == null) {
+        val currentCitation = quizCitations.getOrNull(currentIndex)
+        if (currentCitation == null) {
             _uiState.value = PlayUiState.Error(R.string.error_no_current_citation)
             return
         }
-
         _uiState.value = PlayUiState.Loading
-
         try {
-            val citation = citationsMock.find { it.id == citationId }
-                ?: run {
-                    _uiState.value = PlayUiState.Error(R.string.error_not_found)
-                    return
-                }
-
-            val correctAnswer = citation.getAnswer()
+            val correctAnswer = currentCitation.getAnswer()
             val isCorrect = correctAnswer?.id == answerId
-
-            val updatedCitation = citation.copy(
+            val updatedCitation = currentCitation.copy(
                 userGuessMovieVF = correctAnswer?.titleVF,
                 userGuessMovieVO = correctAnswer?.titleVO,
                 result = isCorrect
             )
-
-            _currentCitation.value = updatedCitation
+            quizCitations[currentIndex] = updatedCitation
             _uiState.value = PlayUiState.Answer(
                 citation = updatedCitation,
-                currentIndex = 0,
-                quizSize = 0
+                currentIndex = currentIndex + 1,
+                quizSize = quizCitations.size
             )
+            currentIndex++
+            showCurrentQuestion()
         } catch (e: Exception) {
             _uiState.value = PlayUiState.Error(R.string.error_unknown)
         }
     }
 
+    override fun goToNextCitation() {}
+
+    override suspend fun fetchImage(filmId: Int): ImageBitmap? {
+        return null
+    }
+
     override fun resetValues() {
         _gameMode.value = GameMode.ALL
+        currentIndex = 0
+        quizCitations.clear()
     }
 }
 

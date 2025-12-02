@@ -23,6 +23,8 @@ import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.components.TextBody2Bold
 import com.example.citationeapp.ui.theme.components.TextBody2Regular
+import com.example.citationeapp.ui.theme.components.TextBody3Bold
+import com.example.citationeapp.ui.theme.components.TextBody3Regular
 import com.example.citationeapp.ui.theme.components.TextBottomBar
 import com.example.citationeapp.ui.theme.components.TextH1
 import com.example.citationeapp.ui.theme.components.TextH1Bold
@@ -72,9 +74,11 @@ fun DesignSystemLabels(modifier: Modifier = Modifier) {
                 TextH2Bold(text = "TextH2Bold")
                 TextH3Bold(text = "TextH3Bold")
                 TextBody1Regular(text = "TextBody1Regular")
-                TextBody2Regular(text = "TextBody2Regular")
                 TextBody1Bold(text = "TextBody1Bold")
+                TextBody2Regular(text = "TextBody2Regular")
                 TextBody2Bold(text = "TextBody2Bold")
+                TextBody3Regular(text = "TextBody3Regular")
+                TextBody3Bold(text = "TextBody3Bold")
             }
         }
     }

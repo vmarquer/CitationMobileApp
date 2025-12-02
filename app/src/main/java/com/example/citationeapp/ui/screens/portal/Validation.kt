@@ -31,6 +31,7 @@ import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.lineHeightSmall
 import com.example.citationeapp.ui.theme.padding16
+import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing24
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,7 +60,7 @@ fun Validation(
         )
     ) {
         if (validationState is ValidationState.Loading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = primary)
         } else {
             TextBody1Bold(textId = R.string.validation_title)
 

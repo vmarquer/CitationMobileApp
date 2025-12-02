@@ -1,6 +1,7 @@
 package com.example.citationeapp.data.models
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import com.example.citationeapp.R
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.success
@@ -18,7 +19,8 @@ data class Citation(
     val kind: String,
     val answerId: Int? = null,
     val choices: List<Film>,
-    val result: Boolean? = null
+    val result: Boolean? = null,
+    val image: ImageBitmap? = null
 )
 
 fun Citation.getAnswer(): Film? {

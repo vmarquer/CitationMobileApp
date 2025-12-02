@@ -1,14 +1,11 @@
 package com.example.citationeapp.data.remote.repositories
 
 import android.util.Base64
-import com.example.citationeapp.data.models.CitationVersion
 import com.example.citationeapp.data.preferences.UserPreferences
 import com.example.citationeapp.data.remote.api.AuthApiService
 import com.example.citationeapp.data.remote.dto.ActivationRequestDTO
 import com.example.citationeapp.data.remote.dto.AskNewPasswordDTO
-import com.example.citationeapp.data.remote.dto.AskUtilisateurInfos
 import com.example.citationeapp.data.remote.dto.AuthRequestDTO
-import com.example.citationeapp.data.remote.dto.CitationLightDto
 import com.example.citationeapp.data.remote.dto.ModifyPasswordDTO
 import com.example.citationeapp.data.remote.dto.NewPasswordRequestDTO
 import com.example.citationeapp.data.remote.dto.RefreshTokenRequestDTO
@@ -17,16 +14,12 @@ import com.example.citationeapp.data.remote.dto.UtilisateurInfosDTO
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.success
 import com.example.citationeapp.utils.ToastManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
-import retrofit2.Response
 import java.util.Date
 import javax.inject.Inject
 
@@ -244,24 +237,19 @@ class AuthRepository @Inject constructor(
     }
 
     override suspend fun getUserInfos(): Boolean {
-        val email  = extractEmailFromToken()
-        if (email == null) {
-            return false
-        }
         return try {
-            val response = authApiService.getUserInfos(AskUtilisateurInfos(email))
+            val response = authApiService.getUserInfos()
             if (response.isSuccessful) {
                 response.body()?.let { infos ->
                     _userInfos.value = infos
-                    return true
-                }
-                false
+                    true
+                } ?: false
             } else {
+                println("test")
                 ToastManager.showMessage("${response.code()} : ${response.message()}", fail)
                 false
             }
         } catch (e: Exception) {
-            print("Exception : ${e.message}")
             ToastManager.showMessage("Exception : ${e.message}", fail)
             false
         }

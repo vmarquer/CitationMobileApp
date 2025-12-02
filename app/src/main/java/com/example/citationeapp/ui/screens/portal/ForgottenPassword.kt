@@ -33,6 +33,7 @@ import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.components.TextBody2Regular
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.padding16
+import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing24
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -68,7 +69,7 @@ fun ForgottenPassword(
         TextBody1Bold(textId = R.string.forgotten_password_title)
 
         if (askNewPasswordState is AskNewPasswordState.Loading || askNewPasswordState is AskNewPasswordState.Loading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = primary)
         } else {
             if (askNewPasswordState !is AskNewPasswordState.Success) {
                 TextBody2Regular(text = "Entrez votre email")

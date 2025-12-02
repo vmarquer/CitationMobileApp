@@ -9,9 +9,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.body1Bold
+import com.example.citationeapp.ui.theme.body1Italic
 import com.example.citationeapp.ui.theme.body1Regular
 import com.example.citationeapp.ui.theme.body2Bold
+import com.example.citationeapp.ui.theme.body2Italic
 import com.example.citationeapp.ui.theme.body2Regular
+import com.example.citationeapp.ui.theme.body3Bold
+import com.example.citationeapp.ui.theme.body3Italic
+import com.example.citationeapp.ui.theme.body3Regular
 import com.example.citationeapp.ui.theme.h1
 import com.example.citationeapp.ui.theme.h1Bold
 import com.example.citationeapp.ui.theme.h2
@@ -174,6 +179,23 @@ fun TextBody1Bold(
 }
 
 @Composable
+fun TextBody1Italic(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    @StringRes textId: Int = -1,
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
+) {
+    Text(
+        text = if (textId == -1) text else stringResource(id = textId),
+        modifier = modifier,
+        color = color,
+        style = body1Italic,
+        textAlign = textAlign
+    )
+}
+
+@Composable
 fun TextBody2Regular(
     modifier: Modifier = Modifier,
     text: String = "",
@@ -203,6 +225,74 @@ fun TextBody2Bold(
         modifier = modifier,
         color = color,
         style = body2Bold,
+        textAlign = textAlign
+    )
+}
+
+@Composable
+fun TextBody2Italic(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    @StringRes textId: Int = -1,
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
+) {
+    Text(
+        text = if (textId == -1) text else stringResource(id = textId),
+        modifier = modifier,
+        color = color,
+        style = body2Italic,
+        textAlign = textAlign
+    )
+}
+
+@Composable
+fun TextBody3Regular(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    @StringRes textId: Int = -1,
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
+) {
+    Text(
+        text = if (textId == -1) text else stringResource(id = textId),
+        modifier = modifier,
+        color = color,
+        style = body3Regular,
+        textAlign = textAlign
+    )
+}
+
+@Composable
+fun TextBody3Bold(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    @StringRes textId: Int = -1,
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
+) {
+    Text(
+        text = if (textId == -1) text else stringResource(id = textId),
+        modifier = modifier,
+        color = color,
+        style = body3Bold,
+        textAlign = textAlign
+    )
+}
+
+@Composable
+fun TextBody3Italic(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    @StringRes textId: Int = -1,
+    color: Color = black,
+    textAlign: TextAlign = TextAlign.Start
+) {
+    Text(
+        text = if (textId == -1) text else stringResource(id = textId),
+        modifier = modifier,
+        color = color,
+        style = body3Italic,
         textAlign = textAlign
     )
 }

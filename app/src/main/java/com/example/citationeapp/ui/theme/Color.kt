@@ -10,3 +10,11 @@ val dark_blue = Color(0xFF3B2887)
 val success = Color(0xFF3F894E)
 val yellow = Color(0xFFFFCC00)
 val fail = Color(0xFF963232)
+
+fun progressColor(ratio: Float): Color {
+    return when {
+        ratio >= 0.8f -> success
+        ratio >= 0.5f -> yellow
+        else -> fail
+    }
+}

@@ -18,13 +18,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.citationeapp.ui.theme.components.CustomCard
-import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.grey
-import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.padding8
-import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.spacing2
 import com.example.citationeapp.ui.theme.spacing6
 
@@ -57,20 +53,7 @@ fun DesignSystemCards(modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(spacing6)
             ) {
-                CustomCard {
-                    Column(
-                        modifier = Modifier.padding(padding16)
-                    ) {
-                        TextBody1Regular(text = "Custom Card")
-                    }
-                }
-                CustomCard(borderColor = primary) {
-                    Column(
-                        modifier = Modifier.padding(padding16),
-                    ) {
-                        TextBody1Regular(text = "Custom Outline Card")
-                    }
-                }
+
             }
         }
     }

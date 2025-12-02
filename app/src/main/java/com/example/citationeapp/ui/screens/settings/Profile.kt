@@ -1,13 +1,20 @@
 package com.example.citationeapp.ui.screens.settings
 
 import ButtonPrimary
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -15,7 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,9 +33,17 @@ import com.example.citationeapp.R
 import com.example.citationeapp.data.remote.dto.UtilisateurInfosDTO
 import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
 import com.example.citationeapp.ui.theme.components.ConfirmationDialog
+import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
+import com.example.citationeapp.ui.theme.grey
+import com.example.citationeapp.ui.theme.lineHeightSmall
 import com.example.citationeapp.ui.theme.padding12
+import com.example.citationeapp.ui.theme.padding24
+import com.example.citationeapp.ui.theme.primary
+import com.example.citationeapp.ui.theme.progressColor
+import com.example.citationeapp.ui.theme.spacing16
 import com.example.citationeapp.ui.theme.spacing8
+import com.example.citationeapp.ui.theme.white
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,31 +61,112 @@ fun Profile(
     val userInfos by viewModel.userInfos.collectAsState()
     var showLogoutDialog by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(padding12)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(spacing8)
-    ) {
-        if (logoutState is LogoutState.Loading) {
-            CircularProgressIndicator()
-        } else {
-            TextBody1Regular(text = "Email: ${userInfos.email}")
-            TextBody1Regular(text = "Nom d'utilisateur: ${userInfos.username}")
-            TextBody1Regular(text = "Role: ${userInfos.role}")
-            TextBody1Regular(text = "Ratio: ${userInfos.goodAnswers}/${userInfos.answers}")
+    if (logoutState is LogoutState.Loading) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator(color = primary)
+        }
+    } else {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(padding12),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(spacing16),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .background(grey),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null,
+                            tint = white,
+                            modifier = Modifier.size(50.dp)
+                        )
+                        TextBody1Bold(
+                            text = userInfos.username,
+                            color = white
+                        )
+                    }
 
-            ButtonPrimary(
-                onClick = goModifyPassword,
-                modifier = Modifier.fillMaxWidth(),
-                text = "Modifier son mot de passe"
-            )
-
-            ButtonPrimary(
-                onClick = { showLogoutDialog = true },
-                modifier = Modifier.fillMaxWidth(),
-                text = "Se déconnecter"
+                }
+                TextBody1Regular(text = userInfos.email)
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = modifier.size(120.dp)
+                ) {
+                    val ratio = userInfos.goodAnswers.toFloat() / userInfos.answers.toFloat()
+                    CircularProgressIndicator(
+                        progress = { 1f },
+                        strokeWidth = 4.dp,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(2.dp),
+                        color = grey.copy(alpha = 0.3f)
+                    )
+                    CircularProgressIndicator(
+                        progress = { ratio },
+                        strokeWidth = 8.dp,
+                        modifier = Modifier.fillMaxSize(),
+                        color = progressColor(ratio)
+                    )
+                    TextBody1Bold(
+                        text = "${userInfos.goodAnswers}/${userInfos.answers}",
+                    )
+                }
+            }
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = padding24),
+                verticalArrangement = Arrangement.spacedBy(spacing8)
+            ) {
+                ButtonPrimary(
+                    onClick = goModifyPassword,
+                    modifier = Modifier.fillMaxWidth(),
+                    textId = R.string.button_modify_password
+                )
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = padding12),
+                    thickness = lineHeightSmall,
+                    color = grey
+                )
+                ButtonPrimary(
+                    onClick = { showLogoutDialog = true },
+                    modifier = Modifier.fillMaxWidth(),
+                    textId = R.string.button_logout
+                )
+            }
+        }
+        if (showLogoutDialog) {
+            ConfirmationDialog(
+                titleId = R.string.profile_logout_dialog_title,
+                messageId = R.string.profile_logout_dialog_message,
+                onConfirm = {
+                    showLogoutDialog = false
+                    viewModel.logout()
+                },
+                onDismiss = { showLogoutDialog = false }
             )
         }
 
@@ -76,18 +175,6 @@ fun Profile(
                 goPortal()
             }
         }
-    }
-
-    if (showLogoutDialog) {
-        ConfirmationDialog(
-            titleId = R.string.profile_logout_dialog_title,
-            messageId = R.string.profile_logout_dialog_message,
-            onConfirm = {
-                showLogoutDialog = false
-                viewModel.logout()
-            },
-            onDismiss = { showLogoutDialog = false }
-        )
     }
 }
 
