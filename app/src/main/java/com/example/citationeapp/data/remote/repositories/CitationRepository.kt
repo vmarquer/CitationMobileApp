@@ -49,8 +49,7 @@ class CitationRepository @Inject constructor(
     override val quizSize: StateFlow<Int> = _quizSize.asStateFlow()
     private val _version = MutableStateFlow(CitationVersion.VF)
     override val version: StateFlow<CitationVersion> = _version.asStateFlow()
-    private val _quizCitations = MutableStateFlow<List<Citation>>(emptyList())
-    val quizCitations = _quizCitations.asStateFlow()
+    private var quizCitations: MutableList<Citation> = mutableListOf()
     private val _gameMode = MutableStateFlow<GameMode>(GameMode.ALL)
     private var currentIndex = 0
 
@@ -102,9 +101,9 @@ class CitationRepository @Inject constructor(
                 _uiState.value = PlayUiState.Error(R.string.error_empty_answer_from_server)
                 return
             }
-            _quizCitations.value = body.map { it.toCitation() }
+            quizCitations = body.map { it.toCitation() }.toMutableList()
             _uiState.value = PlayUiState.Question(
-                citation = _quizCitations.value[currentIndex],
+                citation = quizCitations[currentIndex],
                 currentIndex = currentIndex + 1,
                 quizSize = quizSize.value
             )
@@ -121,7 +120,7 @@ class CitationRepository @Inject constructor(
 
     override suspend fun submitAnswer(citationId: Int, answerId: Int) {
         val size = quizSize.value
-        val currentCitation = _quizCitations.value[currentIndex]
+        val currentCitation = quizCitations[currentIndex]
         val email = authRepository.extractEmailFromToken()
         if (email == null) {
             _uiState.value = PlayUiState.Error(R.string.error_no_email)
@@ -151,12 +150,9 @@ class CitationRepository @Inject constructor(
             val citation = currentCitation.updateWithResponse(answerResponse, userGuessMovie)
             val imageBitmap = fetchImage(answerResponse.answerId)
             val updatedCitation = citation.updateWithImage(imageBitmap)
-            val updatedList = _quizCitations.value.toMutableList().also {
-                it[currentIndex] = updatedCitation
-            }
-            _quizCitations.value = updatedList
+            quizCitations[currentIndex] = updatedCitation
             _uiState.value = PlayUiState.Answer(
-                citation = _quizCitations.value[currentIndex],
+                citation = updatedCitation,
                 currentIndex = currentIndex + 1,
                 quizSize = size
             )
@@ -171,16 +167,16 @@ class CitationRepository @Inject constructor(
     }
 
     override fun goToNextCitation() {
-        val size = _quizCitations.value.size
+        val size = quizCitations.size
         if (currentIndex + 1 >= size) {
             _uiState.value = PlayUiState.Result(
-                usedCitations = _quizCitations.value,
+                usedCitations = quizCitations,
                 quizSize = size
             )
         } else {
             currentIndex++
             _uiState.value = PlayUiState.Question(
-                citation = _quizCitations.value[currentIndex],
+                citation = quizCitations[currentIndex],
                 currentIndex = currentIndex + 1,
                 quizSize = size
             )
@@ -206,7 +202,7 @@ class CitationRepository @Inject constructor(
     override fun resetValues() {
         _gameMode.value = GameMode.ALL
         currentIndex = 0
-        _quizCitations.value = emptyList()
+        quizCitations.clear()
     }
 }
 
