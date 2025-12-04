@@ -2,7 +2,6 @@ package com.example.citationeapp.ui.screens.play
 
 import ButtonPrimary
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,23 +10,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
+import com.example.citationeapp.ui.theme.components.AnimatedCircularScoreIndicator
 import com.example.citationeapp.ui.theme.components.ResultCard
-import com.example.citationeapp.ui.theme.components.TextBody2Bold
 import com.example.citationeapp.ui.theme.components.TextH1Bold
-import com.example.citationeapp.ui.theme.grey
-import com.example.citationeapp.ui.theme.lineHeightLarge
-import com.example.citationeapp.ui.theme.lineHeightMedium
-import com.example.citationeapp.ui.theme.padding2
 import com.example.citationeapp.ui.theme.padding24
 import com.example.citationeapp.ui.theme.padding6
-import com.example.citationeapp.ui.theme.progressColor
 import com.example.citationeapp.ui.theme.spacing10
 import com.example.citationeapp.ui.theme.spacing6
 import com.example.citationeapp.ui.theme.userScoreMediumHeight
@@ -42,7 +35,6 @@ fun Result(
     goHome: () -> Unit
 ) {
     val successCount = usedCitations.count { it.result == true }
-    val ratio = successCount.toFloat() / quizSize.toFloat()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -56,27 +48,11 @@ fun Result(
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextH1Bold(textId = R.string.play_result_title)
-
-            Box(
-                contentAlignment = Alignment.Center,
+            AnimatedCircularScoreIndicator(
+                goodAnswers = successCount,
+                totalAnswers = quizSize,
                 modifier = Modifier.size(userScoreMediumHeight)
-            ) {
-                CircularProgressIndicator(
-                    progress = { 1f },
-                    strokeWidth = lineHeightMedium,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding2),
-                    color = grey.copy(alpha = 0.3f)
-                )
-                CircularProgressIndicator(
-                    progress = { ratio },
-                    strokeWidth = lineHeightLarge,
-                    modifier = Modifier.fillMaxSize(),
-                    color = progressColor(ratio)
-                )
-                TextBody2Bold(text = "$successCount/$quizSize")
-            }
+            )
         }
         Column(
             modifier = Modifier

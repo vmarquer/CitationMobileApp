@@ -31,20 +31,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.citationeapp.R
 import com.example.citationeapp.data.remote.dto.UtilisateurInfosDTO
 import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
+import com.example.citationeapp.ui.theme.components.AnimatedCircularScoreIndicator
 import com.example.citationeapp.ui.theme.components.ConfirmationDialog
 import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.grey
 import com.example.citationeapp.ui.theme.iconVeryLargeSize
-import com.example.citationeapp.ui.theme.lineHeightLarge
-import com.example.citationeapp.ui.theme.lineHeightMedium
 import com.example.citationeapp.ui.theme.lineHeightSmall
 import com.example.citationeapp.ui.theme.padding12
-import com.example.citationeapp.ui.theme.padding2
 import com.example.citationeapp.ui.theme.padding24
 import com.example.citationeapp.ui.theme.primary
 import com.example.citationeapp.ui.theme.profileBoxSize
-import com.example.citationeapp.ui.theme.progressColor
 import com.example.citationeapp.ui.theme.spacing16
 import com.example.citationeapp.ui.theme.spacing8
 import com.example.citationeapp.ui.theme.userScoreLargeHeight
@@ -114,29 +111,11 @@ fun Profile(
 
                 }
                 TextBody1Regular(text = userInfos.email)
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = modifier.size(userScoreLargeHeight)
-                ) {
-                    val ratio = userInfos.goodAnswers.toFloat() / userInfos.answers.toFloat()
-                    CircularProgressIndicator(
-                        progress = { 1f },
-                        strokeWidth = lineHeightMedium,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding2),
-                        color = grey.copy(alpha = 0.3f)
-                    )
-                    CircularProgressIndicator(
-                        progress = { ratio },
-                        strokeWidth = lineHeightLarge,
-                        modifier = Modifier.fillMaxSize(),
-                        color = progressColor(ratio)
-                    )
-                    TextBody1Bold(
-                        text = "${userInfos.goodAnswers}/${userInfos.answers}",
-                    )
-                }
+                AnimatedCircularScoreIndicator(
+                    goodAnswers = userInfos.goodAnswers,
+                    totalAnswers = userInfos.answers,
+                    modifier = Modifier.size(userScoreLargeHeight)
+                )
             }
             Column(
                 modifier = modifier
