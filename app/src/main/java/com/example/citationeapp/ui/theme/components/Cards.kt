@@ -24,13 +24,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
+import com.example.citationeapp.ui.theme.corner10
 import com.example.citationeapp.ui.theme.fail
+import com.example.citationeapp.ui.theme.imageSmallSize
 import com.example.citationeapp.ui.theme.lineHeightSmall
 import com.example.citationeapp.ui.theme.padding24
 import com.example.citationeapp.ui.theme.padding6
+import com.example.citationeapp.ui.theme.roundedIndexSize
 import com.example.citationeapp.ui.theme.spacing4
 import com.example.citationeapp.ui.theme.spacing6
 import com.example.citationeapp.ui.theme.success
@@ -61,9 +63,9 @@ fun ResultCard(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(roundedIndexSize)
                     .align(Alignment.TopStart)
-                    .padding(6.dp)
+                    .padding(padding6)
                     .border(width = lineHeightSmall, color = white, shape = CircleShape)
                     .clip(CircleShape)
             ) {
@@ -110,8 +112,8 @@ fun ResultCard(
                                 contentDescription = null,
                                 contentScale = ContentScale.Fit,
                                 modifier = modifier
-                                    .width(80.dp)
-                                    .clip(RoundedCornerShape(10.dp))
+                                    .width(imageSmallSize)
+                                    .clip(RoundedCornerShape(corner10))
                             )
                         }
                     }

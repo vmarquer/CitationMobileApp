@@ -29,7 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
@@ -38,11 +37,13 @@ import com.example.citationeapp.data.models.getDifficultyLabel
 import com.example.citationeapp.ui.theme.components.TextBody1Regular
 import com.example.citationeapp.ui.theme.components.TextBody2Regular
 import com.example.citationeapp.ui.theme.components.TextBody3Bold
+import com.example.citationeapp.ui.theme.corner10
 import com.example.citationeapp.ui.theme.customBoxHeightAnswer
 import com.example.citationeapp.ui.theme.customBoxHeightAnswerSecondHalf
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.failSuccessLogoHeight
 import com.example.citationeapp.ui.theme.grey
+import com.example.citationeapp.ui.theme.imageSmallSize
 import com.example.citationeapp.ui.theme.minHeightChoicesBox
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.padding2
@@ -190,8 +191,8 @@ fun Answer(
                             contentDescription = null,
                             contentScale = ContentScale.Fit,
                             modifier = modifier
-                                .width(80.dp)
-                                .clip(RoundedCornerShape(10.dp))
+                                .width(imageSmallSize)
+                                .clip(RoundedCornerShape(corner10))
                         )
                     }
                 }

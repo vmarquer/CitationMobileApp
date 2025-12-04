@@ -46,7 +46,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -57,7 +56,11 @@ import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextBody2Regular
 import com.example.citationeapp.ui.theme.components.TextH3Bold
+import com.example.citationeapp.ui.theme.gameModePagerHeight
 import com.example.citationeapp.ui.theme.grey
+import com.example.citationeapp.ui.theme.iconLargeSize
+import com.example.citationeapp.ui.theme.imageLargeSize
+import com.example.citationeapp.ui.theme.imageMediumSize
 import com.example.citationeapp.ui.theme.padding12
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.padding24
@@ -107,7 +110,7 @@ fun Home(
                 state = pagerState,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp),
+                    .height(gameModePagerHeight),
             ) { page ->
                 Box(
                     contentAlignment = Alignment.Center,
@@ -123,7 +126,7 @@ fun Home(
                     ) {
                         if (page > 0) {
                             Icon(
-                                modifier = Modifier.size(32.dp),
+                                modifier = Modifier.size(iconLargeSize),
                                 imageVector = Icons.Filled.ChevronLeft,
                                 contentDescription = null,
                                 tint = black
@@ -133,13 +136,13 @@ fun Home(
                             painter = painterResource(id = modes[page].iconRes),
                             contentDescription = null,
                             modifier = Modifier
-                                .height(200.dp)
+                                .height(imageLargeSize)
                                 .clip(CircleShape),
                             contentScale = ContentScale.Fit
                         )
                         if (page < 2) {
                             Icon(
-                                modifier = Modifier.size(32.dp),
+                                modifier = Modifier.size(iconLargeSize),
                                 imageVector = Icons.Filled.ChevronRight,
                                 contentDescription = null,
                                 tint = black
@@ -191,7 +194,7 @@ fun Home(
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .height(150.dp)
+                .height(imageMediumSize)
                 .padding(padding16),
             contentScale = ContentScale.Fit
         )
@@ -271,7 +274,7 @@ fun Home(
                             color = grey
                         )
                         Icon(
-                            modifier = Modifier.size(32.dp),
+                            modifier = Modifier.size(iconLargeSize),
                             imageVector = Icons.Filled.ChevronRight,
                             contentDescription = null,
                             tint = black

@@ -15,7 +15,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.example.citationeapp.R
 import com.example.citationeapp.data.models.Citation
 import com.example.citationeapp.data.models.CitationVersion
@@ -23,11 +22,15 @@ import com.example.citationeapp.ui.theme.components.ResultCard
 import com.example.citationeapp.ui.theme.components.TextBody2Bold
 import com.example.citationeapp.ui.theme.components.TextH1Bold
 import com.example.citationeapp.ui.theme.grey
+import com.example.citationeapp.ui.theme.lineHeightLarge
+import com.example.citationeapp.ui.theme.lineHeightMedium
+import com.example.citationeapp.ui.theme.padding2
 import com.example.citationeapp.ui.theme.padding24
 import com.example.citationeapp.ui.theme.padding6
 import com.example.citationeapp.ui.theme.progressColor
 import com.example.citationeapp.ui.theme.spacing10
 import com.example.citationeapp.ui.theme.spacing6
+import com.example.citationeapp.ui.theme.userScoreMediumHeight
 
 @Composable
 fun Result(
@@ -56,19 +59,19 @@ fun Result(
 
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.size(60.dp)
+                modifier = Modifier.size(userScoreMediumHeight)
             ) {
                 CircularProgressIndicator(
                     progress = { 1f },
-                    strokeWidth = 4.dp,
+                    strokeWidth = lineHeightMedium,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(2.dp),
+                        .padding(padding2),
                     color = grey.copy(alpha = 0.3f)
                 )
                 CircularProgressIndicator(
                     progress = { ratio },
-                    strokeWidth = 8.dp,
+                    strokeWidth = lineHeightLarge,
                     modifier = Modifier.fillMaxSize(),
                     color = progressColor(ratio)
                 )

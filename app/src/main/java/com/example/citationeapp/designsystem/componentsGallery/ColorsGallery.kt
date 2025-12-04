@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
 import com.example.citationeapp.ui.theme.black
 import com.example.citationeapp.ui.theme.components.TextBody1Bold
 import com.example.citationeapp.ui.theme.components.TextBody2Regular
@@ -35,8 +34,10 @@ import com.example.citationeapp.ui.theme.components.TextH3Bold
 import com.example.citationeapp.ui.theme.dark_blue
 import com.example.citationeapp.ui.theme.fail
 import com.example.citationeapp.ui.theme.grey
+import com.example.citationeapp.ui.theme.maxHeightLazyVerticalGridColors
 import com.example.citationeapp.ui.theme.padding8
 import com.example.citationeapp.ui.theme.primary
+import com.example.citationeapp.ui.theme.spacerColors
 import com.example.citationeapp.ui.theme.spacing10
 import com.example.citationeapp.ui.theme.spacing2
 import com.example.citationeapp.ui.theme.success
@@ -60,8 +61,7 @@ fun DesignSystemColors(
         Pair("Yellow", yellow),
         Pair("Fail", fail),
     )
-    val spacerSize = 80.dp
-    val circleRadius = with(LocalDensity.current) { (spacerSize / 2).toPx() }
+    val circleRadius = with(LocalDensity.current) { (spacerColors / 2).toPx() }
     val colorPerLine: Int = floor(sqrt(colors.size.toFloat())).toInt()
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -91,14 +91,14 @@ fun DesignSystemColors(
             ) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(colorPerLine),
-                    modifier = modifier.heightIn(max = 500.dp),
-                    contentPadding = PaddingValues(8.dp)
+                    modifier = modifier.heightIn(max = maxHeightLazyVerticalGridColors),
+                    contentPadding = PaddingValues(padding8)
                 ) {
                     items(colors.size) { index ->
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Spacer(
                                 modifier = modifier
-                                    .size(width = spacerSize, height = spacerSize)
+                                    .size(width = spacerColors, height = spacerColors)
                                     .drawBehind {
                                         drawCircle(
                                             color = colors[index].second,

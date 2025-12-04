@@ -22,13 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.citationeapp.R
 import com.example.citationeapp.data.remote.repositories.AuthRepositoryInterface
 import com.example.citationeapp.ui.theme.black
+import com.example.citationeapp.ui.theme.iconAppLargeSize
+import com.example.citationeapp.ui.theme.imageMediumSize
 import com.example.citationeapp.ui.theme.lineHeightSmall
 import com.example.citationeapp.ui.theme.padding16
 import com.example.citationeapp.ui.theme.spacing12
@@ -73,7 +74,7 @@ fun Portal(
                     painter = painterResource(id = R.drawable.ic_app),
                     contentDescription = null,
                     modifier = Modifier
-                        .height(250.dp)
+                        .height(iconAppLargeSize)
                         .clip(CircleShape),
                     contentScale = ContentScale.Fit
                 )
@@ -106,7 +107,7 @@ fun Portal(
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .height(150.dp)
+                    .height(imageMediumSize)
                     .padding(padding16),
                 contentScale = ContentScale.Fit
             )

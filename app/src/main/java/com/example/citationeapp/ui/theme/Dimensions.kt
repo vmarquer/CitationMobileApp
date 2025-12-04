@@ -26,7 +26,11 @@ val spacing24 = 24.dp
 val spacing32 = 32.dp
 val spacing34 = 34.dp
 
+val corner10 = 10.dp
+
 // --- Tailles des icones
+val iconAppLargeSize = 250.dp
+val iconAppMediumSize = 150.dp
 val iconVerySmallSize = 10.dp
 val iconSmallSize = 16.dp
 val iconMediumSize = 24.dp
@@ -35,16 +39,27 @@ val iconVeryLargeSize = 64.dp
 
 // --- Lignes
 val lineHeightSmall = 1.dp
-val lineHeightMedium = 2.dp
+val lineHeightMedium = 4.dp
 val lineHeightLarge = 8.dp
 
 
 // --- Autres composants
-val heightTextField = 50.dp
 val customBoxHeightQuestion = 250.dp
 val customBoxHeightAnswer = 170.dp
 val customBoxHeightAnswerSecondHalf = 80.dp
 val heightAnswerButton = 56.dp
 val minHeightChoicesBox = 270.dp
 val failSuccessLogoHeight = 50.dp
+val userScoreMediumHeight = 60.dp
+val userScoreLargeHeight = 120.dp
+val gameModePagerHeight = 250.dp
+val imageSmallSize = 80.dp
+val imageMediumSize = 150.dp
+val imageLargeSize = 200.dp
+val roundedIndexSize = 30.dp
+val profileBoxSize = 100.dp
 
+
+// --- Design System
+val maxHeightLazyVerticalGridColors = 50.dp
+val spacerColors = 80.dp
